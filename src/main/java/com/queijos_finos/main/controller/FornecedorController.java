@@ -1,15 +1,10 @@
 package com.queijos_finos.main.controller;
 
-import com.queijos_finos.main.model.Contrato;
 import com.queijos_finos.main.model.Fornecedor;
-import com.queijos_finos.main.model.Propriedade;
-import com.queijos_finos.main.model.Usuarios;
 import com.queijos_finos.main.repository.FornecedorRepository;
 
 import jakarta.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -19,16 +14,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Controller
 public class FornecedorController {
-    @Autowired
-    private FornecedorRepository fornecedorRepository;
+
+    private final FornecedorRepository fornecedorRepository;
+
+    public FornecedorController(FornecedorRepository fornecedorRepository) {
+        this.fornecedorRepository = fornecedorRepository;
+    }
 
     @GetMapping("/fornecedores")
     public String showFornecedores(@RequestParam(name = "query", required = false) String query, Model model) {
@@ -49,7 +45,7 @@ public class FornecedorController {
                                    @RequestParam("nicho") String nicho,
                                    @RequestParam("email") String email,
                                    @RequestParam("qualidade") Double qualidade,
-                                   Model model) throws ParseException {
+                                   Model model) {
 
         if (id != -1) {
             fornecedorRepository.findById(id)
@@ -73,12 +69,12 @@ public class FornecedorController {
         model.addAttribute("mensagem", "Fornecedor salvo com sucesso");
         return "redirect:/fornecedores";
     }
-    
+
     @Transactional
     @PostMapping("/fornecedor/delete/{id}")
     public String deleteFornecedor(@PathVariable("id") Long id,
                                    Model model) {
-    	fornecedorRepository.deleteFornecedorPropriedadeRelacionamento(id);
+        fornecedorRepository.deleteFornecedorPropriedadeRelacionamento(id);
         fornecedorRepository.deleteById(id);
         return "redirect:/fornecedores";
     }
@@ -90,7 +86,8 @@ public class FornecedorController {
 
         if (idFornecedor != null) {
             Optional<Fornecedor> fornecedor = fornecedorRepository.findById(idFornecedor);
-            model.addAttribute("fornecedor", fornecedor.get());
+
+            fornecedor.ifPresent(value -> model.addAttribute("fornecedor", value));
         }
 
         Pageable pageable = PageRequest.of(0, 20);

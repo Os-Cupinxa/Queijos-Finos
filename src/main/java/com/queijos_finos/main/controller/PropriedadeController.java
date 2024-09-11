@@ -1,19 +1,14 @@
 package com.queijos_finos.main.controller;
 
-import java.text.ParseException;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import com.queijos_finos.main.model.*;
 import com.queijos_finos.main.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,16 +16,19 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class PropriedadeController {
 
-    @Autowired
-    private PropriedadeRepository propriedadeRepo;
-    @Autowired
-    private CursosRepository cursoRepo;
-    @Autowired
-    private TecnologiaRepository tecnologiaRepo;
-    @Autowired
-    private FornecedorRepository fornecedorRepo;
-    @Autowired
-    private AmostraRepository amostraRepo;
+    private final PropriedadeRepository propriedadeRepo;
+    private final CursosRepository cursoRepo;
+    private final TecnologiaRepository tecnologiaRepo;
+    private final FornecedorRepository fornecedorRepo;
+    private final AmostraRepository amostraRepo;
+
+    public PropriedadeController(PropriedadeRepository propriedadeRepo, CursosRepository cursoRepo, TecnologiaRepository tecnologiaRepo, FornecedorRepository fornecedorRepo, AmostraRepository amostraRepo) {
+        this.propriedadeRepo = propriedadeRepo;
+        this.cursoRepo = cursoRepo;
+        this.tecnologiaRepo = tecnologiaRepo;
+        this.fornecedorRepo = fornecedorRepo;
+        this.amostraRepo = amostraRepo;
+    }
 
 
     @GetMapping("/propriedade")
@@ -86,7 +84,7 @@ public class PropriedadeController {
         if (idPropriedade != null) {
             Optional<Propriedade> propriedade = propriedadeRepo.findById(idPropriedade);
 
-            model.addAttribute("propriedade", propriedade.get());
+            propriedade.ifPresent(value -> model.addAttribute("propriedade", value));
         }
 
 
@@ -104,7 +102,7 @@ public class PropriedadeController {
 
     @PostMapping("/propriedade")
     public String createPropriedade(@RequestBody Propriedade propriedadeReq,
-                                    Model model) throws ParseException {
+                                    Model model) {
 
         for (Tecnologias tecnologia : propriedadeReq.getTecnologias()) {
             List<Tecnologias> tecnologiaExistente = tecnologiaRepo.findByNome(tecnologia.getNome());
@@ -114,8 +112,6 @@ public class PropriedadeController {
                 tecnologia.setId(tecnologiaRepo.findFirstByOrderByIdDesc().getId());
             }
         }
-
-        System.out.print(propriedadeReq);
 
         if (propriedadeReq.getIdPropriedade() != -1) {
             propriedadeRepo.findById(propriedadeReq.getIdPropriedade())

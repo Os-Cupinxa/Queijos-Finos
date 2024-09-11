@@ -53,5 +53,4 @@ public class Imagem {
     public void setUrl(String url) {
         this.url = url;
     }
-
 }

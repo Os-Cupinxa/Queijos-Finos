@@ -9,7 +9,6 @@ import com.queijos_finos.main.model.Usuarios;
 
 import java.util.List;
 
-
 public interface UsuarioRepository extends JpaRepository<Usuarios, Long> {
     @Query("select u from Usuarios u where u.email=:email")
     Usuarios findByEmail(String email);

@@ -2,7 +2,6 @@ package com.queijos_finos.main.model;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
@@ -242,6 +241,4 @@ public class Propriedade {
                 + ", fornecedores=" + fornecedores + ", tecnologias=" + tecnologias + ", cursos=" + cursos.toString()
                 + ", imagens=" + imagens + ", contratos=" + contratos + ", amostras=" + amostras + "]";
     }
-
-
 }

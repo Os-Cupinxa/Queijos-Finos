@@ -5,7 +5,6 @@ import com.queijos_finos.main.repository.CursosRepository;
 
 import jakarta.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,8 +17,11 @@ import java.util.Optional;
 @RequestMapping("/cursos")
 public class CursosController {
 
-    @Autowired
-    private CursosRepository cursosRepository;
+    private final CursosRepository cursosRepository;
+
+    public CursosController(CursosRepository cursosRepository) {
+        this.cursosRepository = cursosRepository;
+    }
 
     @GetMapping
     public String showCursos(@RequestParam(value = "search", required = false) String search, Model model) {

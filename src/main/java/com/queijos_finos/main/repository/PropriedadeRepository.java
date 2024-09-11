@@ -7,10 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.queijos_finos.main.model.Contrato;
 import com.queijos_finos.main.model.Propriedade;
-import com.queijos_finos.main.model.Usuarios;
-
 
 public interface PropriedadeRepository extends JpaRepository<Propriedade, Long> {
     Page<Propriedade> findAll(Pageable pageable);

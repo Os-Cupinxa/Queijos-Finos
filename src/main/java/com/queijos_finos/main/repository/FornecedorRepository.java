@@ -1,6 +1,5 @@
 package com.queijos_finos.main.repository;
 
-import com.queijos_finos.main.model.Usuarios;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

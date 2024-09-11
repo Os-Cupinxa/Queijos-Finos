@@ -1,13 +1,11 @@
 package com.queijos_finos.main.controller;
 
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,10 +25,13 @@ import com.queijos_finos.main.repository.PropriedadeRepository;
 @Controller
 public class ContratosController {
 
-    @Autowired
-    private ContratoRepository contratoRepo;
-    @Autowired
-    private PropriedadeRepository propriedadeRepo;
+    private final ContratoRepository contratoRepo;
+    private final PropriedadeRepository propriedadeRepo;
+
+    public ContratosController(ContratoRepository contratoRepo, PropriedadeRepository propriedadeRepo) {
+        this.contratoRepo = contratoRepo;
+        this.propriedadeRepo = propriedadeRepo;
+    }
 
     @GetMapping("/contratos/cadastrar")
     public String createContratoView(@RequestParam(required = false) Long idContrato,
@@ -39,7 +40,7 @@ public class ContratosController {
         if (idContrato != null) {
             Optional<Contrato> contrato = contratoRepo.findById(idContrato);
 
-            model.addAttribute("contrato", contrato.get());
+            contrato.ifPresent(value -> model.addAttribute("contrato", value));
         }
 
 
@@ -71,8 +72,6 @@ public class ContratosController {
 
         Propriedade propriedade = new Propriedade();
         propriedade.setIdPropriedade(idPropriedade);
-
-        System.out.println(dataEmissao);
 
         SimpleDateFormat formato = new SimpleDateFormat("y-M-d");
         Date dataEmissaoConv = formato.parse(dataEmissao);

@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.queijos_finos.main.dto.TecnologiaCountProp;
 import com.queijos_finos.main.model.Tecnologias;
 
 public interface TecnologiaRepository extends JpaRepository<Tecnologias, Long> {

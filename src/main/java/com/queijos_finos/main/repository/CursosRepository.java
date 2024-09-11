@@ -23,8 +23,6 @@ public interface CursosRepository extends JpaRepository<Curso, Long> {
     @Modifying
     @Query(value = "DELETE FROM propriedade_has_curso WHERE curso_id_curso = :cursoId", nativeQuery = true)
     void deleteCursoPropriedadeRelacionamento(Long cursoId);
-    
-   
 }
 
 

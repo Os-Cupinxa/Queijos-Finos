@@ -3,7 +3,6 @@ package com.queijos_finos.main.model;
 import java.util.List;
 import java.util.Objects;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -88,6 +87,4 @@ public class Curso {
         return "Curso [Id=" + id + ", nome=" + nome + ", conteudo=" + conteudo + ", professor=" + professor
                 + ", duracao=" + duracao + ", propriedades=" + propriedades + "]";
     }
-
-
 }
