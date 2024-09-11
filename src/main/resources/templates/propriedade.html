@@ -269,7 +269,6 @@
         </nav>
     </div>
     <div class="w-100">
-
         <div class="superior">
             <header class="sidebar-header">
                 <?xml version="1.0" encoding="UTF-8"?>
@@ -296,7 +295,6 @@
                     <button class="rounded-pill shadow botaoCadastrar">+ CADASTRAR NOVO</button>
                 </a>
             </div>
-
 
             <div class="w-100 m-5">
                 <table id="myTable" class="">
@@ -394,7 +392,7 @@
                                                     <p class="font-weight-bold text-center mb-0 ml-2 "
                                                        th:style="'color:' + (${prop.status == 0} ? 'rgb(184,43,43);font-weight: bold' : (${prop.status == 1} ? 'rgb(226,195,29);font-weight: bold' : 'rgb(80,160,30);font-weight: bold'))"
                                                        th:text="${prop.status == 2} ? 'Produzindo' : (${prop.status == 1} ? 'Contemplação' : 'Desistente')"></p>
-                                                  
+
                                                 </div>
                                                 <div class="d-flex justify-content-end">
                                                     <button class="btn btn-secondary"
@@ -416,26 +414,27 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+    </div>
 
-
-            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-            <script type="text/javascript" charset="utf8"
-                    src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
-            <script>
-                $(document).ready(function () {
-                    $('#usuarioTable').DataTable();
-                });
-                new DataTable('#usuarioTable');
-            </script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-                    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-                    crossorigin="anonymous"></script>
-            <script>
-                $(document).ready(function () {
-                    $('#myTable').DataTable();
-                });
-                new DataTable('#myTable');
-            </script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#usuarioTable').DataTable();
+        });
+        new DataTable('#usuarioTable');
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            $('#myTable').DataTable();
+        });
+        new DataTable('#myTable');
+    </script>
+</div>
 </body>
 </html>
