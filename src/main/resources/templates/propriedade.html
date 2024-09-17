@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8"/>
@@ -10,8 +10,6 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
     <link rel="stylesheet" href="./contratos.css"/>
-
-
 </head>
 
 <body>
@@ -269,31 +267,13 @@
         </nav>
     </div>
     <div class="w-100">
-
-        <div class="superior">
-            <header class="sidebar-header">
-                <?xml version="1.0" encoding="UTF-8"?>
-                <svg width="30px" height="30px" stroke-width="1.5"
-                     viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#ffffff">
-                    <path
-                            d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z"
-                            stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                    <path
-                            d="M4.271 18.3457C4.271 18.3457 6.50002 15.5 12 15.5C17.5 15.5 19.7291 18.3457 19.7291 18.3457"
-                            stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                    <path
-                            d="M12 12C13.6569 12 15 10.6569 15 9C15 7.34315 13.6569 6 12 6C10.3431 6 9 7.34315 9 9C9 10.6569 10.3431 12 12 12Z"
-                            stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                </svg>
-                <span>Olá usuario!</span>
-            </header>
-        </div>
+        <div th:insert="~{fragments/header :: header}"></div>
 
         <div class="conteudo-index p-3" style="overflow-y: auto; overflow-x:hidden">
             <div class="d-flex align-items-center justify-content-between p-3 border border-black w-100">
                 <h1 class="mx-auto mb-0">Propriedades</h1>
                 <a href="/propriedade/cadastrar">
-                    <button class="rounded-pill shadow botaoCadastrar">+ CADASTRAR NOVO</button>
+                    <button class="btn btn-primary">+ CADASTRAR NOVO</button>
                 </a>
             </div>
 
@@ -394,7 +374,7 @@
                                                     <p class="font-weight-bold text-center mb-0 ml-2 "
                                                        th:style="'color:' + (${prop.status == 0} ? 'rgb(184,43,43);font-weight: bold' : (${prop.status == 1} ? 'rgb(226,195,29);font-weight: bold' : 'rgb(80,160,30);font-weight: bold'))"
                                                        th:text="${prop.status == 2} ? 'Produzindo' : (${prop.status == 1} ? 'Contemplação' : 'Desistente')"></p>
-                                                  
+
                                                 </div>
                                                 <div class="d-flex justify-content-end">
                                                     <button class="btn btn-secondary"
@@ -416,26 +396,28 @@
                     </tbody>
                 </table>
             </div>
+        </div>
 
 
-            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-            <script type="text/javascript" charset="utf8"
-                    src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
-            <script>
-                $(document).ready(function () {
-                    $('#usuarioTable').DataTable();
-                });
-                new DataTable('#usuarioTable');
-            </script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-                    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-                    crossorigin="anonymous"></script>
-            <script>
-                $(document).ready(function () {
-                    $('#myTable').DataTable();
-                });
-                new DataTable('#myTable');
-            </script>
-
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script type="text/javascript" charset="utf8"
+                src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#usuarioTable').DataTable();
+            });
+            new DataTable('#usuarioTable');
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+                crossorigin="anonymous"></script>
+        <script>
+            $(document).ready(function () {
+                $('#myTable').DataTable();
+            });
+            new DataTable('#myTable');
+        </script>
+    </div>
+</div>
 </body>
 </html>
