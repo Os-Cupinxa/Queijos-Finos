@@ -19,71 +19,71 @@
     <link rel="stylesheet"
           type="text/css"
           href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+    <link rel="stylesheet"
+          href="./global.css"/>
 </head>
 <body>
-<div class="index">
-    <div th:insert="~{fragments/sidebar :: sidebar('contratos')}"></div>
+<div th:insert="~{fragments/sidebar :: sidebar('contratos')}"></div>
 
-    <div class="w-100">
-        <div th:insert="~{fragments/header :: header}"></div>
+<div class="w-100">
+    <div th:insert="~{fragments/header :: header}"></div>
 
-        <div class="conteudo-index p-3">
-            <div class="d-flex w-100 p-3 flex-row-reverse border border-black">
-                <a href="/contratos/cadastrar">
-                    <button class="rounded-pill shadow botaoCadastrar w-100">+ CADASTRAR NOVO</button>
-                </a>
-                <h1 class="text-center w-75">Contratos</h1>
-            </div>
+    <div class="conteudo-index p-3">
+        <div class="d-flex w-100 p-3 flex-row-reverse border border-black">
+            <a href="/contratos/cadastrar">
+                <button class="rounded-pill shadow botaoCadastrar w-100">+ CADASTRAR NOVO</button>
+            </a>
+            <h1 class="text-center w-75">Contratos</h1>
+        </div>
 
-            <div class="w-100 d-flex conteudo ">
-                <div class="p-3 w-100 tabela overflow-auto">
-                    <table class="table-stripe stripe"
-                           id="contratosTable">
-                        <thead>
-                        <tr class="">
-                            <th scope="col"></th>
-                            <th scope="col">Nome</th>
-                            <th scope="col">Data Emissao</th>
-                            <th scope="col">Data Vencimento</th>
-                            <th scope="col">Propriedade</th>
-                            <th scope="col"></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr class="border"
-                            th:each="contrato : ${contratos.getContent()}">
-                            <td><img src="comercial.png"></td>
-                            <th th:text="${contrato.getNome()}"></th>
-                            <td th:text="${contrato.getDataEmissaoString()}"></td>
-                            <td th:text="${contrato.getDataVercimentoString()}"></td>
-                            <td th:text="${contrato.getPropriedade().getNomePropriedade()}"></td>
-                            <td class="d-flex flex-row-reverse"><a
-                                    th:href="@{/contratos/cadastrar?idContrato={id}(id=${contrato.getId()})}">
-                                <button class="btn"><img src="ferramenta-lapis.png"
-                                                         alt=""></button>
-                            </a></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-
+        <div class="w-100 d-flex conteudo ">
+            <div class="p-3 w-100 tabela overflow-auto">
+                <table class="table-stripe stripe"
+                       id="contratosTable">
+                    <thead>
+                    <tr class="">
+                        <th scope="col"></th>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Data Emissao</th>
+                        <th scope="col">Data Vencimento</th>
+                        <th scope="col">Propriedade</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="border"
+                        th:each="contrato : ${contratos.getContent()}">
+                        <td><img src="comercial.png"></td>
+                        <th th:text="${contrato.getNome()}"></th>
+                        <td th:text="${contrato.getDataEmissaoString()}"></td>
+                        <td th:text="${contrato.getDataVercimentoString()}"></td>
+                        <td th:text="${contrato.getPropriedade().getNomePropriedade()}"></td>
+                        <td class="d-flex flex-row-reverse"><a
+                                th:href="@{/contratos/cadastrar?idContrato={id}(id=${contrato.getId()})}">
+                            <button class="btn"><img src="ferramenta-lapis.png"
+                                                     alt=""></button>
+                        </a></td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
 
         </div>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript"
-            charset="utf8"
-            src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#contratosTable').DataTable();
-        });
-    </script>
+    </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript"
+        charset="utf8"
+        src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#contratosTable').DataTable();
+    });
+</script>
 </body>
 </html>

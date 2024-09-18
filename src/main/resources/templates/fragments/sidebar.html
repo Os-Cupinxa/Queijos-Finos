@@ -1,21 +1,25 @@
 <div th:fragment="sidebar(activePage)"
-     class="d-flex flex-column p-3 text-bg-dark h-100"
+     class="d-flex flex-column p-3 h-100 background-primary"
      style="width: 280px;">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet"
+          href="../sidebar.css"/>
+    <link rel="stylesheet"
+          href="../colors.css"/>
 
     <a href="/paginaInicial"
        class="d-flex align-items-center mb-3 mb-md-0 justify-content-center text-white text-decoration-none">
-        <span class="fs-4">Queijos Finos</span>
+        <span class="fs-2 text-white sidebar-title">Queijos Finos</span>
     </a>
-    <hr>
-    <ul class="nav nav-pills flex-column mb-auto">
+    <hr class="horizontal-line">
+    <ul class="nav nav-pills flex-column mb-auto gap-2">
         <li class="nav-item">
             <a href="/paginaInicial"
                th:classappend="${activePage == 'home'} ? 'active' : ''"
                class="nav-link text-white"
                aria-current="page">
-                <i class="fa-solid fa-table-columns"></i>
+                <i class="fa-solid fa-chart-pie"></i>
                 <span>Home</span>
             </a>
         </li>
