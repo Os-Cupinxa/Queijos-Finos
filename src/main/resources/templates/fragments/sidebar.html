@@ -1,4 +1,9 @@
-<div th:fragment="sidebar" class="d-flex flex-column p-3 text-bg-dark h-100" style="width: 280px;">
+<div th:fragment="sidebar(activePage)"
+     class="d-flex flex-column p-3 text-bg-dark h-100"
+     style="width: 280px;">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <a href="/paginaInicial"
        class="d-flex align-items-center mb-3 mb-md-0 justify-content-center text-white text-decoration-none">
         <span class="fs-4">Queijos Finos</span>
@@ -6,37 +11,50 @@
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
         <li class="nav-item">
-            <a href="/paginaInicial" class="nav-link active" aria-current="page">
+            <a href="/paginaInicial"
+               th:classappend="${activePage == 'home'} ? 'active' : ''"
+               class="nav-link text-white"
+               aria-current="page">
                 <i class="fa-solid fa-table-columns"></i>
                 <span>Home</span>
             </a>
         </li>
         <li>
-            <a href="/propriedade" class="nav-link text-white">
+            <a href="/propriedade"
+               th:classappend="${activePage == 'propriedade'} ? 'active' : ''"
+               class="nav-link text-white">
                 <i class="fa-solid fa-house"></i>
                 <span>Propriedades</span>
             </a>
         </li>
         <li>
-            <a href="/cursos" class="nav-link text-white">
+            <a href="/cursos"
+               th:classappend="${activePage == 'cursos'} ? 'active' : ''"
+               class="nav-link text-white">
                 <i class="fa-solid fa-book"></i>
                 <span>Cursos</span>
             </a>
         </li>
         <li>
-            <a href="/contratos" class="nav-link text-white">
+            <a href="/contratos"
+               th:classappend="${activePage == 'contratos'} ? 'active' : ''"
+               class="nav-link text-white">
                 <i class="fa-solid fa-file-signature"></i>
                 <span>Contratos</span>
             </a>
         </li>
         <li>
-            <a href="/fornecedores" class="nav-link text-white">
+            <a href="/fornecedores"
+               th:classappend="${activePage == 'fornecedores'} ? 'active' : ''"
+               class="nav-link text-white">
                 <i class="fa-solid fa-box"></i>
                 <span>Fornecedores</span>
             </a>
         </li>
         <li>
-            <a href="/usuarios" class="nav-link text-white">
+            <a href="/usuarios"
+               th:classappend="${activePage == 'usuarios'} ? 'active' : ''"
+               class="nav-link text-white">
                 <i class="fa-solid fa-users"></i>
                 <span>Usuários</span>
             </a>

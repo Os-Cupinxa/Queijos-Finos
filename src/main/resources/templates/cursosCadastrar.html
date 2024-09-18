@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <title>Cadastrar Curso</title>
@@ -10,7 +10,7 @@
 </head>
 <body>
 <div class="index">
-    <div th:insert="~{fragments/sidebar :: sidebar}"></div>
+    <div th:insert="~{fragments/sidebar :: sidebar('cursos')}"></div>
 
     <div class="w-100">
         <div th:insert="~{fragments/header :: header}"></div>
