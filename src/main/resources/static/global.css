@@ -1,8 +1,14 @@
+/*@import url('https://cdn.jsdelivr.net/gh/iconoir-icons/iconoir@main/css/iconoir.css');*/
+@import url('https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css');
+@import url('https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css');
+@import url('https://cdn.datatables.net/2.0.7/css/dataTables.dataTables.min.css');
+
 body {
     display: flex;
     flex-direction: row;
     width: 100%;
     height: 100vh;
+    font-family: Inter, sans-serif;
 }
 
 .page-content {
@@ -12,4 +18,189 @@ body {
     height: calc(100% - 56px);
     flex-direction: column;
     align-items: center;
+    background-color: #F6F3F1;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    width: 100%;
+    height: 60px;
+}
+
+.page-header h1 {
+    font-size: calc(1.275rem + .3vw) !important;
+    margin: 0;
+}
+
+.icon-wrapper {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #9D8E61;
+    border-radius: 10px;
+    border: 3px solid #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #857952;
+}
+
+/* Scrollbar Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #9D8E61 #f1f1f1;
+}
+
+/* Table styles */
+.table-wrapper {
+    width: 100%;
+    max-height: calc(100% - 60px);
+    padding-top: 20px;
+}
+
+.dataTables_wrapper {
+    height: 100%;
+}
+
+.dataTables_filter input {
+    border-radius: 25px;
+    padding: 8px 15px;
+    border: 1px solid #9D8E61;
+    background-color: #FFFFFF !important;
+    outline: none;
+}
+
+.dataTables_length,
+.dataTables_filter {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 36px;
+    padding: 0 10px;
+    min-width: 300px;
+}
+
+.dataTables_filter input {
+    width: 300px;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    background-color: #FFFFFF !important;
+}
+
+.sorting {
+    height: 30px;
+    filter: brightness(0);
+}
+
+.dataTables_scroll {
+    max-height: calc(100% - 60px);
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    border-radius: 10px;
+    background: #9D8E61 !important;
+    color: #FFFFFF !important;
+    border: 1px solid #9D8E61 !important;
+    outline: none;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:not(.current):not(.disabled):hover,
+.dataTables_wrapper .dataTables_paginate .paginate_button:not(.current):not(.disabled):active {
+    border-radius: 10px;
+    background: rgba(157, 142, 97, 0.5) !important;
+    color: #FFFFFF !important;
+    border: 1px solid transparent !important;
+    outline: none;
+    box-shadow: none;
+}
+
+.dataTables_wrapper .dataTables_info {
+    width: 100%;
+}
+
+table.dataTable > thead > tr > th, table.dataTable > thead > tr > td,
+table.dataTable thead th, table.dataTable thead td {
+    border-bottom: none !important;
+}
+
+.dataTables_wrapper.no-footer .dataTables_scrollBody {
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* Accordion */
+.accordion-button:not(.collapsed) {
+    background-color: #9D8E61;
+    color: #FFFFFF;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+}
+
+.accordion-button:not(.collapsed)::after {
+    filter: brightness(0) invert(1);
+}
+
+/* Buttons */
+.btn-primary {
+    border-radius: 100px;
+    background-color: #9D8E61;
+    color: #FFFFFF;
+    border: 1px solid #9D8E61;
+}
+
+.btn-primary:hover,
+.btn-primary:active {
+    background-color: #857952;
+    border: 1px solid #857952;
+    color: #e8e8e8;
+}
+
+.btn-secondary {
+    border-radius: 100px;
+    background-color: transparent;
+    color: #9D8E61;
+    border: 1px solid #9D8E61;
+}
+
+.btn-secondary:hover,
+.btn-secondary:active {
+    background-color: #857952;
+    border: 1px solid #857952;
+    color: #e8e8e8;
+}
+
+.btn-check:checked + .btn, .btn.active, .btn.show, .btn:first-child:active, :not(.btn-check) + .btn:active {
+    background-color: #857952;
+    border: 1px solid #857952;
+    color: #e8e8e8;
+}
+
+.nav-pills .nav-link:not(.active):hover,
+.nav-pills .nav-link:not(.active):active {
+    background-color: rgba(157, 142, 97, 0.5);
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    background-color: #9D8E61;
 }
