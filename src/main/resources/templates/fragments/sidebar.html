@@ -8,19 +8,19 @@
     <link rel="stylesheet"
           href="../colors.css"/>
 
-    <a href="/paginaInicial"
+    <a href="/dashboard"
        class="d-flex align-items-center mb-3 mb-md-0 justify-content-center text-white text-decoration-none">
         <span class="fs-2 text-white sidebar-title">Queijos Finos</span>
     </a>
     <hr class="horizontal-line">
     <ul class="nav nav-pills flex-column mb-auto gap-2">
         <li class="nav-item">
-            <a href="/paginaInicial"
+            <a href="/dashboard"
                th:classappend="${activePage == 'home'} ? 'active' : ''"
                class="nav-link text-white"
                aria-current="page">
                 <i class="fa-solid fa-chart-pie"></i>
-                <span>Home</span>
+                <span>Dashboard</span>
             </a>
         </li>
         <li>
@@ -64,5 +64,9 @@
             </a>
         </li>
     </ul>
-    <hr>
+
+
+    <a href="/" class="logout-button">
+        <i class="fa-solid fa-right-from-bracket fa-2x"></i>
+    </a>
 </div>

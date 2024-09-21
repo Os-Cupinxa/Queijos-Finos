@@ -14,10 +14,9 @@
 <div class="w-100">
     <div th:insert="~{fragments/header :: header}"></div>
 
-    <!--Head Cursos-->
     <div class="page-content p-3">
-        <div class="d-flex align-items-center justify-content-between border-bottom pb-3 w-100">
-            <h1 class="fs-4">
+        <div class="page-header border-bottom">
+            <h1>
                 Cursos
             </h1>
             <a href="/cursos/cadastrar">
@@ -28,7 +27,7 @@
             </a>
         </div>
 
-        <div class="w-100 h-100 pt-3">
+        <div class="table-wrapper">
             <table id="cursosTable">
                 <thead>
                 <tr>
@@ -40,16 +39,17 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr class="border"
+                <tr class="table-item"
                     th:each="curso : ${cursos}">
                     <td th:text="${curso.getNome()}"></td>
                     <td th:text="${curso.getProfessor()}"></td>
                     <td th:text="${curso.getConteudo()}"></td>
                     <td th:text="${curso.getDuracao()}"></td>
-                    <td class="d-flex flex-row-reverse">
+                    <td>
                         <a th:href="@{/cursos/editar/{id}(id=${curso.getId()})}">
-                            <button class="btn"><img src="ferramenta-lapis.png"
-                                                     alt="Editar"></button>
+                            <button class="squared-button">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
                         </a>
                     </td>
                 </tr>
@@ -65,7 +65,35 @@
           href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <script>
         $(document).ready(function () {
-            $('#cursosTable').DataTable();
+            $('#cursosTable').DataTable({
+                scrollY: '56vh',
+                scrollCollapse: true,
+                language: {
+                    "decimal": ",",
+                    "thousands": ".",
+                    "emptyTable": "Nenhum dado disponível na tabela",
+                    "info": "Mostrando _START_ até _END_ de _TOTAL_ registros",
+                    "infoEmpty": "Mostrando 0 até 0 de 0 registros",
+                    "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                    "infoPostFix": "",
+                    "lengthMenu": "Mostrando _MENU_ registros",
+                    "loadingRecords": "Carregando...",
+                    "processing": "Processando...",
+                    "search": "",
+                    "searchPlaceholder": "Pesquisar propriedade",
+                    "zeroRecords": "Nenhum registro encontrado",
+                    "paginate": {
+                        "first": "Primeiro",
+                        "last": "Último",
+                        "next": "Próximo",
+                        "previous": "Anterior"
+                    },
+                    "aria": {
+                        "sortAscending": ": ativar para ordenar a coluna de forma crescente",
+                        "sortDescending": ": ativar para ordenar a coluna de forma decrescente"
+                    }
+                }
+            });
         });
     </script>
 </div>

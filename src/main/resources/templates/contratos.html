@@ -15,8 +15,8 @@
     <div th:insert="~{fragments/header :: header}"></div>
 
     <div class="page-content p-3">
-        <div class="d-flex align-items-center justify-content-between border-bottom pb-3 w-100">
-            <h1 class="fs-4">Contratos</h1>
+        <div class="page-header border-bottom">
+            <h1>Contratos</h1>
 
             <a href="/contratos/cadastrar">
                 <button class="btn btn-primary">
@@ -26,31 +26,31 @@
             </a>
         </div>
 
-        <div class="w-100 h-100 pt-3">
+        <div class="table-wrapper">
             <table id="contratosTable">
                 <thead>
                 <tr class="">
-                    <th scope="col"></th>
                     <th scope="col">Nome</th>
                     <th scope="col">Data Emissao</th>
                     <th scope="col">Data Vencimento</th>
                     <th scope="col">Propriedade</th>
-                    <th scope="col"></th>
+                    <th scope="col">Editar</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr class="border"
                     th:each="contrato : ${contratos.getContent()}">
-                    <td><img src="comercial.png"></td>
                     <th th:text="${contrato.getNome()}"></th>
                     <td th:text="${contrato.getDataEmissaoString()}"></td>
                     <td th:text="${contrato.getDataVercimentoString()}"></td>
                     <td th:text="${contrato.getPropriedade().getNomePropriedade()}"></td>
-                    <td class="d-flex flex-row-reverse"><a
-                            th:href="@{/contratos/cadastrar?idContrato={id}(id=${contrato.getId()})}">
-                        <button class="btn"><img src="ferramenta-lapis.png"
-                                                 alt=""></button>
-                    </a></td>
+                    <td>
+                        <a th:href="@{/contratos/cadastrar?idContrato={id}(id=${contrato.getId()})}">
+                            <button class="squared-button">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                        </a>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -67,7 +67,35 @@
         src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
 <script>
     $(document).ready(function () {
-        $('#contratosTable').DataTable();
+        $('#contratosTable').DataTable({
+            autoWidth: false,
+            responsive: true,
+            language: {
+                "decimal": ",",
+                "thousands": ".",
+                "emptyTable": "Nenhum dado disponível na tabela",
+                "info": "Mostrando _START_ até _END_ de _TOTAL_ registros",
+                "infoEmpty": "Mostrando 0 até 0 de 0 registros",
+                "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                "infoPostFix": "",
+                "lengthMenu": "Mostrando _MENU_ registros",
+                "loadingRecords": "Carregando...",
+                "processing": "Processando...",
+                "search": "",
+                "searchPlaceholder": "Pesquisar propriedade",
+                "zeroRecords": "Nenhum registro encontrado",
+                "paginate": {
+                    "first": "Primeiro",
+                    "last": "Último",
+                    "next": "Próximo",
+                    "previous": "Anterior"
+                },
+                "aria": {
+                    "sortAscending": ": ativar para ordenar a coluna de forma crescente",
+                    "sortDescending": ": ativar para ordenar a coluna de forma decrescente"
+                }
+            }
+        });
     });
 </script>
 </body>

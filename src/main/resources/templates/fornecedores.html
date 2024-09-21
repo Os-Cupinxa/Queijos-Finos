@@ -16,8 +16,8 @@
     <div th:insert="~{fragments/header :: header}"></div>
 
     <div class="page-content p-3">
-        <div class="d-flex align-items-center justify-content-between border-bottom pb-3 w-100">
-            <h1 class="fs-4">Fornecedores</h1>
+        <div class="page-header border-bottom">
+            <h1>Fornecedores</h1>
 
             <a href="/fornecedores/cadastrar">
                 <button class="btn btn-primary">
@@ -27,29 +27,27 @@
             </a>
         </div>
 
-        <div class="w-100 h-100 pt-3">
-            <table class="table-stripe stripe"
-                   id="fornecedorTable">
+        <div class="table-wrapper">
+            <table id="fornecedorTable">
                 <thead>
                 <tr class="">
-                    <th scope="col"></th>
                     <th scope="col">Nome</th>
                     <th scope="col">Email</th>
                     <th scope="col">Qualidade</th>
-                    <th scope="col"></th>
+                    <th scope="col">Editar</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr class="border user-row"
+                <tr class="table-item"
                     th:each="fornecedor : ${fornecedores}">
-                    <td><img src="comercial.png"></td>
                     <td th:text="${fornecedor.nome}"></td>
                     <td th:text="${fornecedor.email}"></td>
                     <td th:text="${fornecedor.qualidade}"></td>
-                    <td class="d-flex flex-row-reverse">
+                    <td>
                         <a th:href="@{/fornecedores/cadastrar?idFornecedor={id}(id=${fornecedor.getId()})}">
-                            <button class="btn"><img src="ferramenta-lapis.png"
-                                                     alt=""></button>
+                            <button class="squared-button">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
                         </a>
                     </td>
                 </tr>
@@ -57,20 +55,48 @@
             </table>
         </div>
     </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript"
+            charset="utf8"
+            src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            $('#fornecedorTable').DataTable({
+                scrollY: '56vh',
+                scrollCollapse: true,
+                language: {
+                    "decimal": ",",
+                    "thousands": ".",
+                    "emptyTable": "Nenhum dado disponível na tabela",
+                    "info": "Mostrando _START_ até _END_ de _TOTAL_ registros",
+                    "infoEmpty": "Mostrando 0 até 0 de 0 registros",
+                    "infoFiltered": "(filtrado de _MAX_ registros no total)",
+                    "infoPostFix": "",
+                    "lengthMenu": "Mostrando _MENU_ registros",
+                    "loadingRecords": "Carregando...",
+                    "processing": "Processando...",
+                    "search": "",
+                    "searchPlaceholder": "Pesquisar propriedade",
+                    "zeroRecords": "Nenhum registro encontrado",
+                    "paginate": {
+                        "first": "Primeiro",
+                        "last": "Último",
+                        "next": "Próximo",
+                        "previous": "Anterior"
+                    },
+                    "aria": {
+                        "sortAscending": ": ativar para ordenar a coluna de forma crescente",
+                        "sortDescending": ": ativar para ordenar a coluna de forma decrescente"
+                    }
+                }
+            });
+        });
+    </script>
 </div>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script type="text/javascript"
-        charset="utf8"
-        src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
-
-<script>
-    $(document).ready(function () {
-        $('#fornecedorTable').DataTable();
-    });
-</script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
 </body>
 </html>
