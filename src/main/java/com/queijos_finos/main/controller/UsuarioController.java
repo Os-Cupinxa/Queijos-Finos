@@ -103,7 +103,7 @@ public class UsuarioController {
             usuarioOptional.ifPresent(usuarios -> model.addAttribute("usuario", usuarios));
         }
 
-        return "usuariosCadastrar";
+        return "subPages/usuariosCadastrar";
     }
 
 

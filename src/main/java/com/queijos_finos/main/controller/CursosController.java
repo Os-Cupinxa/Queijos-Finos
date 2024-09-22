@@ -36,13 +36,13 @@ public class CursosController {
     @GetMapping("/cadastrar")
     public String createCursosView(Model model) {
         model.addAttribute("curso", new Curso());
-        return "cursosCadastrar";
+        return "subPages/cursosCadastrar";
     }
 
     @PostMapping
     public String cadastrarCurso(@ModelAttribute Curso curso, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return "cursosCadastrar";
+            return "subPages/cursosCadastrar";
         }
         cursosRepository.save(curso);
         return "redirect:/cursos";
@@ -53,7 +53,7 @@ public class CursosController {
         Optional<Curso> curso = cursosRepository.findById(id);
         if (curso.isPresent()) {
             model.addAttribute("curso", curso.get());
-            return "cursosEditar";
+            return "subPages/cursosEditar";
         } else {
             model.addAttribute("mensagem", "Curso não encontrado");
             return "redirect:/cursos";
@@ -64,14 +64,14 @@ public class CursosController {
     public String editCursos(@PathVariable Long id, @ModelAttribute Curso curso, BindingResult result, Model model) {
         if (result.hasErrors()) {
             model.addAttribute("curso", curso);
-            return "cursosEditar";
+            return "subPages/cursosEditar";
         }
         curso.setId(id);
         cursosRepository.save(curso);
         model.addAttribute("mensagem", "Curso atualizado com sucesso");
         return "redirect:/cursos";
     }
-    
+
     @Transactional
     @PostMapping("/delete/{id}")
     public String deleteCursos(@PathVariable Long id, Model model) {

@@ -9,11 +9,9 @@ import java.util.Optional;
 import com.queijos_finos.main.model.*;
 import com.queijos_finos.main.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -49,7 +47,7 @@ public class PropriedadeController {
 
         model.addAttribute("propriedade", propriedade);
         model.addAttribute("amostra", new Amostra());
-        return "visualizarPropriedade";
+        return "subPages/visualizarPropriedade";
     }
 
     @PostMapping("/amostras")
@@ -98,7 +96,7 @@ public class PropriedadeController {
         model.addAttribute("tecnologias", tecnologias);
         model.addAttribute("fornecedores", fornecedores);
 
-        return "propriedadeCadastrar";
+        return "subPages/propriedadeCadastrar";
     }
 
 

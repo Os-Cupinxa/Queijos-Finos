@@ -11,7 +11,7 @@ body {
     font-family: Inter, sans-serif;
 }
 
-.page-content {
+.page-content-container {
     padding: 10px;
     display: flex;
     width: 100%;
@@ -35,12 +35,44 @@ body {
     margin: 0;
 }
 
+.buttons-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.page-content-wrapper {
+    width: 100%;
+    height: calc(100% - 60px);
+    overflow-y: auto;
+    padding: 20px 10px 10px 10px;
+}
+
 .icon-wrapper {
     width: 30px;
     height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+/* Forms */
+.form-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    gap: 20px;
+}
+
+.form-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 20px;
 }
 
 /* Scrollbar */
@@ -237,7 +269,6 @@ table.dataTable thead th, table.dataTable thead td {
 
 /* Buttons */
 .btn-primary {
-    border-radius: 100px;
     background-color: #9D8E61;
     color: #FFFFFF;
     border: 1px solid #9D8E61;
@@ -252,7 +283,6 @@ table.dataTable thead th, table.dataTable thead td {
 
 .btn-secondary,
 .squared-button {
-    border-radius: 100px;
     background-color: transparent;
     color: #9D8E61;
     border: 1px solid #9D8E61;
@@ -262,7 +292,6 @@ table.dataTable thead th, table.dataTable thead td {
 .squared-button {
     height: 38px;
     width: 38px;
-    border-radius: 10px;
 }
 
 .btn-secondary:hover,

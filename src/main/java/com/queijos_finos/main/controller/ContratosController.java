@@ -46,7 +46,7 @@ public class ContratosController {
         List<Propriedade> propriedades = propriedadeRepo.findWithoutContrato();
 
         model.addAttribute("propriedades", propriedades);
-        return "contratosCadastrar";
+        return "subPages/contratosCadastrar";
     }
 
     @GetMapping("/contratos")
@@ -103,7 +103,7 @@ public class ContratosController {
     public String deleteContrato(@PathVariable("id") Long id) {
         System.out.println("teste");
         contratoRepo.deleteById(id);
-        return "contratosCadastrar";
+        return "subPages/contratosCadastrar";
     }
 
 }
