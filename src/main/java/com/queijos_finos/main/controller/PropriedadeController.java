@@ -34,8 +34,7 @@ public class PropriedadeController {
     @GetMapping("/propriedade")
     public String showPropriedade(Model model) {
         List<Propriedade> propriedade;
-        Pageable pageable = PageRequest.of(0, 100);
-        propriedade = propriedadeRepo.findAll(pageable).getContent();
+        propriedade = propriedadeRepo.findAll();
         model.addAttribute("propriedade", propriedade);
         return "propriedade";
     }
