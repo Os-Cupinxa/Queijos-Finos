@@ -1,0 +1,36 @@
+<div th:fragment="modalConfirmDelete(id)"
+     class="modal fade"
+     id="modalConfirmDelete"
+     tabindex="-1"
+     role="dialog">
+    <div class="modal-dialog modal-dialog-centered"
+         role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"
+                    id="exampleModalLongTitle">
+                    Confirmar
+                </h5>
+            </div>
+
+            <div class="modal-body">
+                <p class="mb-0">Tem certeza que deseja excluir? Esta ação é <b>irreversível</b>.</p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-dismiss="modal">
+                    Cancelar
+                </button>
+
+                <button type="button"
+                        class="btn btn-danger"
+                        data-dismiss="modal"
+                        th:onclick="'handleDelete(' + ${id} + ')'">
+                    Excluir
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -287,7 +287,7 @@ table.dataTable thead th, table.dataTable thead td {
     color: #e8e8e8;
 }
 
-.btn-secondary,
+.outline-button,
 .squared-button {
     background-color: transparent;
     color: #9D8E61;
@@ -301,8 +301,8 @@ table.dataTable thead th, table.dataTable thead td {
     width: 38px;
 }
 
-.btn-secondary:hover,
-.btn-secondary:active,
+.outline-button:hover,
+.outline-button:active,
 .squared-button:hover,
 .squared-button:active {
     background-color: #857952;
@@ -310,7 +310,7 @@ table.dataTable thead th, table.dataTable thead td {
     color: #e8e8e8;
 }
 
-.btn-check:checked + .btn, .btn.active, .btn.show, .btn:first-child:active, :not(.btn-check) + .btn:active {
+.btn-primary.btn:active {
     background-color: #857952;
     border: 1px solid #857952;
     color: #e8e8e8;
