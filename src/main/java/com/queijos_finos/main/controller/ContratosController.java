@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import com.queijos_finos.main.model.Curso;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -54,7 +55,10 @@ public class ContratosController {
             Model model) {
         Pageable pageable = PageRequest.of(30, 25);
 
-        Page<Contrato> contratos = contratoRepo.findAll(pageable);
+        List<Contrato> contratos;
+        contratos = contratoRepo.findAll();
+
+        System.out.println(contratos);
 
         model.addAttribute("contratos", contratos);
 

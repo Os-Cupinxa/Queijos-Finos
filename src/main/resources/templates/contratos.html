@@ -36,8 +36,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr class="border"
-                    th:each="contrato : ${contratos.getContent()}">
+                <tr class="table-item"
+                    th:each="contrato : ${contratos}">
                     <th th:text="${contrato.getNome()}"></th>
                     <td th:text="${contrato.getDataEmissaoString()}"></td>
                     <td th:text="${contrato.getDataVercimentoString()}"></td>
@@ -66,8 +66,8 @@
 <script>
     $(document).ready(function () {
         $('#contratosTable').DataTable({
-            autoWidth: false,
-            responsive: true,
+            scrollY: '56vh',
+            scrollCollapse: true,
             language: {
                 "decimal": ",",
                 "thousands": ".",
