@@ -51,24 +51,26 @@
                 </div>
 
                 <div class="form-row">
-                    <p class="text-center">Data de emissao:</p>
                     <input th:value="${contrato != null}? ${{contrato.getDataEmissaoString()}} : ''"
                            name="dataEmissao"
                            required
-                           type="date"
+                           type="text"
+                           onfocus="(this.type='date')"
+                           onblur="(this.type='text')"
                            class="form-control"
-                           placeholder="Data Emissao">
+                           placeholder="Data de Emissão">
 
                 </div>
 
                 <div class="form-row">
-                    <p class="text-center">Data de vencimento:</p>
                     <input th:value="${contrato != null}? ${{contrato.getDataVercimentoString()}} : ''"
                            name="dataVencimento"
                            required
-                           type="date"
+                           type="text"
+                           onfocus="(this.type='date')"
+                           onblur="(this.type='text')"
                            class="form-control"
-                           placeholder="Data Vencimento">
+                           placeholder="Data de Vencimento">
                 </div>
 
                 <div class="form-row">
@@ -95,8 +97,6 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     function excluirPergunta(perguntaId) {
-        console.log(perguntaId);
-
         Swal.fire({
             title: "Tem certeza que deseja excluir?",
             text: "Isso nao será reversivel!",
