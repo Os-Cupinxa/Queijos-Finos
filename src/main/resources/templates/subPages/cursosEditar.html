@@ -18,8 +18,9 @@
 
             <div class="buttons-wrapper">
                 <button type="button"
-                        th:onclick="'excluirCurso(\'' + ${curso.getId()} + '\');'"
-                        class="btn btn-danger">
+                        class="btn btn-danger"
+                        data-toggle="modal"
+                        data-target="#modalConfirmDelete">
                     EXCLUIR
                 </button>
 
@@ -73,47 +74,30 @@
             </form>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        function excluirCurso(cursoId) {
-            Swal.fire({
-                title: "Tem certeza que deseja excluir?",
-                text: "Isso nao será reversivel!",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: '#DD6B55',
-                confirmButtonText: 'Sim, tenho certeza!',
-                cancelButtonText: "Cancelar",
-                closeOnConfirm: false,
-                closeOnCancel: false
-            }).then(function (result) {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: '/cursos/delete/' + cursoId,
-                        type: 'POST',
-                        data: {_method: 'POST'},
-                        success: function (response) {
-                            window.location.href = '/cursos';
-                        },
-                        error: function (xhr, status, error) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'Ocorreu um erro ao excluir a pergunta.'
-                            });
-                        }
-                    });
-                }
-            });
-
-        }
-
-    </script>
 </div>
+
+<div th:replace="~{fragments/modalConfirmDelete :: modalConfirmDelete(${curso != null
+    ? curso.getId()
+    : null})}"></div>
+
+<script>
+    function handleDelete(id) {
+        $.ajax({
+            url: '/cursos/delete/' + id,
+            type: 'POST',
+            data: {_method: 'POST'},
+            success: function () {
+                window.location.href = '/cursos';
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
 </body>
 </html>

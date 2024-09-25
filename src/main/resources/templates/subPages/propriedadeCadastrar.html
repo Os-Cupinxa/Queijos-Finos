@@ -22,9 +22,9 @@
 
             <div class="buttons-wrapper">
                 <button type="button"
-                        th:if="${propriedade != null}"
-                        th:onclick="'excluirPropriedade(\'' + ${propriedade.getIdPropriedade()} + '\');'"
-                        class="btn btn-danger">
+                        class="btn btn-danger"
+                        data-toggle="modal"
+                        data-target="#modalConfirmDelete">
                     EXCLUIR
                 </button>
 
@@ -49,7 +49,6 @@
                            id="nome"
                            required
                            type="text"
-                           style="border-color: #273C4E;"
                            class="form-control"
                            aria-describedby="nomeHelp"
                            placeholder="Nome da Propriedade">
@@ -58,14 +57,12 @@
                            id="cnpj"
                            required
                            type="text"
-                           style="border-color: #273C4E;"
                            class="form-control"
                            aria-describedby="cnpjHelp"
                            placeholder="CNPJ">
 
                     <select id="status"
                             required
-                            style="border-color: #273C4E;"
                             class="form-select"
                             aria-describedby="statusHelp">
                         <option value="2"
@@ -88,7 +85,6 @@
                            id="latitude"
                            required
                            type="text"
-                           style="border-color: #273C4E;"
                            class="form-control"
                            aria-describedby="latitudeHelp"
                            placeholder="Latitude">
@@ -97,7 +93,6 @@
                            id="longitude"
                            required
                            type="text"
-                           style="border-color: #273C4E;"
                            class="form-control"
                            aria-describedby="longitudeHelp"
                            placeholder="Longitude">
@@ -108,7 +103,6 @@
                            id="rua"
                            required
                            type="text"
-                           style="border-color: #273C4E;"
                            class="form-control"
                            aria-describedby="ruaHelp"
                            placeholder="Rua">
@@ -117,7 +111,6 @@
                            id="bairro"
                            required
                            type="text"
-                           style="border-color: #273C4E;"
                            class="form-control"
                            aria-describedby="bairroHelp"
                            placeholder="Bairro">
@@ -128,7 +121,6 @@
                            id="cidade"
                            required
                            type="text"
-                           style="border-color: #273C4E;"
                            class="form-control"
                            aria-describedby="cidadeHelp"
                            placeholder="Cidade">
@@ -137,7 +129,6 @@
                            id="uf"
                            required
                            type="text"
-                           style="border-color: #273C4E;"
                            class="form-control"
                            aria-describedby="ufHelp"
                            placeholder="UF">
@@ -148,7 +139,6 @@
                            id="nomeProdutor"
                            required
                            type="text"
-                           style="border-color: #273C4E;"
                            class="form-control"
                            aria-describedby="nomeProdutorHelp"
                            placeholder="Nome do Produtor">
@@ -157,7 +147,6 @@
                            id="cpf"
                            required
                            type="text"
-                           style="border-color: #273C4E;"
                            class="form-control"
                            aria-describedby="cpfHelp"
                            placeholder="CPF">
@@ -168,7 +157,6 @@
                            id="celular"
                            required
                            type="text"
-                           style="border-color: #273C4E;"
                            class="form-control"
                            aria-describedby="celularHelp"
                            placeholder="Celular">
@@ -177,7 +165,6 @@
                            id="telefone"
                            required
                            type="text"
-                           style="border-color: #273C4E;"
                            class="form-control"
                            aria-describedby="telefoneHelp"
                            placeholder="Telefone">
@@ -186,7 +173,6 @@
                            id="email"
                            required
                            type="email"
-                           style="border-color: #273C4E;"
                            class="form-control"
                            aria-describedby="emailHelp"
                            placeholder="Email">
@@ -197,10 +183,10 @@
                         <div class="d-flex align-items-center">
                             <p class="m-3 fs-3">Cursos</p>
                             <button type="button"
-                                    class="btn rounded-pill"
-                                    style="background-color: #273C4E; height: 50px; color: white"
+                                    class="btn btn-primary"
                                     data-toggle="modal"
-                                    data-target="#exampleModalCenter">Adicionar curso
+                                    data-target="#exampleModalCenter">
+                                ADICIONAR CURSO
                             </button>
 
                         </div>
@@ -250,9 +236,9 @@
                                         th:text="${tecnologia.getNome()}"></option>
                             </select>
                             <button type="button"
-                                    class="btn rounded-pill"
-                                    style="background-color: #273C4E; height: 50px; color: white"
-                                    onclick="adicionarTecnologia()">+
+                                    class="btn btn-primary"
+                                    onclick="adicionarTecnologia()">
+                                <i class="fa-solid fa-plus"></i>
                             </button>
                         </div>
                         <div class="border border-black w-100 overflow-auto p-3 rounded"
@@ -294,10 +280,10 @@
                     <div class="w-100">
                         <p class="text-center fs-2">Fornecedores
                             <button type="button"
-                                    class="btn rounded-pill"
-                                    style="background-color: #273C4E; height: 50px; color: white"
+                                    class="btn btn-primary"
                                     data-toggle="modal"
-                                    data-target="#fornecedorModal">Adicionar Fornecedor
+                                    data-target="#fornecedorModal">
+                                ADICIONAR FORNECEDOR
                             </button>
                         </p>
 
@@ -389,11 +375,12 @@
             </div>
             <div class="modal-footer">
                 <button type="button"
-                        class="btn outline-button"
-                        data-dismiss="modal">Cancelar
+                        class="btn btn-danger"
+                        data-dismiss="modal">
+                    Cancelar
                 </button>
                 <button type="button"
-                        class="btn btn-primary"
+                        class="btn btn-success"
                         onclick="adicionarCursos()"
                         data-dismiss="modal">
                     Adicionar
@@ -402,6 +389,7 @@
         </div>
     </div>
 </div>
+
 <!-- Modal FORNECEDOR-->
 <div class="modal fade"
      id="fornecedorModal"
@@ -454,11 +442,11 @@
             </div>
             <div class="modal-footer">
                 <button type="button"
-                        class="btn outline-button"
+                        class="btn btn-danger"
                         data-dismiss="modal">Cancelar
                 </button>
                 <button type="button"
-                        class="btn btn-primary"
+                        class="btn btn-success"
                         data-dismiss="modal"
                         onclick="adicionarFornecedores()">
                     Adicionar
@@ -478,7 +466,6 @@
         src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
 
 <script>
-
     $(document).ready(function () {
         $('#cursosTable').DataTable({
             paging: false,
@@ -783,43 +770,24 @@
         });
     }
 
-    function excluirPropriedade(propriedadeId) {
-        console.log(propriedadeId);
-
-        Swal.fire({
-            title: "Tem certeza que deseja excluir?",
-            text: "Isso nao será reversivel!",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: '#DD6B55',
-            confirmButtonText: 'Sim, tenho certeza!',
-            cancelButtonText: "Cancelar",
-            closeOnConfirm: false,
-            closeOnCancel: false
-        }).then(function (result) {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '/propriedade/delete/' + propriedadeId,
-                    type: 'POST',
-                    data: {_method: 'POST'},
-                    success: function (response) {
-                        window.location.href = '/propriedade';
-                    },
-                    error: function (xhr, status, error) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Ocorreu um erro ao excluir a propriedade.'
-                        });
-                    }
-                });
+    function handleDelete(id) {
+        $.ajax({
+            url: '/propriedade/delete/' + id,
+            type: 'POST',
+            data: {_method: 'POST'},
+            success: function () {
+                window.location.href = '/propriedade';
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
             }
         });
-
-
     }
-
 </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
 </body>
 </html>
 
