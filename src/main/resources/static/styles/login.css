@@ -1,0 +1,55 @@
+.login-container {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+    background-color: #F6F3F1;
+    overflow-y: hidden;
+}
+
+.main-content {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    padding-left: 80px;
+    width: 100%;
+    z-index: 1;
+    max-width: 600px;
+    gap: 20px;
+    box-sizing: border-box;
+    margin-bottom: 40px;
+}
+
+.main-title-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+}
+
+.main-title.part1,
+.main-title.part2 {
+    font-size: 8vw;
+    font-family: "Bell MT", serif;
+    color: #9D8E61;
+    text-align: center;
+    line-height: 0.85;
+}
+
+.main-title.part2 {
+    font-size: 6vw;
+}
+
+.background-image {
+    position: absolute;
+    width: 50%;
+    bottom: -50px;
+    right: 0;
+    z-index: 0;
+}
