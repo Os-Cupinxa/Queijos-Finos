@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <link rel="stylesheet"
-          th:href="@{/global.css}"/>
+          th:href="@{/styles/global.css}"/>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
@@ -536,33 +536,30 @@
     }
 
     function removerFornecedor(id) {
-        var dataTable = $('#fornecedorTable').DataTable();
+        const dataTable = $('#fornecedorTable').DataTable();
         dataTable.row($("#" + id)).remove().draw();
-
     }
 
     function removerTecnologia(id) {
-        console.log(id)
-        var dataTable = $('#tecnologiasTable').DataTable();
+        const dataTable = $('#tecnologiasTable').DataTable();
         dataTable.row($("#" + id)).remove().draw();
-
     }
 
     function adicionarTecnologia() {
-        var select = document.getElementById("tecnologiaSelect")
+        const select = document.getElementById("tecnologiaSelect");
 
-        var text = select.options[select.selectedIndex].text;
-        var id = select.options[select.selectedIndex].value;
+        const text = select.options[select.selectedIndex].text;
+        const id = select.options[select.selectedIndex].value;
 
-        if (text != "") {
+        if (text !== "") {
             var tecnologias = document.getElementsByClassName("tecnologiaAdd")
             var flag = 0
             for (tecnologia of tecnologias) {
-                if (tecnologia.id == id) {
+                if (tecnologia.id === id) {
                     flag = 1
                 }
             }
-            if (flag == 0) {
+            if (flag === 0) {
                 var table = new DataTable("#tecnologiasTable")
                 table.row
                     .add([
@@ -573,10 +570,10 @@
                     ])
                     .draw(false);
 
-                var linhas = document.getElementById("tecnologiasTable").children[1].children
+                const linhas = document.getElementById("tecnologiasTable").children[1].children;
                 for (let linha of linhas) {
 
-                    if (linha.children[0].innerText == text) {
+                    if (linha.children[0].innerText === text) {
                         linha.setAttribute("id", id)
                         linha.className = 'tecnologiaAdd'
                         linha.children[0].setAttribute("id", id)
@@ -592,17 +589,19 @@
     }
 
     function adicionarFornecedores() {
-        var selects = document.getElementsByClassName("fornecedorADDcheck")
+        const selects = document.getElementsByClassName("fornecedorADDcheck");
+
         for (let check of selects) {
             if (check.checked) {
                 let flag = 0
                 var cursosSelect = document.getElementsByClassName("fornecedorID")
                 for (let curso of cursosSelect) {
-                    if (curso.id == check.id) {
+                    if (curso.id === check.id) {
                         flag = 1
                     }
                 }
-                if (flag == 0) {
+
+                if (flag === 0) {
                     var infos = document.getElementsByClassName(`fornecedorADD ${check.id}`)
                     var table = new DataTable("#fornecedorTable")
                     table.row
@@ -617,7 +616,7 @@
                         ])
                         .draw(false);
 
-                    var linhas = document.getElementById("fornecedorTable").children[1].children
+                    const linhas = document.getElementById("fornecedorTable").children[1].children;
 
                     for (let linha of linhas) {
 
@@ -627,26 +626,25 @@
                             linha.children[0].className = `sorting_1 fornecedorID`
                             break;
                         }
-
                     }
                 }
-
             }
         }
     }
 
     function adicionarCursos() {
-        var selects = document.getElementsByClassName("cursoADDcheck")
+        const selects = document.getElementsByClassName("cursoADDcheck");
+
         for (let check of selects) {
             if (check.checked) {
                 let flag = 0
-                var cursosSelect = document.getElementsByClassName("cursoID")
+                const cursosSelect = document.getElementsByClassName("cursoID");
                 for (let curso of cursosSelect) {
-                    if (curso.id == check.id) {
+                    if (curso.id === check.id) {
                         flag = 1
                     }
                 }
-                if (flag == 0) {
+                if (flag === 0) {
                     var infos = document.getElementsByClassName(`cursoADD ${check.id}`)
                     var table = new DataTable("#cursosTable")
                     table.row
@@ -661,11 +659,11 @@
                         ])
                         .draw(false);
 
-                    var linhas = document.getElementById("cursosTable").children[1].children
-                    console.log(linhas)
+                    const linhas = document.getElementById("cursosTable").children[1].children;
+
                     for (let linha of linhas) {
 
-                        if (linha.children[0].innerText == infos[0].innerText) {
+                        if (linha.children[0].innerText === infos[0].innerText) {
                             linha.setAttribute("id", check.id)
                             linha.children[0].setAttribute("id", check.id)
                             linha.children[0].className = `sorting_1 cursoID`

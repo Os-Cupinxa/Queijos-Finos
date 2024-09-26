@@ -10,7 +10,7 @@
 <body>
 
 <div class="w-100 flex-column align-items-center d-flex justify-content-center" style="height: 100vh;">
-    <img src="logo.png" class=" mb-5" style="width: 40%;">
+    <img th:src="@{/images/logo.png}" class=" mb-5" style="width: 40%;" alt="Biopark Logo">
     <span th:text="${mensagem}"></span>
     <div class="w-50">
         <form class="w-100" th:action="@{/dashboard}" method="post">
