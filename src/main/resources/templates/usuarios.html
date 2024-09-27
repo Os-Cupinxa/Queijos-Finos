@@ -24,23 +24,37 @@
             </a>
         </div>
 
+        <!-- Campo de pesquisa -->
+        <form action="#"
+              method="get"
+              class="table-search">
+            <input type="text"
+                   name="query"
+                   class="form-control"
+                   placeholder="Pesquisar usuários"
+                   th:value="${query}">
+            <button type="submit"
+                    class="btn btn-secondary">
+                PESQUISAR
+            </button>
+        </form>
 
+        <!-- Tabela de usuários -->
         <div class="table-wrapper">
             <table id="usuarioTable">
                 <thead>
                 <tr class="">
                     <th scope="col">Nome</th>
                     <th scope="col">E-mail</th>
-                    <th scope="col">Editar</th>
+                    <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr class="border user-row "
-                    th:each="usuario : ${usuarios}">
+                <tr th:each="usuario : ${usuarios}">
                     <td th:text="${usuario.getNome()}"></td>
                     <td th:text="${usuario.getEmail()}"></td>
-                    <td>
-                        <a th:href="@{/usuarios/cadastrar?idUsuarios={id}(id=${usuario.getIdUsuario()})}">
+                    <td class="button-table-column">
+                        <a th:href="@{/usuarios/cadastrar(idUsuarios=${usuario.getIdUsuario()})}">
                             <button class="squared-button">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </button>
@@ -50,12 +64,46 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Paginação -->
+        <div class="pagination">
+            <nav>
+                <ul class="pagination justify-content-center">
+                    <!-- Botão de Página Anterior -->
+                    <li class="page-item"
+                        th:classappend="${currentPage == 0} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/usuarios(page=${currentPage - 1}, size=${size})}"
+                           tabindex="-1">Anterior</a>
+                    </li>
+
+                    <!-- Páginas -->
+                    <li class="page-item"
+                        th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                        th:classappend="${i == currentPage} ? 'active'">
+                        <a class="page-link"
+                           th:text="${i + 1}"
+                           th:href="@{/usuarios(page=${i}, size=${size})}"></a>
+                    </li>
+
+                    <!-- Botão de Próxima Página -->
+                    <li class="page-item"
+                        th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/usuarios(page=${currentPage + 1}, size=${size})}">Próximo</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Informações de Paginação -->
+        <!--        <div class="text-center">-->
+        <!--            Página <span th:text="${currentPage + 1}"></span> de <span th:text="${totalPages}"></span>-->
+        <!--            (Total de itens: <span th:text="${totalItems}"></span>)-->
+        <!--        </div>-->
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript"
-            charset="utf8"
-            src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>

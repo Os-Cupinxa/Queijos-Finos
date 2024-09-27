@@ -4,9 +4,7 @@ import com.queijos_finos.main.repository.PropriedadeRepository;
 import com.queijos_finos.main.repository.TecnologiaRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,11 +32,33 @@ public class UsuarioController {
 
 
     @GetMapping("/usuarios")
-    public String showUsuarios(@RequestParam(name = "query", required = false) String query, Model model) {
-        List<Usuarios> usuarios;
-        Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
-        usuarios = usuarioRepo.findAll(pageable).getContent();
-        model.addAttribute("usuarios", usuarios);
+    public String showUsuarios(
+            @RequestParam(name = "query", required = false) String query,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            Model model) {
+
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Usuarios> usuariosPage;
+
+        if (query != null && !query.isEmpty()) {
+            Usuarios usuarioExample = new Usuarios();
+            usuarioExample.setNome(query);
+
+            ExampleMatcher matcher = ExampleMatcher.matching()
+                    .withMatcher("nome", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase());
+
+            Example<Usuarios> example = Example.of(usuarioExample, matcher);
+            usuariosPage = usuarioRepo.findAll(example, pageable);
+        } else {
+            usuariosPage = usuarioRepo.findAll(pageable);
+        }
+
+        model.addAttribute("usuarios", usuariosPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", usuariosPage.getTotalPages());
+        model.addAttribute("totalItems", usuariosPage.getTotalElements());
+        model.addAttribute("query", query);
+
         return "usuarios";
     }
 
@@ -130,12 +150,12 @@ public class UsuarioController {
             long type2Count = propRepo.countBystatus(1);
             long type3Count = propRepo.countBystatus(0);
             Pageable pageable = PageRequest.of(0, 5); // First page with 5 items
-        	List<Propriedade> top5Properties = propRepo.findTop5ByOrderByIdDesc(pageable).getContent();
+            List<Propriedade> top5Properties = propRepo.findTop5ByOrderByIdDesc(pageable).getContent();
 
-        	Page<Object[]> results = tecnologiaRepository.countTecnologiaPropriedadesNative(pageable);
+            Page<Object[]> results = tecnologiaRepository.countTecnologiaPropriedadesNative(pageable);
             List<TecnologiaCountProp> tecnologiaCountProps = results.stream()
-                .map(obj -> new TecnologiaCountProp((String) obj[0], ((Number) obj[1]).longValue()))
-                .collect(Collectors.toList());
+                    .map(obj -> new TecnologiaCountProp((String) obj[0], ((Number) obj[1]).longValue()))
+                    .collect(Collectors.toList());
 
             model.addAttribute("type1Count", type1Count);
             model.addAttribute("type2Count", type2Count);
@@ -154,13 +174,13 @@ public class UsuarioController {
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
 
-    	Pageable pageable = PageRequest.of(0, 5); // First page with 5 items
-    	List<Propriedade> top5Properties = propRepo.findTop5ByOrderByIdDesc(pageable).getContent();
+        Pageable pageable = PageRequest.of(0, 5); // First page with 5 items
+        List<Propriedade> top5Properties = propRepo.findTop5ByOrderByIdDesc(pageable).getContent();
 
-    	Page<Object[]> results = tecnologiaRepository.countTecnologiaPropriedadesNative(pageable);
+        Page<Object[]> results = tecnologiaRepository.countTecnologiaPropriedadesNative(pageable);
         List<TecnologiaCountProp> tecnologiaCountProps = results.stream()
-            .map(obj -> new TecnologiaCountProp((String) obj[0], ((Number) obj[1]).longValue()))
-            .collect(Collectors.toList());
+                .map(obj -> new TecnologiaCountProp((String) obj[0], ((Number) obj[1]).longValue()))
+                .collect(Collectors.toList());
 
 
         long type1Count = propRepo.countBystatus(2);

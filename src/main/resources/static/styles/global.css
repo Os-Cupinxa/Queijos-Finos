@@ -76,6 +76,11 @@ body {
     gap: 20px;
 }
 
+.form-control:focus {
+    border-color: #857952;
+    box-shadow: 0 0 0 .25rem rgba(157, 142, 97, 0.25);
+}
+
 textarea.form-control {
     min-height: 300px;
     resize: none;
@@ -178,19 +183,70 @@ textarea.form-control {
 /* Table styles */
 .table-wrapper {
     width: 100%;
-    min-height: calc(100% - 60px);
-    max-height: calc(100% - 60px);
-    padding-top: 20px;
+    height: 100%;
+    padding: 20px 0;
+    overflow-y: auto;
+}
+
+.table-search {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    padding: 10px;
+    gap: 20px;
+}
+
+.table-search input {
+    max-width: 300px;
+}
+
+.table-wrapper table {
+    width: 100%;
+}
+
+.table-wrapper table tbody {
+    border-top: 1px solid #dee2e6;
+}
+
+.table-wrapper table thead tr th {
+    padding-left: 10px;
+    border-right: 1px solid #dee2e6;
+}
+
+.table-wrapper table thead tr th:last-of-type {
+    border-right: none;
+}
+
+.table-wrapper table tbody tr td {
+    height: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0 10px;
+    border-right: 1px solid #dee2e6;
+}
+
+.table-wrapper table tbody tr td:last-of-type {
+    border-right: none;
+}
+
+.table-wrapper table tbody tr:first-of-type {
+    border-top: 1px solid #f1f1f1;
 }
 
 .table-wrapper table tbody tr {
     background-color: #FFFFFF;
+    border-bottom: 1px solid #f1f1f1;
 }
 
-.table-item td {
-    overflow: hidden;
-    text-overflow: ellipsis;
+.table-wrapper .button-table-column {
+    width: 60px;
+    max-width: 60px;
 }
+
+
+
 
 .dataTables_wrapper {
     height: 100%;
@@ -257,6 +313,34 @@ table.dataTable thead th, table.dataTable thead td {
 .dataTables_wrapper.no-footer .dataTables_scrollBody {
     border-top: 1px solid #dee2e6 !important;
     border-bottom: 1px solid #dee2e6 !important;
+}
+
+/* Paginator */
+.pagination {
+    user-select: none;
+}
+
+.active > .page-link, .page-link.active {
+    background-color: #9D8E61;
+    border-color: #9D8E61;
+}
+
+.page-link {
+    color: #9D8E61;
+}
+
+.page-link:hover {
+    background-color: rgba(157, 142, 97, 0.1);
+    color: #9D8E61;
+}
+
+.page-link:focus {
+    box-shadow: none;
+}
+
+.disabled > .page-link, .page-link.disabled {
+    color: #9D8E61;
+    background-color: #e1e1e1;
 }
 
 /* Accordion */
