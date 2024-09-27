@@ -69,24 +69,50 @@
         <div class="pagination">
             <nav>
                 <ul class="pagination justify-content-center">
-                    <!-- Botão de Página Anterior -->
                     <li class="page-item"
                         th:classappend="${currentPage == 0} ? 'disabled'">
                         <a class="page-link"
                            th:href="@{/usuarios(page=${currentPage - 1}, size=${size})}"
                            tabindex="-1">Anterior</a>
                     </li>
+                </ul>
 
-                    <!-- Páginas -->
+                <ul class="pagination justify-content-center">
+
                     <li class="page-item"
-                        th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                        th:classappend="${currentPage == 0} ? 'active'">
+                        <a class="page-link"
+                           th:href="@{/usuarios(page=${0}, size=${size})}">1</a>
+                    </li>
+
+                    <li class="page-item disabled"
+                        th:if="${currentPage > 3}">
+                        <span class="page-link">...</span>
+                    </li>
+
+                    <li class="page-item"
+                        th:each="i : ${#numbers.sequence(currentPage > 3 ? currentPage - 2 : 1, currentPage < totalPages - 3 ? currentPage + 2 : totalPages - 2)}"
                         th:classappend="${i == currentPage} ? 'active'">
                         <a class="page-link"
                            th:text="${i + 1}"
                            th:href="@{/usuarios(page=${i}, size=${size})}"></a>
                     </li>
 
-                    <!-- Botão de Próxima Página -->
+                    <li class="page-item disabled"
+                        th:if="${currentPage < totalPages - 4}">
+                        <span class="page-link">...</span>
+                    </li>
+
+                    <li class="page-item"
+                        th:if="${totalPages > 1}"
+                        th:classappend="${currentPage == totalPages - 1} ? 'active'">
+                        <a class="page-link"
+                           th:text="${totalPages}"
+                           th:href="@{/usuarios(page=${totalPages - 1}, size=${size})}"></a>
+                    </li>
+                </ul>
+
+                <ul class="pagination justify-content-center">
                     <li class="page-item"
                         th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
                         <a class="page-link"

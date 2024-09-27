@@ -320,6 +320,17 @@ table.dataTable thead th, table.dataTable thead td {
     user-select: none;
 }
 
+.pagination nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+}
+
+.pagination nav ul:nth-of-type(2) {
+    width: 300px;
+}
+
 .active > .page-link, .page-link.active {
     background-color: #9D8E61;
     border-color: #9D8E61;
