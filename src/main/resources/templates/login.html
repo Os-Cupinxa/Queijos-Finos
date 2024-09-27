@@ -16,6 +16,7 @@
 <body>
 <div class="login-container"
      style="height: 100vh;">
+
     <div class="main-content">
         <!--
         <img th:src="@{/images/logo.svg}"
@@ -23,32 +24,34 @@
              style="width: 40%;"
              alt="Biopark Logo">
         -->
-        <div class="main-title-wrapper">
-            <span class="main-title part1">QUEIJOS</span>
-            <span class="main-title part2">FINOS</span>
+        <div class="main-title-container">
+            <img th:src="@{/images/selo.png}"
+                 class="selo-image"
+                 style="width: 40%;"
+                 alt="Selo Queijos Finos">
+
+            <div class="main-title-wrapper">
+                <span class="main-title part1">QUEIJOS</span>
+                <span class="main-title part2">FINOS</span>
+            </div>
         </div>
+
         <span th:text="${mensagem}"></span>
-        <form class="w-100"
+        <form class="login-form-container"
               th:action="@{/dashboard}"
               method="post">
-            <div class="mb-3">
+            <input name="email"
+                   required
+                   type="text"
+                   class="form-control"
+                   aria-describedby="emailHelp"
+                   placeholder="Email">
 
-                <input name="email"
-                       required
-                       type="text"
-                       class="form-control"
-                       aria-describedby="emailHelp"
-                       placeholder="Email">
-
-            </div>
-
-            <div class="mb-3">
-                <input name="senha"
-                       required
-                       type="password"
-                       class="form-control"
-                       placeholder="Senha">
-            </div>
+            <input name="senha"
+                   required
+                   type="password"
+                   class="form-control"
+                   placeholder="Senha">
 
             <div class="d-flex justify-content-end w-auto">
                 <button type="submit"
