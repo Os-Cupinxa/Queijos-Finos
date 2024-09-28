@@ -1,0 +1,56 @@
+<!-- TODO fix when there is only 2 or 3 pages -->
+<div th:fragment="tablePaginator(currentPage, totalPages, currentScreen)"
+     class="pagination">
+    <nav th:if="${totalPages > 1}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item"
+                th:classappend="${currentPage == 0} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{${currentScreen}(page=${currentPage - 1})}"
+                   tabindex="-1">Anterior</a>
+            </li>
+        </ul>
+
+        <ul class="pagination justify-content-center">
+            <li class="page-item"
+                th:classappend="${currentPage == 0} ? 'active'">
+                <a class="page-link"
+                   th:href="@{${currentScreen}(page=${0})}">1</a>
+            </li>
+
+            <li class="page-item disabled"
+                th:if="${currentPage > 3}">
+                <span class="page-link">...</span>
+            </li>
+
+            <li class="page-item"
+                th:each="i : ${#numbers.sequence(currentPage > 3 ? currentPage - 2 : 1, currentPage < totalPages - 3 ? currentPage + 2 : totalPages - 2)}"
+                th:classappend="${i == currentPage} ? 'active'">
+                <a class="page-link"
+                   th:text="${i + 1}"
+                   th:href="@{${currentScreen}(page=${i})}"></a>
+            </li>
+
+            <li class="page-item disabled"
+                th:if="${currentPage < totalPages - 4}">
+                <span class="page-link">...</span>
+            </li>
+
+            <li class="page-item"
+                th:if="${totalPages > 1}"
+                th:classappend="${currentPage == totalPages - 1} ? 'active'">
+                <a class="page-link"
+                   th:text="${totalPages}"
+                   th:href="@{${currentScreen}(page=${totalPages - 1})}"></a>
+            </li>
+        </ul>
+
+        <ul class="pagination justify-content-center">
+            <li class="page-item"
+                th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{${currentScreen}(page=${currentPage + 1})}">Próximo</a>
+            </li>
+        </ul>
+    </nav>
+</div>
