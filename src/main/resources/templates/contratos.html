@@ -25,19 +25,7 @@
         </div>
 
         <!-- Campo de pesquisa -->
-        <form action="#"
-              method="get"
-              class="table-search">
-            <input type="text"
-                   name="query"
-                   class="form-control"
-                   placeholder="Pesquisar contratos"
-                   th:value="${query}">
-            <button type="submit"
-                    class="btn btn-secondary">
-                PESQUISAR
-            </button>
-        </form>
+        <div th:replace="~{fragments/tableSearch :: tableSearch(${query}, 'Pesquisar contratos')}"></div>
 
         <!-- Tabela de contratos -->
         <div class="table-wrapper">

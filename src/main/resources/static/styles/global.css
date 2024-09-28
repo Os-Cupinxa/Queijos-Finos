@@ -197,6 +197,10 @@ textarea.form-control {
     gap: 20px;
 }
 
+.table-search .input-group {
+    width: 300px;
+}
+
 .table-search input {
     max-width: 300px;
 }
@@ -248,8 +252,6 @@ textarea.form-control {
     width: 60px;
     max-width: 60px;
 }
-
-
 
 
 .dataTables_wrapper {
@@ -413,6 +415,15 @@ table.dataTable thead th, table.dataTable thead td {
     background-color: #857952;
     border: 1px solid #857952;
     color: #e8e8e8;
+}
+
+.btn-clear-search {
+    border-radius: 0 0.375rem 0.375rem 0;
+}
+
+.btn-clear-search .delete-icon {
+    height: 20px;
+    width: 20px;
 }
 
 .nav-pills .nav-link:not(.active):hover,

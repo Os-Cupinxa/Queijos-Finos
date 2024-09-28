@@ -2,11 +2,36 @@
       action="#"
       method="get"
       class="table-search">
-    <input type="text"
-           name="query"
-           class="form-control"
-           th:placeholder="${placeholder}"
-           th:value="${query}">
+    <div th:if="${query != null and query != ''}"
+         class="input-group">
+
+        <input type="text"
+               class="form-control"
+               placeholder=""
+               aria-label=""
+               aria-describedby="basic-addon1"
+               th:placeholder="${placeholder}"
+               th:value="${query}">
+
+        <div class="input-group-append">
+            <button class="btn btn-danger btn-clear-search"
+                    type="button"
+                    onclick="window.location.href='?query='">
+                <i class="fa-solid fa-xmark fa-lg"></i>
+            </button>
+        </div>
+    </div>
+
+    <div th:unless="${query != null and query != ''}"
+         class="input-group">
+        <input th:else
+               type="text"
+               name="query"
+               class="form-control"
+               th:placeholder="${placeholder}"
+               th:value="${query}">
+    </div>
+
     <button type="submit"
             class="btn btn-secondary">
         PESQUISAR
