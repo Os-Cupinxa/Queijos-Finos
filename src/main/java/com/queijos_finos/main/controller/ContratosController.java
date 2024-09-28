@@ -8,10 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 import com.queijos_finos.main.model.Curso;
+import com.queijos_finos.main.model.Usuarios;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +32,36 @@ public class ContratosController {
     @Autowired
     private PropriedadeRepository propriedadeRepo;
 
+    @GetMapping("/contratos")
+    public String showContratos(
+            @RequestParam(name = "query", required = false) String query,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            Model model) {
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Contrato> contratos;
+
+        if (query != null && !query.isEmpty()) {
+            Contrato contratoExample = new Contrato();
+            contratoExample.setNome(query);
+
+            ExampleMatcher matcher = ExampleMatcher.matching()
+                    .withMatcher("nome", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase());
+
+            Example<Contrato> example = Example.of(contratoExample, matcher);
+            contratos = contratoRepo.findAll(example, pageable);
+        } else {
+            contratos = contratoRepo.findAll(pageable);
+        }
+
+        model.addAttribute("contratos", contratos.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", contratos.getTotalPages());
+        model.addAttribute("totalItems", contratos.getTotalElements());
+        model.addAttribute("query", query);
+
+        return "contratos";
+    }
+
     @GetMapping("/contratos/cadastrar")
     public String createContratoView(@RequestParam(required = false) Long idContrato,
                                      Model model) {
@@ -48,21 +77,6 @@ public class ContratosController {
 
         model.addAttribute("propriedades", propriedades);
         return "subPages/contratosCadastrar";
-    }
-
-    @GetMapping("/contratos")
-    public String showContratos(
-            Model model) {
-        Pageable pageable = PageRequest.of(30, 25);
-
-        List<Contrato> contratos;
-        contratos = contratoRepo.findAll();
-
-        System.out.println(contratos);
-
-        model.addAttribute("contratos", contratos);
-
-        return "contratos";
     }
 
     @PostMapping("/contratos")

@@ -24,6 +24,22 @@
             </a>
         </div>
 
+        <!-- Campo de pesquisa -->
+        <form action="#"
+              method="get"
+              class="table-search">
+            <input type="text"
+                   name="query"
+                   class="form-control"
+                   placeholder="Pesquisar contratos"
+                   th:value="${query}">
+            <button type="submit"
+                    class="btn btn-secondary">
+                PESQUISAR
+            </button>
+        </form>
+
+        <!-- Tabela de contratos -->
         <div class="table-wrapper">
             <table id="contratosTable">
                 <thead>
@@ -32,17 +48,17 @@
                     <th scope="col">Data de Emissão</th>
                     <th scope="col">Data Vencimento</th>
                     <th scope="col">Propriedade</th>
-                    <th scope="col">Editar</th>
+                    <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr class="table-item"
                     th:each="contrato : ${contratos}">
-                    <th th:text="${contrato.getNome()}"></th>
+                    <td th:text="${contrato.getNome()}"></td>
                     <td th:text="${contrato.getDataEmissaoString()}"></td>
                     <td th:text="${contrato.getDataVercimentoString()}"></td>
                     <td th:text="${contrato.getPropriedade().getNomePropriedade()}"></td>
-                    <td>
+                    <td class="button-table-column">
                         <a th:href="@{/contratos/cadastrar?idContrato={id}(id=${contrato.getId()})}">
                             <button class="squared-button">
                                 <i class="fa-solid fa-pen-to-square"></i>
@@ -53,6 +69,63 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Paginação -->
+        <!-- TODO fix when there is only 2 or 3 pages -->
+        <div th:if="${totalPages > 1}" class="pagination">
+            <nav>
+                <ul class="pagination justify-content-center">
+                    <li class="page-item"
+                        th:classappend="${currentPage == 0} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/contratos(page=${currentPage - 1}, size=${size})}"
+                           tabindex="-1">Anterior</a>
+                    </li>
+                </ul>
+
+                <ul class="pagination justify-content-center">
+                    <li class="page-item"
+                        th:classappend="${currentPage == 0} ? 'active'">
+                        <a class="page-link"
+                           th:href="@{/contratos(page=${0}, size=${size})}">1</a>
+                    </li>
+
+                    <li class="page-item disabled"
+                        th:if="${currentPage > 3}">
+                        <span class="page-link">...</span>
+                    </li>
+
+                    <li class="page-item"
+                        th:each="i : ${#numbers.sequence(currentPage > 3 ? currentPage - 2 : 1, currentPage < totalPages - 3 ? currentPage + 2 : totalPages - 2)}"
+                        th:classappend="${i == currentPage} ? 'active'">
+                        <a class="page-link"
+                           th:text="${i + 1}"
+                           th:href="@{/contratos(page=${i}, size=${size})}"></a>
+                    </li>
+
+                    <li class="page-item disabled"
+                        th:if="${currentPage < totalPages - 4}">
+                        <span class="page-link">...</span>
+                    </li>
+
+                    <li class="page-item"
+                        th:if="${totalPages > 1}"
+                        th:classappend="${currentPage == totalPages - 1} ? 'active'">
+                        <a class="page-link"
+                           th:text="${totalPages}"
+                           th:href="@{/contratos(page=${totalPages - 1}, size=${size})}"></a>
+                    </li>
+                </ul>
+
+                <ul class="pagination justify-content-center">
+                    <li class="page-item"
+                        th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/contratos(page=${currentPage + 1}, size=${size})}">Próximo</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </div>
 </div>
 
@@ -60,9 +133,6 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script type="text/javascript"
-        charset="utf8"
-        src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
 <script th:src="@{/scripts/contratos.js}"></script>
 </body>
 </html>
