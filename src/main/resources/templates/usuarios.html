@@ -66,7 +66,8 @@
         </div>
 
         <!-- Paginação -->
-        <div class="pagination">
+        <!-- TODO fix when there is only 2 or 3 pages -->
+        <div th:if="${totalPages > 1}" class="pagination">
             <nav>
                 <ul class="pagination justify-content-center">
                     <li class="page-item"
@@ -78,7 +79,6 @@
                 </ul>
 
                 <ul class="pagination justify-content-center">
-
                     <li class="page-item"
                         th:classappend="${currentPage == 0} ? 'active'">
                         <a class="page-link"
@@ -121,12 +121,6 @@
                 </ul>
             </nav>
         </div>
-
-        <!-- Informações de Paginação -->
-        <!--        <div class="text-center">-->
-        <!--            Página <span th:text="${currentPage + 1}"></span> de <span th:text="${totalPages}"></span>-->
-        <!--            (Total de itens: <span th:text="${totalItems}"></span>)-->
-        <!--        </div>-->
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
