@@ -68,7 +68,7 @@ public class PropriedadeController {
 
         model.addAttribute("propriedade", propriedade);
         model.addAttribute("amostra", new Amostra());
-        return "subPages/visualizarPropriedade";
+        return "/subPages/propriedadeVisualizar";
     }
 
     @PostMapping("/amostras")
