@@ -1,0 +1,14 @@
+<form th:fragment="tableSearch(query, placeholder)"
+      action="#"
+      method="get"
+      class="table-search">
+    <input type="text"
+           name="query"
+           class="form-control"
+           th:placeholder="${placeholder}"
+           th:value="${query}">
+    <button type="submit"
+            class="btn btn-secondary">
+        PESQUISAR
+    </button>
+</form>

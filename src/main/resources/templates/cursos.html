@@ -26,6 +26,10 @@
             </a>
         </div>
 
+        <!-- Campo de pesquisa -->
+        <div th:replace="~{fragments/tableSearch :: tableSearch(${query}, 'Pesquisar cursos')}"></div>
+
+        <!-- Tabela de cursos -->
         <div class="table-wrapper">
             <table id="cursosTable">
                 <thead>
@@ -34,7 +38,7 @@
                     <th scope="col">Professor</th>
                     <th scope="col">Conteúdo</th>
                     <th scope="col">Duração</th>
-                    <th scope="col">Editar</th>
+                    <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -42,9 +46,10 @@
                     th:each="curso : ${cursos}">
                     <td th:text="${curso.getNome()}"></td>
                     <td th:text="${curso.getProfessor()}"></td>
-                    <td th:text="${curso.getConteudo()}"></td>
+                    <td th:text="${curso.getConteudo()}"
+                        class="large-column"></td>
                     <td th:text="${curso.getDuracao()}"></td>
-                    <td>
+                    <td class="button-table-column">
                         <a th:href="@{/cursos/editar/{id}(id=${curso.getId()})}">
                             <button class="squared-button">
                                 <i class="fa-solid fa-pen-to-square"></i>
@@ -55,13 +60,68 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Paginação -->
+        <!-- TODO fix when there is only 2 or 3 pages -->
+        <div th:if="${totalPages > 1}"
+             class="pagination">
+            <nav>
+                <ul class="pagination justify-content-center">
+                    <li class="page-item"
+                        th:classappend="${currentPage == 0} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/cursos(page=${currentPage - 1}, size=${size})}"
+                           tabindex="-1">Anterior</a>
+                    </li>
+                </ul>
+
+                <ul class="pagination justify-content-center">
+                    <li class="page-item"
+                        th:classappend="${currentPage == 0} ? 'active'">
+                        <a class="page-link"
+                           th:href="@{/cursos(page=${0}, size=${size})}">1</a>
+                    </li>
+
+                    <li class="page-item disabled"
+                        th:if="${currentPage > 3}">
+                        <span class="page-link">...</span>
+                    </li>
+
+                    <li class="page-item"
+                        th:each="i : ${#numbers.sequence(currentPage > 3 ? currentPage - 2 : 1, currentPage < totalPages - 3 ? currentPage + 2 : totalPages - 2)}"
+                        th:classappend="${i == currentPage} ? 'active'">
+                        <a class="page-link"
+                           th:text="${i + 1}"
+                           th:href="@{/cursos(page=${i}, size=${size})}"></a>
+                    </li>
+
+                    <li class="page-item disabled"
+                        th:if="${currentPage < totalPages - 4}">
+                        <span class="page-link">...</span>
+                    </li>
+
+                    <li class="page-item"
+                        th:if="${totalPages > 1}"
+                        th:classappend="${currentPage == totalPages - 1} ? 'active'">
+                        <a class="page-link"
+                           th:text="${totalPages}"
+                           th:href="@{/cursos(page=${totalPages - 1}, size=${size})}"></a>
+                    </li>
+                </ul>
+
+                <ul class="pagination justify-content-center">
+                    <li class="page-item"
+                        th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/cursos(page=${currentPage + 1}, size=${size})}">Próximo</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <link rel="stylesheet"
-          type="text/css"
-          href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <script th:src="@{/scripts/cursos.js}"></script>
 </div>
 </body>

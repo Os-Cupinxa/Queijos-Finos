@@ -1,11 +1,13 @@
 package com.queijos_finos.main.controller;
 
 import com.queijos_finos.main.model.Curso;
+import com.queijos_finos.main.model.Usuarios;
 import com.queijos_finos.main.repository.CursosRepository;
 
 import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,14 +24,33 @@ public class CursosController {
     private CursosRepository cursosRepository;
 
     @GetMapping
-    public String showCursos(@RequestParam(value = "search", required = false) String search, Model model) {
-        List<Curso> cursos;
-        if (search != null && !search.isEmpty()) {
-            cursos = cursosRepository.findByNomeContainingIgnoreCase(search);
+    public String showCursos(
+            @RequestParam(value = "query", required = false) String query,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            Model model) {
+
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Curso> cursos;
+
+        if (query != null && !query.isEmpty()) {
+            Curso cursoExample = new Curso();
+            cursoExample.setNome(query);
+
+            ExampleMatcher matcher = ExampleMatcher.matching()
+                    .withMatcher("nome", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase());
+
+            Example<Curso> example = Example.of(cursoExample, matcher);
+            cursos = cursosRepository.findAll(example, pageable);
         } else {
-            cursos = cursosRepository.findAll();
+            cursos = cursosRepository.findAll(pageable);
         }
-        model.addAttribute("cursos", cursos);
+
+        model.addAttribute("cursos", cursos.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", cursos.getTotalPages());
+        model.addAttribute("totalItems", cursos.getTotalElements());
+        model.addAttribute("query", query);
+
         return "cursos";
     }
 
@@ -75,7 +96,7 @@ public class CursosController {
     @Transactional
     @PostMapping("/delete/{id}")
     public String deleteCursos(@PathVariable Long id, Model model) {
-    	cursosRepository.deleteCursoPropriedadeRelacionamento(id);
+        cursosRepository.deleteCursoPropriedadeRelacionamento(id);
         cursosRepository.deleteById(id);
         model.addAttribute("mensagem", "Curso excluído com sucesso");
         return "redirect:/cursos";
