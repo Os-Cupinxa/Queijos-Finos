@@ -58,7 +58,7 @@ public class PropriedadeController {
         model.addAttribute("totalItems", propriedade.getTotalElements());
         model.addAttribute("query", query);
 
-        return "propriedade";
+        return "propriedades";
     }
 
     @GetMapping("/propriedade/visualizar")

@@ -19,7 +19,7 @@
     z-index: 2;
     gap: 20px;
     box-sizing: border-box;
-    margin-bottom: 40px;
+    margin-bottom: 200px;
 }
 
 .main-title-container {
@@ -66,6 +66,16 @@
     gap: 20px;
     width: 100%;
     max-width: 400px;
+}
+
+.biopark-logo {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1;
+    height: 80px;
+    max-height: 80px;
+    object-fit: contain;
 }
 
 .background-image {
