@@ -1,14 +1,11 @@
 package com.queijos_finos.main.controller;
 
-import java.text.ParseException;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import com.queijos_finos.main.model.*;
 import com.queijos_finos.main.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -18,16 +15,24 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class PropriedadeController {
 
-    @Autowired
-    private PropriedadeRepository propriedadeRepo;
-    @Autowired
-    private CursosRepository cursoRepo;
-    @Autowired
-    private TecnologiaRepository tecnologiaRepo;
-    @Autowired
-    private FornecedorRepository fornecedorRepo;
-    @Autowired
-    private AmostraRepository amostraRepo;
+    private final PropriedadeRepository propriedadeRepo;
+    private final CursosRepository cursoRepo;
+    private final TecnologiaRepository tecnologiaRepo;
+    private final FornecedorRepository fornecedorRepo;
+    private final AmostraRepository amostraRepo;
+
+    public PropriedadeController(
+            PropriedadeRepository propriedadeRepo,
+            CursosRepository cursoRepo,
+            TecnologiaRepository tecnologiaRepo,
+            FornecedorRepository fornecedorRepo,
+            AmostraRepository amostraRepo) {
+        this.propriedadeRepo = propriedadeRepo;
+        this.cursoRepo = cursoRepo;
+        this.tecnologiaRepo = tecnologiaRepo;
+        this.fornecedorRepo = fornecedorRepo;
+        this.amostraRepo = amostraRepo;
+    }
 
 
     @GetMapping("/propriedade")
@@ -47,6 +52,7 @@ public class PropriedadeController {
                     .withMatcher("nomePropriedade", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase());
 
             Example<Propriedade> example = Example.of(usuarioExample, matcher);
+
             propriedade = propriedadeRepo.findAll(example, pageable);
         } else {
             propriedade = propriedadeRepo.findAll(pageable);
@@ -62,7 +68,10 @@ public class PropriedadeController {
     }
 
     @GetMapping("/propriedade/visualizar")
-    public String detailsPropriedade(@RequestParam(required = false) Long idPropriedade, Model model) {
+    public String detailsPropriedade(
+            @RequestParam(required = false) Long idPropriedade,
+            Model model) {
+
         Optional<Propriedade> propriedadeOptional = propriedadeRepo.findById(idPropriedade);
         Propriedade propriedade = propriedadeOptional.orElse(null);
 
@@ -72,9 +81,12 @@ public class PropriedadeController {
     }
 
     @PostMapping("/amostras")
-    public String createAmostra(@RequestParam Long propriedadeId, @RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date data,
-                                @RequestParam Double quantidadeleite, @RequestParam Double quantidadeQueijo,
-                                @RequestParam String observacao) {
+    public String createAmostra(
+            @RequestParam Long propriedadeId,
+            @RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date data,
+            @RequestParam Double quantidadeleite,
+            @RequestParam Double quantidadeQueijo,
+            @RequestParam String observacao) {
 
         Propriedade propriedade = propriedadeRepo.findById(propriedadeId)
                 .orElseThrow(() -> new IllegalArgumentException("Propriedade não encontrada"));
@@ -94,20 +106,24 @@ public class PropriedadeController {
     @DeleteMapping("/amostra/delete/{id}")
     @ResponseBody
     public void deleteAmostra(@PathVariable("id") Long id) {
-        amostraRepo.deleteById(id); // Remove a amostra pelo ID fornecido
+        amostraRepo.deleteById(id);
     }
 
-
     @GetMapping("/propriedade/cadastrar")
-    public String createPropriedadeView(@RequestParam(required = false) Long idPropriedade,
-                                        Model model) {
+    public String createPropriedadeView(
+            @RequestParam(required = false) Long idPropriedade,
+            Model model) {
 
         if (idPropriedade != null) {
             Optional<Propriedade> propriedade = propriedadeRepo.findById(idPropriedade);
 
-            model.addAttribute("propriedade", propriedade.get());
+            if (propriedade.isPresent()) {
+                model.addAttribute("propriedade", propriedade.get());
+            } else {
+                model.addAttribute("mensagem", "Propriedade não encontrado");
+                return "redirect:/propriedade";
+            }
         }
-
 
         List<Curso> cursos = cursoRepo.findAll();
         List<Tecnologias> tecnologias = tecnologiaRepo.findAll();
@@ -122,19 +138,19 @@ public class PropriedadeController {
 
 
     @PostMapping("/propriedade")
-    public String createPropriedade(@RequestBody Propriedade propriedadeReq,
-                                    Model model) throws ParseException {
+    public String createPropriedade(
+            @RequestBody Propriedade propriedadeReq,
+            Model model) {
 
         for (Tecnologias tecnologia : propriedadeReq.getTecnologias()) {
             List<Tecnologias> tecnologiaExistente = tecnologiaRepo.findByNome(tecnologia.getNome());
+
             if (tecnologiaExistente.isEmpty()) {
                 tecnologia.setId(null);
                 tecnologiaRepo.save(tecnologia);
                 tecnologia.setId(tecnologiaRepo.findFirstByOrderByIdDesc().getId());
             }
         }
-
-        System.out.print(propriedadeReq);
 
         if (propriedadeReq.getIdPropriedade() != -1) {
             propriedadeRepo.findById(propriedadeReq.getIdPropriedade())
@@ -158,7 +174,8 @@ public class PropriedadeController {
                         propriedade.setFornecedores(propriedadeReq.getFornecedores());
                         return propriedadeRepo.save(propriedade);
                     })
-                    .orElseThrow(() -> new RuntimeException("Propriedade não encontrada com o ID: " + propriedadeReq.getIdPropriedade()));
+                    .orElseThrow(() -> new RuntimeException("Propriedade não encontrada com o ID: " +
+                            propriedadeReq.getIdPropriedade()));
         } else {
             propriedadeReq.setIdPropriedade(null);
             propriedadeRepo.save(propriedadeReq);
@@ -169,8 +186,9 @@ public class PropriedadeController {
     }
 
     @PostMapping("/propriedade/delete/{id}")
-    public String createContrato(@PathVariable("id") Long idPropriedade,
-                                 Model model) {
+    public String createContrato(
+            @PathVariable("id") Long idPropriedade,
+            Model model) {
 
         propriedadeRepo.deleteById(idPropriedade);
 

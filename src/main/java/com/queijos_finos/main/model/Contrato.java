@@ -101,16 +101,14 @@ public class Contrato {
 
     public String getDataVercimentoString() {
         SimpleDateFormat formatoSaida = new SimpleDateFormat("y-MM-dd");
-        String dataFormatada = formatoSaida.format(dataVercimento);
 
-        return dataFormatada;
+        return formatoSaida.format(dataVercimento);
     }
 
     public String getDataEmissaoString() {
         SimpleDateFormat formatoSaida = new SimpleDateFormat("y-MM-dd");
-        String dataFormatada = formatoSaida.format(dataEmissao);
 
-        return dataFormatada;
+        return formatoSaida.format(dataEmissao);
     }
 
 

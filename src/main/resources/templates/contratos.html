@@ -47,7 +47,7 @@
                     <td th:text="${contrato.getDataVercimentoString()}"></td>
                     <td th:text="${contrato.getPropriedade().getNomePropriedade()}"></td>
                     <td class="button-table-column">
-                        <a th:href="@{/contratos/cadastrar?idContrato={id}(id=${contrato.getId()})}">
+                        <a th:href="@{/contratos/cadastrar(idContrato=${contrato.getId()})}">
                             <button class="squared-button">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </button>

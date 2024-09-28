@@ -3,7 +3,6 @@ package com.queijos_finos.main.controller;
 import com.queijos_finos.main.repository.PropriedadeRepository;
 import com.queijos_finos.main.repository.TecnologiaRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -23,13 +22,18 @@ import java.util.stream.Collectors;
 @Controller
 public class UsuarioController {
 
-    @Autowired
-    private UsuarioRepository usuarioRepo;
-    @Autowired
-    private PropriedadeRepository propRepo;
-    @Autowired
-    private TecnologiaRepository tecnologiaRepository;
+    private final UsuarioRepository usuarioRepo;
+    private final PropriedadeRepository propRepo;
+    private final TecnologiaRepository tecnologiaRepository;
 
+    public UsuarioController(
+            UsuarioRepository usuarioRepo,
+            PropriedadeRepository propRepo,
+            TecnologiaRepository tecnologiaRepository) {
+        this.usuarioRepo = usuarioRepo;
+        this.propRepo = propRepo;
+        this.tecnologiaRepository = tecnologiaRepository;
+    }
 
     @GetMapping("/usuarios")
     public String showUsuarios(
@@ -64,11 +68,12 @@ public class UsuarioController {
 
 
     @PostMapping("/usuarios")
-    public String createUsuario(@RequestParam("id") Long id,
-                                @RequestParam("nome") String nome,
-                                @RequestParam("email") String email,
-                                @RequestParam(name = "senha", required = false) String senha,
-                                Model model) {
+    public String createUsuario(
+            @RequestParam("id") Long id,
+            @RequestParam("nome") String nome,
+            @RequestParam("email") String email,
+            @RequestParam(name = "senha", required = false) String senha,
+            Model model) {
 
         BCryptPasswordEncoder hashGenerator = new BCryptPasswordEncoder();
         Usuarios usuario = new Usuarios();
@@ -93,9 +98,10 @@ public class UsuarioController {
     }
 
     @PostMapping("/usuarios/alterarSenha")
-    public String alterarSenhaUsuario(@RequestParam("id") Long id,
-                                      @RequestParam("novaSenha") String novaSenha,
-                                      Model model) {
+    public String alterarSenhaUsuario(
+            @RequestParam("id") Long id,
+            @RequestParam("novaSenha") String novaSenha,
+            Model model) {
         BCryptPasswordEncoder hashGenerator = new BCryptPasswordEncoder();
         usuarioRepo.findById(id)
                 .map(usuarios -> {
@@ -108,8 +114,9 @@ public class UsuarioController {
     }
 
     @PostMapping("/usuarios/delete/{id}")
-    public String deleteUsuario(@PathVariable("id") Long id,
-                                Model model) {
+    public String deleteUsuario(
+            @PathVariable("id") Long id,
+            Model model) {
 
         usuarioRepo.deleteById(id);
         return "redirect:/usuarios";
@@ -117,7 +124,10 @@ public class UsuarioController {
 
 
     @GetMapping("/usuarios/cadastrar")
-    public String createUsuarioView(@RequestParam(required = false) Long idUsuarios, Model model) {
+    public String createUsuarioView(
+            @RequestParam(required = false) Long idUsuarios,
+            Model model) {
+
         if (idUsuarios != null) {
             Optional<Usuarios> usuarioOptional = usuarioRepo.findById(idUsuarios);
             usuarioOptional.ifPresent(usuarios -> model.addAttribute("usuario", usuarios));
@@ -136,9 +146,10 @@ public class UsuarioController {
 
 
     @PostMapping("/dashboard")
-    public String login(@RequestParam("email") String email,
-                        @RequestParam("senha") String senha,
-                        Model model) {
+    public String login(
+            @RequestParam("email") String email,
+            @RequestParam("senha") String senha,
+            Model model) {
 
         Usuarios usu = usuarioRepo.findByEmail(email);
 
@@ -146,24 +157,8 @@ public class UsuarioController {
 
         if (hashGenerator.matches(senha, usu.getSenha())) {
             model.addAttribute("usu", usu);
-            long type1Count = propRepo.countBystatus(2);
-            long type2Count = propRepo.countBystatus(1);
-            long type3Count = propRepo.countBystatus(0);
-            Pageable pageable = PageRequest.of(0, 5); // First page with 5 items
-            List<Propriedade> top5Properties = propRepo.findTop5ByOrderByIdDesc(pageable).getContent();
 
-            Page<Object[]> results = tecnologiaRepository.countTecnologiaPropriedadesNative(pageable);
-            List<TecnologiaCountProp> tecnologiaCountProps = results.stream()
-                    .map(obj -> new TecnologiaCountProp((String) obj[0], ((Number) obj[1]).longValue()))
-                    .collect(Collectors.toList());
-
-            model.addAttribute("type1Count", type1Count);
-            model.addAttribute("type2Count", type2Count);
-            model.addAttribute("type3Count", type3Count);
-            model.addAttribute("propriedades", top5Properties);
-            model.addAttribute("topTec", tecnologiaCountProps);
-            System.out.println(usu.getNome());
-            return "dashboard";
+            return getDashboardData(model);
         } else {
 
             model.addAttribute("mensagem", "Credenciais invalidas");
@@ -171,17 +166,13 @@ public class UsuarioController {
         }
     }
 
-    @GetMapping("/dashboard")
-    public String dashboard(Model model) {
-
-        Pageable pageable = PageRequest.of(0, 5); // First page with 5 items
+    private String getDashboardData(Model model) {
+        Pageable pageable = PageRequest.of(0, 5);
         List<Propriedade> top5Properties = propRepo.findTop5ByOrderByIdDesc(pageable).getContent();
-
         Page<Object[]> results = tecnologiaRepository.countTecnologiaPropriedadesNative(pageable);
         List<TecnologiaCountProp> tecnologiaCountProps = results.stream()
                 .map(obj -> new TecnologiaCountProp((String) obj[0], ((Number) obj[1]).longValue()))
                 .collect(Collectors.toList());
-
 
         long type1Count = propRepo.countBystatus(2);
         long type2Count = propRepo.countBystatus(1);
@@ -193,7 +184,10 @@ public class UsuarioController {
         model.addAttribute("propriedades", top5Properties);
         model.addAttribute("topTec", tecnologiaCountProps);
         return "dashboard";
-
     }
 
+    @GetMapping("/dashboard")
+    public String dashboard(Model model) {
+        return getDashboardData(model);
+    }
 }

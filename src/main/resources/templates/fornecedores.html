@@ -46,7 +46,7 @@
                     <td th:text="${fornecedor.getEmail()}"></td>
                     <td th:text="${fornecedor.getQualidade()}"></td>
                     <td class="button-table-column">
-                        <a th:href="@{/fornecedores/cadastrar?idFornecedor={id}(id=${fornecedor.getId()})}">
+                        <a th:href="@{/fornecedores/cadastrar(idFornecedor=${fornecedor.getId()})}">
                             <button class="squared-button">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </button>
