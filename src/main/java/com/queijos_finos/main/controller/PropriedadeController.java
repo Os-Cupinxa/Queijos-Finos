@@ -9,8 +9,7 @@ import java.util.Optional;
 import com.queijos_finos.main.model.*;
 import com.queijos_finos.main.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,10 +31,33 @@ public class PropriedadeController {
 
 
     @GetMapping("/propriedade")
-    public String showPropriedade(Model model) {
-        List<Propriedade> propriedade;
-        propriedade = propriedadeRepo.findAll();
-        model.addAttribute("propriedade", propriedade);
+    public String showPropriedade(
+            @RequestParam(name = "query", required = false) String query,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            Model model) {
+
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Propriedade> propriedade;
+
+        if (query != null && !query.isEmpty()) {
+            Propriedade usuarioExample = new Propriedade();
+            usuarioExample.setNomePropriedade(query);
+
+            ExampleMatcher matcher = ExampleMatcher.matching()
+                    .withMatcher("nomePropriedade", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase());
+
+            Example<Propriedade> example = Example.of(usuarioExample, matcher);
+            propriedade = propriedadeRepo.findAll(example, pageable);
+        } else {
+            propriedade = propriedadeRepo.findAll(pageable);
+        }
+
+        model.addAttribute("propriedades", propriedade.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", propriedade.getTotalPages());
+        model.addAttribute("totalItems", propriedade.getTotalElements());
+        model.addAttribute("query", query);
+
         return "propriedade";
     }
 
