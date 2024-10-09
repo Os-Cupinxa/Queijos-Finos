@@ -29,9 +29,22 @@ body {
     height: 60px;
 }
 
+.page-header .left-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
 .page-header h1 {
     font-size: calc(1.275rem + .3vw) !important;
     margin: 0;
+}
+
+.page-header .status-tag {
+    padding: 4px 10px;
+    border-radius: 20px;
+    color: #FFFFFF;
 }
 
 .buttons-wrapper {
@@ -166,11 +179,170 @@ textarea.form-control {
     width: 120px;
 }
 
+/* View property page */
+.page-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 10px;
+    gap: 20px;
+}
+
+.page-container .details-row {
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+    flex-direction: column;
+    width: 100%;
+}
+
+.page-container .details-row:nth-of-type(1) {
+    flex-direction: row;
+    gap: 20px;
+}
+
+.page-container .details-row:nth-of-type(4) {
+    flex-direction: row;
+    gap: 60px;
+}
+
+.page-container .details-row .chart-wrapper {
+    width: calc(100% - 10px);
+    height: 300px;
+}
+
+.page-container .details-row .chart-wrapper .chart {
+    display: flex;
+    align-items: stretch;
+    justify-content: flex-start;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+.page-container .details-wrapper {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 10px;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #FFFFFF;
+}
+
+.page-container .horizontal-line {
+    border: 1px solid #dee2e6;
+}
+
+.details-wrapper p {
+    margin-bottom: 0;
+}
+
+.table-header {
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.page-container .details-row:nth-of-type(4) .row-item:first-of-type {
+    min-width: calc(70% - 30px);
+}
+
+.page-container .details-row:nth-of-type(4) .row-item:last-of-type {
+    min-width: calc(30% - 30px);
+}
+
+.year-select-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.year-select {
+    width: 200px;
+}
+
+.property-table-wrapper {
+    min-height: 100px;
+    max-height: 300px;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.property-table-wrapper table {
+    width: 100%;
+}
+
+.property-table-wrapper table {
+    width: 100%;
+}
+
+.property-table-wrapper table tbody {
+    border-top: 1px solid #dee2e6;
+}
+
+.property-table-wrapper table thead tr {
+    position: sticky;
+    top: 0;
+    left: 0;
+    background-color: #F6F3F1;
+}
+
+.property-table-wrapper table thead tr th {
+    padding-left: 10px;
+    border-right: 1px solid #dee2e6;
+}
+
+.property-table-wrapper table thead tr th:last-of-type {
+    border-right: none;
+}
+
+.property-table-wrapper table tbody tr td {
+    height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0 10px;
+    border-right: 1px solid #dee2e6;
+}
+
+.property-table-wrapper table tbody tr td:last-of-type {
+    border-right: none;
+}
+
+.property-table-wrapper table tbody tr:first-of-type {
+    border-top: 1px solid #f1f1f1;
+}
+
+.property-table-wrapper table tbody tr {
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.property-table-wrapper .large-column {
+    max-width: 300px;
+}
+
+.property-table-wrapper .button-table-column {
+    width: 52px;
+    max-width: 52px;
+}
+
 /* Table styles */
 .table-wrapper {
     width: 100%;
     height: 100%;
-    padding: 20px 0;
+    margin: 20px 0;
     overflow-y: auto;
 }
 
@@ -197,6 +369,13 @@ textarea.form-control {
 
 .table-wrapper table tbody {
     border-top: 1px solid #dee2e6;
+}
+
+.table-wrapper table thead tr {
+    position: sticky;
+    top: 0;
+    left: 0;
+    background-color: #F6F3F1;
 }
 
 .table-wrapper table thead tr th {
@@ -305,10 +484,24 @@ textarea.form-control {
     width: 38px;
 }
 
+.squared-button.delete {
+    color: #b02a37;
+    border: 1px solid #b02a37;
+    height: 30px;
+    width: 30px;
+}
+
 .squared-button:hover,
 .squared-button:active {
     background-color: #857952;
     border: 1px solid #857952;
+    color: #e8e8e8;
+}
+
+.squared-button.delete:hover,
+.squared-button.delete:active {
+    background-color: #b02a37;
+    border: 1px solid #b02a37;
     color: #e8e8e8;
 }
 

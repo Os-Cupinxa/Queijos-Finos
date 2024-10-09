@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8"/>
     <link rel="stylesheet"
           th:href="@{/styles/global.css}"/>
-    <title>Propriedades</title>
+    <title th:text="'Propriedade: ' + ${propriedade.nomePropriedade}">Propriedade</title>
 </head>
-
 <body>
 <div th:insert="~{fragments/sidebar :: sidebar('propriedade')}"></div>
 
@@ -16,7 +14,23 @@
 
     <div class="page-content-container p-3">
         <div class="page-header border-bottom">
-            <h1 th:text="${propriedade.nomePropriedade}"></h1>
+            <div class="left-content">
+                <h1 th:text="${propriedade.nomePropriedade}"></h1>
+
+                <div class="status-tag"
+                     th:style="'background-color:' + (${propriedade.getStatus() == 0}
+                   ? 'rgb(184,43,43);font-weight: bold'
+                   : (${propriedade.getStatus() == 1}
+                   ? 'rgb(226,195,29);font-weight: bold'
+                   : 'rgb(80,160,30);font-weight: bold'))"
+
+                     th:text="${propriedade.getStatus() == 2}
+                   ? 'Produzindo'
+                   : (${propriedade.getStatus() == 1}
+                   ? 'Contemplação'
+                   : 'Desistente')"
+                ></div>
+            </div>
 
             <div class="buttons-wrapper">
                 <button type="button"
@@ -29,80 +43,113 @@
             </div>
         </div>
 
-        <div class="page-content-wrapper">
-            <div class="form-wrapper">
-                <div class="form-row">
-                    <div>
-                        <h1>Sobre Propriedade:</h1>
-                        <p class="m-0">Nome do Produtor: <span th:text="${propriedade.nomeProdutor}"></span></p>
-                        <p class="m-0">Email: <span th:text="${propriedade.email}"
-                                                    class="m-0"></span></p>
-                        <p class="m-0">Cpf: <span th:text="${propriedade.CPF}"
-                                                  class="m-0"></span></p>
-                        <p class="m-0">Cnpj: <span th:text="${propriedade.CNPJ}"
-                                                   class="m-0"></span></p>
-                        <p class="m-0">Telefone: <span th:text="${propriedade.telefone}"
-                                                       class="m-0"></span></p>
-                        <p class="m-0">Celular: <span th:text="${propriedade.celular}"
-                                                      class="m-0"></span></p>
-                        <p class="m-0">Selo de identificação</p>
+        <div class="page-container">
+            <div class="details-row">
+                <div class="details-wrapper shadow-sm">
+                    <h4>Sobre a propriedade</h4>
+                    <p>
+                        Nome do Produtor:
+                        <span th:text="${propriedade.nomeProdutor}"></span>
+                    </p>
+                    <p>
+                        Email:
+                        <span th:text="${propriedade.email}"></span>
+                    </p>
+                    <p>
+                        CPF:
+                        <span th:text="${propriedade.CPF}"></span>
+                    </p>
+                    <p>
+                        CNPJ:
+                        <span th:text="${propriedade.CNPJ}"></span>
+                    </p>
+                    <p>
+                        Telefone:
+                        <span th:text="${propriedade.telefone}"></span>
+                    </p>
+                    <p>
+                        Celular:
+                        <span th:text="${propriedade.celular}"></span>
+                    </p>
+                </div>
+
+                <div class="details-wrapper shadow-sm">
+                    <h4>Endereço</h4>
+                    <p>
+                        Nome da Rua:
+                        <span th:text="${propriedade.rua}"></span>
+                    </p>
+                    <p>
+                        Bairro:
+                        <span th:text="${propriedade.bairro}"></span>
+                    </p>
+                    <p>
+                        Cidade:
+                        <span th:text="${propriedade.cidade}"></span>
+                    </p>
+                    <p>
+                        UF:
+                        <span th:text="${propriedade.UF}"></span>
+                    </p>
+                    <p>
+                        Latitude:
+                        <span th:text="${propriedade.latitude}"></span>
+                    </p>
+                    <p>
+                        Longitude:
+                        <span th:text="${propriedade.longitude}"></span>
+                    </p>
+                </div>
+
+                <div class="details-wrapper shadow-sm">
+                    <iframe
+                            id="map"
+                            class="rounded"
+                            width="100%"
+                            height="100%"
+                            style="border:0"
+                            allowfullscreen
+                            aria-hidden="false"
+                            tabindex="0">
+                    </iframe>
+                </div>
+            </div>
+
+            <hr class="horizontal-line w-100">
+
+            <div class="details-row">
+                <div class="year-select-wrapper">
+                    <h4>Produção</h4>
+
+                    <select id="selectYear"
+                            class="form-select year-select"
+                            onchange="filtrarPorAno(this.value)">
+                    </select>
+                </div>
+
+                <div class="chart-wrapper">
+                    <div id="chart"
+                         class="chart">
                     </div>
-                    <div>
-                        <div style="width: 100%">
-                            <iframe
-                                    id="map"
-                                    width="100%"
-                                    height="300"
-                                    style="border:0"
-                                    allowfullscreen
-                                    aria-hidden="false"
-                                    tabindex="0">
-                            </iframe>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <h1>Endereço</h1>
-                    <p class="m-0">Logadouro: <span th:text="${propriedade.UF}"
-                                                    class="m-0"></span></p>
-                    <p class="m-0">Nome da Rua: <span th:text="${propriedade.rua}"
-                                                      class="m-0"></span></p>
-                    <p class="m-0">Bairro: <span th:text="${propriedade.bairro}"
-                                                 class="m-0"></span></p>
-                    <p class="m-0">Numero: <span th:text="${propriedade.UF}"
-                                                 class="m-0"></span></p>
-                    <p class="m-0">Cidade: <span th:text="${propriedade.cidade}"
-                                                 class="m-0"></span></p>
-                    <p class="m-0">UF:PR: <span th:text="${propriedade.UF}"
-                                                class="m-0"></span></p>
                 </div>
             </div>
 
-            <div class="ps-5">
-                <label for="selectYear">Selecione o ano:</label>
+            <hr class="horizontal-line w-100">
 
-                <select id="selectYear"
-                        onchange="filtrarPorAno(this.value)">
-                </select>
-            </div>
+            <div class="details-row">
+                <div class="table-header pb-2">
+                    <h4>Amostras</h4>
 
-            <div class="border border-black ms-5 me-5 p-2"
-                 id="chart"
-                 style="border-radius: 10px; height: 250px; ">
-            </div>
-
-            <div class="d-flex flex-column border border-black ms-5 me-5 mt-5"
-                 style="border-radius: 10px; height: 500px; ">
-                <div style="border-bottom: 1px solid black;">
-                    <h1 class="text-center">Amostras</h1>
+                    <button class="btn btn-primary"
+                            data-bs-toggle="modal"
+                            data-bs-target="#amostraModal">
+                        <i class="fa-solid fa-plus"></i>
+                        CADASTRAR AMOSTRA
+                    </button>
                 </div>
-                <div class="h-100 p-2"
-                     style="overflow-y: auto;">
 
-                    <table class="table-stripe stripe h-100 w-100"
-                           id="myTable">
+                <div class="property-table-wrapper">
+                    <table>
                         <thead>
                         <tr>
                             <th scope="col">Observação</th>
@@ -117,139 +164,108 @@
                             th:id="${amostra.getId()}"
                             th:each="amostra, status : ${propriedade.getAmostras()}"
                             th:short="${amostra.getData()}">
-                            <td th:text="${amostra.getObservacao()}"></td>
+                            <td class="large-column"
+                                th:text="${amostra.getObservacao()}"></td>
                             <td th:text="${#dates.format(amostra.getData(), 'dd/MM/yyyy')}"></td>
                             <td th:text="${amostra.getQuantidadeleite()}"></td>
                             <td th:text="${amostra.getQuantidadeQueijo()}"></td>
-                            <td>
-                                <button type="button"
-                                        th:onclick="'removerAmostra(\'' + ${amostra.getId()} + '\');'"
-                                        class="btn btn-danger rounded-pill px-3 shadow ">
-                                    x
+                            <td class="button-table-column">
+                                <button class="squared-button delete"
+                                        th:onclick="'removerAmostra(\'' + ${amostra.getId()} + '\');'">
+                                    <i class="fa-solid fa-trash"></i>
                                 </button>
-
                             </td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
-                <div class="d-flex justify-content-center align-items-end p-2"
-                     style="border-top: 1px solid black;">
-                    <button class="btn btn-secondary"
-                            data-bs-toggle="modal"
-                            data-bs-target="#amostraModal">Adicionar
-                    </button>
-                </div>
             </div>
 
-            <div class="ms-5 me-5 d-flex justify-content-betwen">
-                <div class="w-50 me-2 p-2">
-                    <div class="d-flex align-items-center m-2">
-                        <p class="m-3 fs-3">Cursos</p>
+            <hr class="horizontal-line w-100">
 
-                    </div>
-                    <div class="border border-black w-100 overflow-auto p-3 rounded"
-                         style="height: 400px; width: 400px;">
+            <div class="details-row">
+                <div class="row-item">
+                    <h4 class="pb-2">Cursos</h4>
 
-                        <table class="table-stripe stripe"
-                               id="cursosTable">
+                    <div class="property-table-wrapper">
+                        <table id="cursosTable">
                             <thead>
                             <tr>
                                 <th scope="col">Nome</th>
-                                <th scope="col">Conteudo</th>
                                 <th scope="col">Professor</th>
                                 <th scope="col">Duração</th>
-                                <th scope="col"></th>
                             </tr>
                             </thead>
                             <tbody th:if="${propriedade != null}">
                             <tr class="border tr"
                                 th:id="${curso.getId()}"
                                 th:each="curso : ${propriedade.getCursos()}">
-                                <th class="cursoID"
+                                <td class="cursoID"
                                     th:id="${curso.getId()}"
-                                    th:text="${curso.getNome()}"></th>
-                                <td th:text="${curso.getConteudo()}"></td>
+                                    th:text="${curso.getNome()}"></td>
                                 <td th:text="${curso.getProfessor()}"></td>
                                 <td th:text="${curso.getDuracao()}"></td>
-                                <td>
-
-                                </td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <div class="w-50 ms-2 p-2">
-                    <div class="d-flex align-items-center m-2">
-                        <p class="m-3 fs-3">Tecnologias</p>
 
-                    </div>
-                    <div class="border border-black w-100 overflow-auto p-3 rounded"
-                         style="height: 400px; width: 400px;">
+                <div class="row-item">
+                    <h4 class="pb-2">Tecnologias</h4>
 
-                        <table class="table-stripe stripe w-100"
-                               id="tecnologiasTable">
+                    <div class="property-table-wrapper">
+                        <table id="tecnologiasTable">
                             <thead>
                             <tr>
                                 <th scope="col">Nome</th>
-                                <th scope="col"></th>
                             </tr>
                             </thead>
                             <tbody th:if="${propriedade != null}">
                             <tr class="border tr tecnologiaAdd"
                                 th:id="${tecnologia.getId()}"
                                 th:each="tecnologia : ${propriedade.getTecnologias()}">
-                                <th class="tecnologiaID"
+                                <td class="tecnologiaID"
                                     th:id="${tecnologia.getId()}"
-                                    th:text="${tecnologia.getNome()}"></th>
-                                <td>
-
-                                </td>
-
+                                    th:text="${tecnologia.getNome()}"></td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <div>
-
-                </div>
             </div>
 
-            <div class="border border-black rounded overflow-auto me-5 ms-5 p-2"
-                 style="height: 600px; margin-top: 100px;">
-                <p class="text-center fs-2">Fornecedores
+            <hr class="horizontal-line w-100">
 
-                </p>
+            <div class="details-row">
+                <h4 class="pb-2">
+                    Fornecedores
+                </h4>
 
-                <table class="table-stripe stripe w-100"
-                       id="fornecedorTable">
-                    <thead>
-                    <tr class="">
-                        <th scope="col">Nome</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Nicho</th>
-                        <th scope="col">Qualidade</th>
-                        <th scope="col"></th>
-                    </tr>
-                    </thead>
-                    <tbody th:if="${propriedade != null}">
-                    <tr class="border user-row"
-                        th:id="${fornecedor.getId()}"
-                        th:each="fornecedor : ${propriedade.getFornecedores()}">
-                        <td class="fornecedorID"
+                <div class="property-table-wrapper">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Nicho</th>
+                            <th scope="col">Qualidade</th>
+                        </tr>
+                        </thead>
+                        <tbody th:if="${propriedade != null}">
+                        <tr class="border user-row"
                             th:id="${fornecedor.getId()}"
-                            th:text="${fornecedor.getNome()}"></td>
-                        <td th:text="${fornecedor.getEmail()}"></td>
-                        <td th:text="${fornecedor.getNicho()}"></td>
-                        <td th:text="${fornecedor.getQualidade()}"></td>
-                        <td>
-
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                            th:each="fornecedor : ${propriedade.getFornecedores()}">
+                            <td class="fornecedorID"
+                                th:id="${fornecedor.getId()}"
+                                th:text="${fornecedor.getNome()}"></td>
+                            <td th:text="${fornecedor.getEmail()}"></td>
+                            <td th:text="${fornecedor.getNicho()}"></td>
+                            <td th:text="${fornecedor.getQualidade()}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -436,7 +452,7 @@
         });
     </script>
     <script>
-        var dadosProducao = {};
+        const dadosProducao = {};
 
         function inicializarDados() {
             var linhas = document.querySelectorAll("#myTable tbody tr");
@@ -469,7 +485,7 @@
 
         inicializarDados();
 
-        var options = {
+        const options = {
             series: [{
                 name: 'Leite',
                 data: []
@@ -478,8 +494,9 @@
                 data: []
             }],
             chart: {
-                height: 350,
                 type: 'bar',
+                height: '100%',
+                width: '100%'
             },
             plotOptions: {
                 bar: {
@@ -516,7 +533,7 @@
             }
         };
 
-        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        const chart = new ApexCharts(document.querySelector("#chart"), options);
 
         chart.render();
 
@@ -549,7 +566,6 @@
             }]);
         }
 
-
         function atualizarSelectAnos() {
             var selectAno = document.getElementById('selectYear');
             var anosDisponiveis = Object.keys(dadosProducao);
@@ -560,8 +576,15 @@
                 return b - a;
             });
 
+            const defaultOption = document.createElement('option');
+            defaultOption.value = null;
+            defaultOption.textContent = 'Selecione o ano';
+            defaultOption.disabled = true
+            defaultOption.selected = true
+            selectAno.appendChild(defaultOption);
+
             anosDisponiveis.forEach(function (ano) {
-                var option = document.createElement('option');
+                const option = document.createElement('option');
                 option.value = ano;
                 option.textContent = ano;
                 selectAno.appendChild(option);
