@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <link rel="stylesheet"
           th:href="@{/styles/global.css}"/>
+    <link rel="icon"
+          type="image/png"
+          sizes="128x128"
+          th:href="@{/images/favicon.png}">
     <title>Cursos - editar</title>
 </head>
 <body>
@@ -25,7 +29,7 @@
                 </button>
 
                 <button type="button"
-                        onclick="document.getElementById('cursoForm').requestSubmit();"
+                        onclick="document.getElementById('courseForm').requestSubmit();"
                         class="btn btn-success">
                     ATUALIZAR
                 </button>
@@ -33,7 +37,7 @@
         </div>
 
         <div class="page-content-wrapper">
-            <form id="cursoForm"
+            <form id="courseForm"
                   class="form-wrapper"
                   th:action="@{/cursos/editar/{id}(id=${curso.getId()})}"
                   method="post">

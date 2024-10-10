@@ -2,9 +2,13 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8"/>
-    <title th:text="${fornecedor != null}? 'Usuários - editar' : 'Usuários - cadastrar' ">Usuários</title>
     <link rel="stylesheet"
           th:href="@{/styles/global.css}"/>
+    <link rel="icon"
+          type="image/png"
+          sizes="128x128"
+          th:href="@{/images/favicon.png}">
+    <title th:text="${fornecedor != null}? 'Usuários - editar' : 'Usuários - cadastrar' ">Usuários</title>
 </head>
 <body>
 <div th:insert="~{fragments/sidebar :: sidebar('usuarios')}"></div>
@@ -34,7 +38,7 @@
                 </button>
 
                 <button th:text="${usuario != null}? 'ATUALIZAR' : 'CADASTRAR'"
-                        onclick="document.getElementById('usuarioForm').requestSubmit();"
+                        onclick="document.getElementById('userForm').requestSubmit();"
                         class="btn btn-success">
                     CADASTRAR
                 </button>
@@ -42,7 +46,7 @@
         </div>
 
         <div class="page-content-wrapper">
-            <form id="usuarioForm"
+            <form id="userForm"
                   class="form-wrapper"
                   th:action="@{/usuarios}"
                   method="post">

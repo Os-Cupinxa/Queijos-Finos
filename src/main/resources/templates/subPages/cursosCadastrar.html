@@ -2,9 +2,13 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Cursos - cadastrar</title>
     <link rel="stylesheet"
           th:href="@{/styles/global.css}"/>
+    <link rel="icon"
+          type="image/png"
+          sizes="128x128"
+          th:href="@{/images/favicon.png}">
+    <title>Cursos - cadastrar</title>
 </head>
 <body>
 <div th:insert="~{fragments/sidebar :: sidebar('cursos')}"></div>
@@ -17,7 +21,7 @@
             <h1>Cadastrar Curso</h1>
 
             <div class="buttons-wrapper">
-                <button onclick="document.getElementById('cursoForm').requestSubmit();"
+                <button onclick="document.getElementById('courseForm').requestSubmit();"
                         class="btn btn-success">
                     CADASTRAR
                 </button>
@@ -25,7 +29,7 @@
         </div>
 
         <div class="page-content-wrapper">
-            <form id="cursoForm"
+            <form id="courseForm"
                   class="form-wrapper"
                   th:action="@{/cursos}"
                   method="post">

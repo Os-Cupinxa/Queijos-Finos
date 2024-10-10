@@ -2,9 +2,13 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8"/>
-    <title th:text="${fornecedor != null}? 'Fornecedores - editar' : 'Fornecedores - cadastrar' ">Fornecedores</title>
     <link rel="stylesheet"
           th:href="@{/styles/global.css}"/>
+    <link rel="icon"
+          type="image/png"
+          sizes="128x128"
+          th:href="@{/images/favicon.png}">
+    <title th:text="${fornecedor != null}? 'Fornecedores - editar' : 'Fornecedores - cadastrar' ">Fornecedores</title>
 </head>
 <body>
 <div th:insert="~{fragments/sidebar :: sidebar('fornecedores')}"></div>
@@ -26,7 +30,7 @@
                 </button>
 
                 <button th:text="${fornecedor != null}? 'ATUALIZAR' : 'CADASTRAR'"
-                        onclick="document.getElementById('cursoForm').requestSubmit();"
+                        onclick="document.getElementById('supplierForm').requestSubmit();"
                         class="btn btn-success">
                     CADASTRAR
                 </button>
@@ -34,7 +38,7 @@
         </div>
 
         <div class="page-content-wrapper">
-            <form id="cursoForm"
+            <form id="supplierForm"
                   class="form-wrapper"
                   th:action="@{/fornecedores}"
                   method="post">

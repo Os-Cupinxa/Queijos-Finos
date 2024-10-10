@@ -2,9 +2,13 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8"/>
-    <title th:text="${contrato != null}? 'Contratos - editar' : 'Contratos - cadastrar' ">Contratos</title>
     <link rel="stylesheet"
           th:href="@{/styles/global.css}"/>
+    <link rel="icon"
+          type="image/png"
+          sizes="128x128"
+          th:href="@{/images/favicon.png}">
+    <title th:text="${contrato != null}? 'Contratos - editar' : 'Contratos - cadastrar' ">Contratos</title>
 </head>
 <body>
 <div th:insert="~{fragments/sidebar :: sidebar('contratos')}"></div>
@@ -26,7 +30,7 @@
                 </button>
 
                 <button th:text="${contrato != null}? 'ATUALIZAR' : 'CADASTRAR'"
-                        onclick="document.getElementById('cursoForm').requestSubmit();"
+                        onclick="document.getElementById('contractForm').requestSubmit();"
                         class="btn btn-success">
                     CADASTRAR
                 </button>
@@ -34,7 +38,7 @@
         </div>
 
         <div class="page-content-wrapper">
-            <form id="cursoForm"
+            <form id="contractForm"
                   class="form-wrapper"
                   th:action="@{/contratos}"
                   method="post">
