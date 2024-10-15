@@ -40,7 +40,7 @@
             </div>
         </div>
 
-        <div class="page-content-wrapper">
+        <div class="page-container">
             <form class="form-wrapper"
                   method="post"
                   id="formularioPropriedade">
@@ -182,27 +182,26 @@
                            placeholder="Email">
                 </div>
 
-                <div class="form-row">
-                    <div class="w-50">
-                        <div class="d-flex align-items-center">
-                            <p class="m-3 fs-3">Cursos</p>
+                <hr class="horizontal-line w-100">
+
+                <div class="details-row row-direction">
+                    <div class="row-item w-60">
+                        <div class="table-header pb-2">
+                            <h4 class="pb-2">Cursos</h4>
+
                             <button type="button"
                                     class="btn btn-primary"
                                     data-toggle="modal"
                                     data-target="#exampleModalCenter">
                                 ADICIONAR CURSO
                             </button>
-
                         </div>
-                        <div class="border border-black w-100 overflow-auto p-3 rounded"
-                             style="height: 400px; width: 400px;">
 
-                            <table class="table-stripe stripe"
-                                   id="cursosTable">
+                        <div class="property-table-wrapper">
+                            <table id="cursosTable">
                                 <thead>
                                 <tr>
                                     <th scope="col">Nome</th>
-                                    <th scope="col">Conteúdo</th>
                                     <th scope="col">Professor</th>
                                     <th scope="col">Duração</th>
                                     <th scope="col"></th>
@@ -215,14 +214,12 @@
                                     <th class="cursoID"
                                         th:id="${curso.getId()}"
                                         th:text="${curso.getNome()}"></th>
-                                    <td th:text="${curso.getConteudo()}"></td>
                                     <td th:text="${curso.getProfessor()}"></td>
                                     <td th:text="${curso.getDuracao()}"></td>
-                                    <td>
-                                        <button type="button"
-                                                th:onclick="'removerCurso(\'' + ${curso.getId()} + '\');'"
-                                                class="btn btn-danger rounded-pill px-3 shadow ">
-                                            x
+                                    <td class="button-table-column">
+                                        <button class="squared-button delete"
+                                                th:onclick="'removerCurso(\'' + ${curso.getId()} + '\');'">
+                                            <i class="fa-solid fa-trash"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -230,10 +227,12 @@
                             </table>
                         </div>
                     </div>
-                    <div class="w-50">
-                        <div class="d-flex align-items-center">
-                            <p class="m-3 fs-3">Tecnologias</p>
-                            <select class="form-control tecnologiaSelect"
+
+                    <div class="row-item w-40">
+                        <div class="table-header pb-2">
+                            <h4 class="pb-2">Tecnologias</h4>
+
+                            <select class="form-control tecnologia-select"
                                     id="tecnologiaSelect">
                                 <option selected="selected"></option>
                                 <option th:value="${tecnologia.getId()}"
@@ -246,11 +245,9 @@
                                 <i class="fa-solid fa-plus"></i>
                             </button>
                         </div>
-                        <div class="border border-black w-100 overflow-auto p-3 rounded"
-                             style="height: 400px; width: 400px;">
 
-                            <table class="table-stripe stripe"
-                                   id="tecnologiasTable">
+                        <div class="property-table-wrapper">
+                            <table id="tecnologiasTable">
                                 <thead>
                                 <tr>
                                     <th scope="col">Nome</th>
@@ -264,11 +261,10 @@
                                     <th class="tecnologiaID"
                                         th:id="${tecnologia.getId()}"
                                         th:text="${tecnologia.getNome()}"></th>
-                                    <td>
-                                        <button type="button"
-                                                th:onclick="'removerTecnologia(\'' + ${tecnologia.getId()} + '\');'"
-                                                class="btn btn-danger rounded-pill px-3 shadow ">
-                                            x
+                                    <td class="button-table-column">
+                                        <button class="squared-button delete"
+                                                th:onclick="'removerTecnologia(\'' + ${tecnologia.getId()} + '\');'">
+                                            <i class="fa-solid fa-trash"></i>
                                         </button>
                                     </td>
 
@@ -277,24 +273,26 @@
                             </table>
                         </div>
                     </div>
-                    <div>
-
-                    </div>
                 </div>
 
-                <div class="form-row">
-                    <div class="w-100">
-                        <p class="text-center fs-2">Fornecedores
-                            <button type="button"
-                                    class="btn btn-primary"
-                                    data-toggle="modal"
-                                    data-target="#fornecedorModal">
-                                ADICIONAR FORNECEDOR
-                            </button>
-                        </p>
+                <hr class="horizontal-line w-100">
 
-                        <table class="table-stripe stripe"
-                               id="fornecedorTable">
+                <div class="details-row">
+                    <div class="table-header pb-2">
+                        <h4>
+                            Fornecedores
+                        </h4>
+
+                        <button type="button"
+                                class="btn btn-primary"
+                                data-toggle="modal"
+                                data-target="#fornecedorModal">
+                            ADICIONAR FORNECEDOR
+                        </button>
+                    </div>
+
+                    <div class="property-table-wrapper">
+                        <table id="fornecedorTable">
                             <thead>
                             <tr>
                                 <th scope="col">Nome</th>
@@ -314,11 +312,10 @@
                                 <td th:text="${fornecedor.getEmail()}"></td>
                                 <td th:text="${fornecedor.getNicho()}"></td>
                                 <td th:text="${fornecedor.getQualidade()}"></td>
-                                <td>
-                                    <button type="button"
-                                            th:onclick="'removerFornecedor(\'' + ${fornecedor.getId()} + '\');'"
-                                            class="btn btn-danger rounded-pill px-3 shadow ">
-                                        x
+                                <td class="button-table-column">
+                                    <button class="squared-button delete"
+                                            th:onclick="'removerFornecedor(\'' + ${fornecedor.getId()} + '\');'">
+                                        <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </td>
                             </tr>
@@ -477,17 +474,7 @@
 
 <script>
     $(document).ready(function () {
-        $('#cursosTable').DataTable({
-            paging: false,
-            lengthChange: false,
-            info: false
-        });
         $('#cursosTable2').DataTable({
-            paging: false,
-            lengthChange: false,
-            info: false
-        });
-        $('#fornecedorTable').DataTable({
             paging: false,
             lengthChange: false,
             info: false
@@ -497,12 +484,6 @@
             lengthChange: false,
             info: false
         });
-        $('#tecnologiasTable').DataTable({
-            paging: false,
-            lengthChange: false,
-            info: false
-        });
-
     });
 
     $('#tecnologiaSelect').select2({
@@ -574,9 +555,10 @@
                 table.row
                     .add([
                         text,
-                        `<button type="button" onclick="removerTecnologia('${id}');" class="btn btn-danger rounded-pill px-3 shadow ">
-						  		x
-							</button>`
+                        `<button class="squared-button delete"
+                                 onclick="removerTecnologia('${id}');">
+                             <i class="fa-solid fa-trash"></i>
+                         </button>`
                     ])
                     .draw(false);
 
@@ -620,9 +602,10 @@
                             infos[1].innerText,
                             infos[2].innerText,
                             infos[3].innerText,
-                            `<button type="button" onclick="removerFornecedor(${check.id});" class="btn btn-danger rounded-pill px-3 shadow ">
-									  		x
-										</button>`
+                            `<button class="squared-button delete"
+                                     onclick="removerFornecedor(${check.id});">
+                                <i class="fa-solid fa-trash"></i>
+                             </button>`
                         ])
                         .draw(false);
 
@@ -663,9 +646,10 @@
                             infos[1].innerText,
                             infos[2].innerText,
                             infos[3].innerText,
-                            `<button type="button" onclick="removerCurso(${check.id});" class="btn btn-danger rounded-pill px-3 shadow ">
-							  		x
-								</button>`
+                            `<button class="squared-button delete"
+                                     onclick="removerCurso(${check.id});">
+                                 <i class="fa-solid fa-trash"></i>
+                             </button>`
                         ])
                         .draw(false);
 
