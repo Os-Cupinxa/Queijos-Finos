@@ -4,6 +4,8 @@ import com.queijos_finos.main.repository.PropriedadeRepository;
 import com.queijos_finos.main.repository.TecnologiaRepository;
 
 import org.springframework.data.domain.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +17,9 @@ import com.queijos_finos.main.model.Propriedade;
 import com.queijos_finos.main.model.Usuarios;
 import com.queijos_finos.main.repository.UsuarioRepository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -145,8 +149,36 @@ public class UsuarioController {
     }
 
 
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, Object>> login(
+            @RequestParam("email") String email,
+            @RequestParam("senha") String senha) {
+
+        Map<String, Object> response = new HashMap<>();
+        Usuarios usu = usuarioRepo.findByEmail(email);
+
+        if (usu == null) {
+            response.put("status", "error");
+            response.put("message", "Usuário não encontrado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+
+        BCryptPasswordEncoder hashGenerator = new BCryptPasswordEncoder();
+
+        if (hashGenerator.matches(senha, usu.getSenha())) {
+            response.put("status", "success");
+            response.put("message", "Login bem-sucedido");
+
+            return ResponseEntity.ok(response);
+        } else {
+            response.put("status", "error");
+            response.put("message", "Credenciais inválidas");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+    }
+
     @PostMapping("/dashboard")
-    public String login(
+    public String webLogin(
             @RequestParam("email") String email,
             @RequestParam("senha") String senha,
             Model model) {
