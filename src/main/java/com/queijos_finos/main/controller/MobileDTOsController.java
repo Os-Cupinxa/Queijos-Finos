@@ -1,6 +1,7 @@
 package com.queijos_finos.main.controller;
 
 import com.queijos_finos.main.dto.DataPointDTO;
+import com.queijos_finos.main.dto.DataPointDTOYear;
 import com.queijos_finos.main.dto.PropriedadeDTO;
 import com.queijos_finos.main.model.*;
 import com.queijos_finos.main.repository.*;
@@ -15,7 +16,9 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class MobileDTOsController {
@@ -54,6 +57,35 @@ public class MobileDTOsController {
         );
     }
 
+    @GetMapping("/datapointyear")
+    @ResponseBody
+    public DataPointDTOYear getLeitePorMes() {
+        LocalDate localDate = LocalDate.now();
+
+        LocalDateTime startOfCurrentYear = localDate.withDayOfYear(1).atTime(LocalTime.MIN);
+        LocalDateTime endOfCurrentYear = localDate.withDayOfYear(localDate.lengthOfYear()).atTime(LocalTime.MAX);
+
+        LocalDateTime startOfLastYear = localDate.minusYears(1).withDayOfYear(1).atTime(LocalTime.MIN);
+        LocalDateTime endOfLastYear = localDate.minusYears(1).withDayOfYear(localDate.minusYears(1).lengthOfYear()).atTime(LocalTime.MAX);
+
+        Timestamp startTimestamp = Timestamp.valueOf(startOfCurrentYear);
+        Timestamp endTimestamp = Timestamp.valueOf(endOfCurrentYear);
+        Timestamp pastStartTimestamp = Timestamp.valueOf(startOfLastYear);
+        Timestamp pastEndTimestamp = Timestamp.valueOf(endOfLastYear);
+
+        int currentYear = startOfCurrentYear.getYear();
+        int lastYear = startOfLastYear.getYear();
+
+        List<Amostra> curWeekSamples = amostraRepo.findByDateBetween(startTimestamp, endTimestamp);
+        List<Amostra> pastWeekSamples = amostraRepo.findByDateBetween(pastStartTimestamp, pastEndTimestamp);
+
+        List<Double> curData = getQuantitiesForYear(curWeekSamples, currentYear);
+        List<Double> pastData = getQuantitiesForYear(pastWeekSamples, lastYear);
+        List<String> timeLabelsYear = getAbbreviatedMonthLabels();
+
+        return new DataPointDTOYear(curData, pastData, timeLabelsYear);
+    }
+
     @GetMapping("/datapoint")
     @ResponseBody
     public DataPointDTO getLeitePorDia() {
@@ -79,6 +111,34 @@ public class MobileDTOsController {
         List<String> timeLabelsPastWeek = getTimeLabels(pastStartDate.toLocalDate());
 
         return new DataPointDTO(curData, pastData, timeLabelsCurWeek, timeLabelsPastWeek);
+    }
+
+    private List<Double> getQuantitiesForYear(List<Amostra> samples, int year) {
+        List<Double> quantities = new ArrayList<>(12);
+
+        for (int i = 0; i < 12; i++) {
+            quantities.add(0.0);
+        }
+
+        List<Amostra> filteredSamples = samples.stream()
+                .filter(sample -> {
+                    LocalDate sampleDate = sample.getData().toInstant()
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDate();
+                    return sampleDate.getYear() == year;
+                })
+                .toList();
+
+        for (Amostra sample : filteredSamples) {
+            LocalDate sampleDate = sample.getData().toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+            int monthIndex = sampleDate.getMonthValue() - 1;
+            double quantity = sample.getQuantidadeleite();
+            quantities.set(monthIndex, quantities.get(monthIndex) + quantity);
+        }
+
+        return quantities;
     }
 
     private List<Double> getQuantitiesForWeek(
@@ -111,6 +171,18 @@ public class MobileDTOsController {
         for (int i = 0; i < 7; i++) {
             labels.add(startDate.plusDays(i).format(formatter));
         }
+        return labels;
+    }
+
+    private List<String> getAbbreviatedMonthLabels() {
+        List<String> labels = new ArrayList<>();
+        String[] monthNames = {
+                "JAN", "FEV", "MAR", "ABR", "MAI", "JUN",
+                "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"
+        };
+
+        Collections.addAll(labels, monthNames);
+
         return labels;
     }
 }
