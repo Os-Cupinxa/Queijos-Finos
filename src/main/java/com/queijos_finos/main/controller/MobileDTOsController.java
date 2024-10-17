@@ -1,12 +1,11 @@
 package com.queijos_finos.main.controller;
 
-import com.queijos_finos.main.dto.DataPointDTO;
-import com.queijos_finos.main.dto.DataPointDTOYear;
-import com.queijos_finos.main.dto.PropriedadeDTO;
+import com.queijos_finos.main.dto.*;
 import com.queijos_finos.main.model.*;
 import com.queijos_finos.main.repository.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -23,13 +22,26 @@ import java.util.List;
 public class MobileDTOsController {
 
     private final PropriedadeRepository propriedadeRepo;
+    private final PropriedadeRepository propRepo;
     private final AmostraRepository amostraRepo;
 
     public MobileDTOsController(
             PropriedadeRepository propriedadeRepo,
+            PropriedadeRepository propRepo,
             AmostraRepository amostraRepo) {
         this.propriedadeRepo = propriedadeRepo;
+        this.propRepo = propRepo;
         this.amostraRepo = amostraRepo;
+    }
+
+    @GetMapping("/dataInsight")
+    @ResponseBody
+    private DataInsightDTO getDashboardData() {
+        Integer type1Count = Math.toIntExact(propRepo.countBystatus(2));
+        Integer type2Count = Math.toIntExact(propRepo.countBystatus(1));
+        Integer type3Count = Math.toIntExact(propRepo.countBystatus(0));
+
+        return new DataInsightDTO(type1Count, type2Count, type3Count);
     }
 
     @GetMapping("/propriedadesDTO")
@@ -56,7 +68,7 @@ public class MobileDTOsController {
         );
     }
 
-    @GetMapping("/datapointyear")
+    @GetMapping("/dataPointYear")
     @ResponseBody
     public DataPointDTOYear getLeitePorMes() {
         LocalDate localDate = LocalDate.now();
@@ -85,7 +97,7 @@ public class MobileDTOsController {
         return new DataPointDTOYear(curData, pastData, timeLabelsYear);
     }
 
-    @GetMapping("/datapoint")
+    @GetMapping("/dataPoint")
     @ResponseBody
     public DataPointDTO getLeitePorDia() {
         LocalDate localDate = LocalDate.now();
