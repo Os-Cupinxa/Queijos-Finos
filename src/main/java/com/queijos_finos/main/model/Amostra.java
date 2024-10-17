@@ -3,7 +3,6 @@ package com.queijos_finos.main.model;
 import java.util.Date;
 import java.util.Objects;
 
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
