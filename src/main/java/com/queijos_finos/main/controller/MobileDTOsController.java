@@ -7,6 +7,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,14 +24,17 @@ public class MobileDTOsController {
     private final PropriedadeRepository propriedadeRepo;
     private final PropriedadeRepository propRepo;
     private final AmostraRepository amostraRepo;
+    private final ContratoRepository contratoRepository;
 
     public MobileDTOsController(
             PropriedadeRepository propriedadeRepo,
             PropriedadeRepository propRepo,
-            AmostraRepository amostraRepo) {
+            AmostraRepository amostraRepo,
+            ContratoRepository contratoRepository) {
         this.propriedadeRepo = propriedadeRepo;
         this.propRepo = propRepo;
         this.amostraRepo = amostraRepo;
+        this.contratoRepository = contratoRepository;
     }
 
     @GetMapping("/dataInsight")
@@ -41,6 +45,24 @@ public class MobileDTOsController {
         Integer type3Count = Math.toIntExact(propRepo.countBystatus(0));
 
         return new DataInsightDTO(type1Count, type2Count, type3Count);
+    }
+
+    @GetMapping("/expiringContracts")
+    @ResponseBody
+    public List<ExpiringContractsDTO> getExpiringContracts() {
+        LocalDate dataAtual = LocalDate.now();
+        LocalDate dataFutura = dataAtual.plusDays(10);
+
+        // Converter LocalDate para java.sql.Date
+        Date dataAtualSQL = Date.valueOf(dataAtual);
+        Date dataFuturaSQL = Date.valueOf(dataFutura);
+
+        List<Contrato> expiringContracts = contratoRepository.findExpiringContracts(dataAtualSQL, dataFuturaSQL);
+
+        // Converta a lista de contratos para DTOs, se necessário
+        return expiringContracts.stream()
+                .map(contract -> new ExpiringContractsDTO(contract.getPropriedade().getNomePropriedade(), "teste", contract.getDataVercimento()))
+                .toList();
     }
 
     @GetMapping("/propriedadesDTO")
@@ -173,7 +195,6 @@ public class MobileDTOsController {
 
         return quantities;
     }
-
 
     private List<String> getTimeLabels(LocalDate startDate) {
         List<String> labels = new ArrayList<>();

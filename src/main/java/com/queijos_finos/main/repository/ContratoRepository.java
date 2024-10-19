@@ -1,5 +1,7 @@
 package com.queijos_finos.main.repository;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -21,4 +23,7 @@ public interface ContratoRepository extends JpaRepository<Contrato, Long> {
     Page<Contrato> findBynome(Pageable pageable, String nome);
 
     Page<Contrato> findAll(Pageable pageable);
+
+    @Query("SELECT c FROM Contrato c WHERE c.dataVercimento BETWEEN :currentDate AND :futureDate")
+    List<Contrato> findExpiringContracts(Date currentDate, Date futureDate);
 }
