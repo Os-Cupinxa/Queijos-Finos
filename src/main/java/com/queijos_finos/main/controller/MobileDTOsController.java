@@ -25,16 +25,19 @@ public class MobileDTOsController {
     private final PropriedadeRepository propRepo;
     private final AmostraRepository amostraRepo;
     private final ContratoRepository contratoRepository;
+    private final AgendaRepository agendaRepository;
 
     public MobileDTOsController(
             PropriedadeRepository propriedadeRepo,
             PropriedadeRepository propRepo,
             AmostraRepository amostraRepo,
-            ContratoRepository contratoRepository) {
+            ContratoRepository contratoRepository,
+            AgendaRepository agendaRepository) {
         this.propriedadeRepo = propriedadeRepo;
         this.propRepo = propRepo;
         this.amostraRepo = amostraRepo;
         this.contratoRepository = contratoRepository;
+        this.agendaRepository = agendaRepository;
     }
 
     @GetMapping("/dataInsight")
@@ -47,21 +50,35 @@ public class MobileDTOsController {
         return new DataInsightDTO(type1Count, type2Count, type3Count);
     }
 
+    @GetMapping("/itemsAgenda")
+    @ResponseBody
+    public List<AgendaItemsDTO> getFuturesAgendasByUserId(@RequestParam(defaultValue = "0") Long userId) {
+        LocalDate dataAtual = LocalDate.now();
+        Date dataAtualSQL = Date.valueOf(dataAtual);
+
+        List<Agenda> agendas = agendaRepository.findFuturesAgendasByUserId(userId, dataAtualSQL);
+
+        for (Agenda agenda : agendas) {
+            System.out.println(agenda);
+        }
+
+        return agendas.stream()
+                .map(agenda -> new AgendaItemsDTO(agenda.getUsuario().getNome(), agenda.getDescricao(), agenda.getData(), "Visita"))
+                .toList();
+    }
+
     @GetMapping("/expiringContracts")
     @ResponseBody
-    public List<ExpiringContractsDTO> getExpiringContracts() {
+    public List<AgendaItemsDTO> getExpiringContracts() {
         LocalDate dataAtual = LocalDate.now();
-        LocalDate dataFutura = dataAtual.plusDays(10);
-
-        // Converter LocalDate para java.sql.Date
         Date dataAtualSQL = Date.valueOf(dataAtual);
+        LocalDate dataFutura = dataAtual.plusDays(10);
         Date dataFuturaSQL = Date.valueOf(dataFutura);
 
         List<Contrato> expiringContracts = contratoRepository.findExpiringContracts(dataAtualSQL, dataFuturaSQL);
 
-        // Converta a lista de contratos para DTOs, se necessário
         return expiringContracts.stream()
-                .map(contract -> new ExpiringContractsDTO(contract.getPropriedade().getNomePropriedade(), "teste", contract.getDataVercimento()))
+                .map(contract -> new AgendaItemsDTO(contract.getPropriedade().getNomePropriedade(), "teste", contract.getDataVercimento(), "Contrato"))
                 .toList();
     }
 

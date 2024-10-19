@@ -2,18 +2,18 @@ package com.queijos_finos.main.dto;
 
 import java.util.Date;
 
-public class ExpiringContractsDTO {
+public class AgendaItemsDTO {
 
     private String nome;
     private String descricao;
     private Date data;
-    final String tipo;
+    private String tipo;
 
-    public ExpiringContractsDTO(String nome, String descricao, Date data) {
+    public AgendaItemsDTO(String nome, String descricao, Date data, String tipo) {
         this.nome = nome;
         this.descricao = descricao;
         this.data = data;
-        this.tipo = "contrato";
+        this.tipo = tipo;
     }
 
     public String getNome() {
