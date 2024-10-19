@@ -58,10 +58,6 @@ public class MobileDTOsController {
 
         List<Agenda> agendas = agendaRepository.findFuturesAgendasByUserId(userId, dataAtualSQL);
 
-        for (Agenda agenda : agendas) {
-            System.out.println(agenda);
-        }
-
         return agendas.stream()
                 .map(agenda -> new AgendaItemsDTO(agenda.getUsuario().getNome(), agenda.getDescricao(), agenda.getData(), "Visita"))
                 .toList();
