@@ -334,44 +334,42 @@
      role="dialog"
      aria-labelledby="exampleModalCenterTitle"
      aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable"
+    <div class="modal-dialog modal-xl modal-dialog-scrollable"
          role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Adicionar Cursos</h5>
 
             </div>
-            <div class="modal-body">
-                <table class="table-stripe stripe"
-                       id="cursosTable2">
+            <div class="modal-body table-wrapper modal-table">
+                <table id="cursosTable2">
                     <thead>
                     <tr>
                         <th scope="col">Nome</th>
-                        <th scope="col">Conteudo</th>
+                        <th scope="col">Conteúdo</th>
                         <th scope="col">Professor</th>
                         <th scope="col">Duração</th>
                         <th scope="col"></th>
                     </tr>
                     </thead>
                     <tbody id="tbodyCurso">
-                    <tr class="border"
-                        th:each="curso : ${cursos}">
+                    <tr th:each="curso : ${cursos}">
                         <th th:class="'cursoADD '+${curso.getId()}"
                             th:id="${curso.getId()}"
                             th:text="${curso.getNome()}"></th>
-                        <td th:class="'cursoADD '+${curso.getId()}"
-                            th:text="${curso.getConteudo()}"></td>
+                        <td th:class="'large-column cursoADD '+${curso.getId()}"
+                            th:text="${curso.getConteudo()}"
+                            class=""></td>
                         <td th:class="'cursoADD '+${curso.getId()}"
                             th:text="${curso.getProfessor()}"></td>
                         <td th:class="'cursoADD '+${curso.getId()}"
                             th:text="${curso.getDuracao()}"></td>
-                        <td>
+                        <td class="select-table-column">
                             <input type="checkbox"
                                    th:id="${curso.getId()}"
-                                   class="cursoADDcheck"
+                                   class="form-check-input cursoADDcheck"
                                    id="scales1"
                                    name="scales"/>
-                            <label for="scales1">Adicionar</label>
                         </td>
                     </tr>
                     </tbody>
@@ -381,13 +379,13 @@
                 <button type="button"
                         class="btn btn-danger"
                         data-dismiss="modal">
-                    Cancelar
+                    CANCELAR
                 </button>
                 <button type="button"
                         class="btn btn-success"
                         onclick="adicionarCursos()"
                         data-dismiss="modal">
-                    Adicionar
+                    ADICIONAR
                 </button>
             </div>
         </div>
@@ -407,9 +405,8 @@
                 <h5 class="modal-title">Adicionar Fornecedores</h5>
 
             </div>
-            <div class="modal-body">
-                <table class="table-stripe stripe"
-                       id="fornecedorTable2">
+            <div class="modal-body table-wrapper modal-table">
+                <table id="fornecedorTable2">
                     <thead>
                     <tr>
                         <th scope="col">Nome</th>
@@ -420,24 +417,22 @@
                     </tr>
                     </thead>
                     <tbody id="tbodyFornecedor">
-                    <tr class="border"
-                        th:each="fornecedor : ${fornecedores}">
+                    <tr th:each="fornecedor : ${fornecedores}">
                         <th th:class="'fornecedorADD '+${fornecedor.getId()}"
                             th:id="${fornecedor.getId()}"
                             th:text="${fornecedor.getNome()}"></th>
                         <td th:class="'fornecedorADD '+${fornecedor.getId()}"
                             th:text="${fornecedor.getEmail()}"></td>
-                        <td th:class="'fornecedorADD '+${fornecedor.getId()}"
+                        <td th:class="'large-column fornecedorADD '+${fornecedor.getId()}"
                             th:text="${fornecedor.getNicho()}"></td>
                         <td th:class="'fornecedorADD '+${fornecedor.getId()}"
                             th:text="${fornecedor.getQualidade()}"></td>
-                        <td>
+                        <td class="select-table-column">
                             <input type="checkbox"
                                    th:id="${fornecedor.getId()}"
-                                   class="fornecedorADDcheck"
+                                   class="form-check-input fornecedorADDcheck"
                                    id="scales2"
                                    name="scales"/>
-                            <label for="scales2">Adicionar</label>
                         </td>
                     </tr>
                     </tbody>
@@ -446,13 +441,14 @@
             <div class="modal-footer">
                 <button type="button"
                         class="btn btn-danger"
-                        data-dismiss="modal">Cancelar
+                        data-dismiss="modal">
+                    CANCELAR
                 </button>
                 <button type="button"
                         class="btn btn-success"
                         data-dismiss="modal"
                         onclick="adicionarFornecedores()">
-                    Adicionar
+                    ADICIONAR
                 </button>
             </div>
         </div>
@@ -473,19 +469,6 @@
         src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
 
 <script>
-    $(document).ready(function () {
-        $('#cursosTable2').DataTable({
-            paging: false,
-            lengthChange: false,
-            info: false
-        });
-        $('#fornecedorTable2').DataTable({
-            paging: false,
-            lengthChange: false,
-            info: false
-        });
-    });
-
     $('#tecnologiaSelect').select2({
         placeholder: 'Selecione uma tecnologia',
         tags: true,

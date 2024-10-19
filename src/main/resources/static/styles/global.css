@@ -352,6 +352,12 @@ textarea.form-control {
     overflow-y: auto;
 }
 
+.table-wrapper.modal-table {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 0 10px;
+}
+
 .table-search {
     display: flex;
     align-items: center;
@@ -422,6 +428,19 @@ textarea.form-control {
 .table-wrapper .button-table-column {
     width: 60px;
     max-width: 60px;
+}
+
+.table-wrapper .select-table-column {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    max-width: 60px;
+}
+
+.table-wrapper .select-table-column .form-check-input {
+    width: 20px;
+    height: 20px;
 }
 
 /* Paginator */
@@ -538,6 +557,16 @@ textarea.form-control {
 
 .logout-button:hover {
     color: #a60000;
+}
+
+.form-check-input:checked {
+    background-color: #9D8E61;
+    border-color: #9D8E61;
+}
+
+.form-check-input:focus {
+    border: 1px solid #857952;
+    box-shadow: 0 0 0 .25rem rgba(157, 142, 97, 0.25);
 }
 
 /* Inputs */
