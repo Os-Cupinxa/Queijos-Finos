@@ -21,24 +21,21 @@ import java.util.List;
 public class MobileDTOsController {
 
     private final PropriedadeRepository propriedadeRepo;
-    private final PropriedadeRepository propRepo;
     private final AmostraRepository amostraRepo;
 
     public MobileDTOsController(
             PropriedadeRepository propriedadeRepo,
-            PropriedadeRepository propRepo,
             AmostraRepository amostraRepo) {
         this.propriedadeRepo = propriedadeRepo;
-        this.propRepo = propRepo;
         this.amostraRepo = amostraRepo;
     }
 
     @GetMapping("/dataInsight")
     @ResponseBody
-    private DataInsightDTO getDashboardData() {
-        Integer type1Count = Math.toIntExact(propRepo.countBystatus(2));
-        Integer type2Count = Math.toIntExact(propRepo.countBystatus(1));
-        Integer type3Count = Math.toIntExact(propRepo.countBystatus(0));
+    public DataInsightDTO getDashboardData() {
+        Integer type1Count = Math.toIntExact(propriedadeRepo.countBystatus(2));
+        Integer type2Count = Math.toIntExact(propriedadeRepo.countBystatus(1));
+        Integer type3Count = Math.toIntExact(propriedadeRepo.countBystatus(0));
 
         return new DataInsightDTO(type1Count, type2Count, type3Count);
     }
