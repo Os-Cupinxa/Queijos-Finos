@@ -170,6 +170,56 @@ class MobileControllerTest {
             assertEquals(expectedPastData, response.getPastYear());
             assertEquals(expectedTimeLabels, response.getTime());
         }
+
+        @Test
+        void shouldReturnPropriedadesDTO() {
+            Propriedade propriedade1 = new Propriedade();
+            propriedade1.setNomePropriedade("Fazenda do Antony");
+            propriedade1.setNomeProdutor("Antony Bresolin");
+            propriedade1.setCidade("Curitiba");
+            propriedade1.setUF("PR");
+            propriedade1.setStatus(1);
+            propriedade1.setLatitude("-25.4284");
+            propriedade1.setLongitude("-49.2733");
+            propriedade1.setContratos(Collections.emptyList());
+
+            Propriedade propriedade2 = new Propriedade();
+            propriedade2.setNomePropriedade("Fazenda do Gabriel");
+            propriedade2.setNomeProdutor("Gabriel Silva");
+            propriedade2.setCidade("Toledo");
+            propriedade2.setUF("PR");
+            propriedade2.setStatus(2);
+            propriedade2.setLatitude("-24.7316");
+            propriedade2.setLongitude("-53.7434");
+            propriedade2.setContratos(Collections.emptyList());
+
+            List<Propriedade> propriedadesList = Arrays.asList(propriedade1, propriedade2);
+            Page<Propriedade> propriedadesPage = new PageImpl<>(propriedadesList);
+
+            Pageable pageable = PageRequest.of(0, 20);
+            when(propriedadeRepository.findAll(pageable)).thenReturn(propriedadesPage);
+
+            Page<PropriedadeDTO> propriedadesDTOPage = mobileDTOsController.showPropriedadesDTO(0, 20);
+
+            assertEquals(2, propriedadesDTOPage.getTotalElements());
+            assertEquals("Fazenda do Antony", propriedadesDTOPage.getContent().get(0).getName());
+            assertEquals("Antony Bresolin", propriedadesDTOPage.getContent().get(0).getOwner());
+            assertEquals("Curitiba", propriedadesDTOPage.getContent().get(0).getCity());
+            assertEquals("PR", propriedadesDTOPage.getContent().get(0).getState());
+            assertEquals(1, propriedadesDTOPage.getContent().get(0).getStatus());
+            assertEquals("-25.4284", propriedadesDTOPage.getContent().get(0).getLatitude());
+            assertEquals("-49.2733", propriedadesDTOPage.getContent().get(0).getLongitude());
+
+            assertEquals("Fazenda do Gabriel", propriedadesDTOPage.getContent().get(1).getName());
+            assertEquals("Gabriel Silva", propriedadesDTOPage.getContent().get(1).getOwner());
+            assertEquals("Toledo", propriedadesDTOPage.getContent().get(1).getCity());
+            assertEquals("PR", propriedadesDTOPage.getContent().get(1).getState());
+            assertEquals(2, propriedadesDTOPage.getContent().get(1).getStatus());
+            assertEquals("-24.7316", propriedadesDTOPage.getContent().get(1).getLatitude());
+            assertEquals("-53.7434", propriedadesDTOPage.getContent().get(1).getLongitude());
+        }
+
+
     }
     private List<String> getTimeLabels(LocalDate startDate) {
         List<String> labels = new ArrayList<>();
