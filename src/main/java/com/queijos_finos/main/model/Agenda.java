@@ -12,7 +12,6 @@ public class Agenda {
     private Long id;
     private String descricao;
     private Date data;
-    private String tipo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false)
@@ -42,14 +41,6 @@ public class Agenda {
         this.data = data;
     }
 
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
     public Usuarios getUsuario() {
         return usuario;
     }
@@ -63,22 +54,11 @@ public class Agenda {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Agenda agenda = (Agenda) o;
-        return Objects.equals(id, agenda.id) && Objects.equals(descricao, agenda.descricao) && Objects.equals(data, agenda.data) && Objects.equals(tipo, agenda.tipo) && Objects.equals(usuario, agenda.usuario);
+        return Objects.equals(id, agenda.id) && Objects.equals(descricao, agenda.descricao) && Objects.equals(data, agenda.data) && Objects.equals(usuario, agenda.usuario);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, descricao, data, tipo, usuario);
-    }
-
-    @Override
-    public String toString() {
-        return "Agenda{" +
-                "id=" + id +
-                ", descricao='" + descricao + '\'' +
-                ", data=" + data +
-                ", tipo='" + tipo + '\'' +
-                ", usuario=" + usuario +
-                '}';
+        return Objects.hash(id, descricao, data, usuario);
     }
 }

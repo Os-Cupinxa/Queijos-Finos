@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet"
+          th:href="@{/styles/global.css}"/>
+    <link rel="icon"
+          type="image/png"
+          sizes="128x128"
+          th:href="@{/images/favicon.png}">
+    <title th:text="${agendaItem != null}? 'Agenda - editar' : 'Agenda - cadastrar' ">Agenda</title>
+</head>
+<body>
+<div th:insert="~{fragments/sidebar :: sidebar('agenda')}"></div>
+
+<div class="w-100">
+    <div th:insert="~{fragments/header :: header}"></div>
+
+    <div class="page-content-container p-3">
+        <div class="page-header border-bottom">
+            <h1 th:text="${agendaItem != null}? 'Editar Evento da Agenda' : 'Cadastrar Evento na Agenda' ">Agenda</h1>
+
+            <div class="buttons-wrapper">
+                <button type="button"
+                        th:if="${agendaItem != null}"
+                        class="btn btn-danger"
+                        data-toggle="modal"
+                        data-target="#modalConfirmDelete">
+                    EXCLUIR
+                </button>
+
+                <button th:text="${agendaItem != null}? 'ATUALIZAR' : 'CADASTRAR'"
+                        onclick="document.getElementById('userForm').requestSubmit();"
+                        class="btn btn-success">
+                    CADASTRAR
+                </button>
+            </div>
+        </div>
+
+        <div class="page-content-wrapper">
+            <form id="userForm"
+                  class="form-wrapper"
+                  th:action="@{/agenda}"
+                  method="post">
+                <input th:value="${agendaItem != null}? ${agendaItem.getId()} : -1"
+                       name="id"
+                       id="id"
+                       type="hidden"
+                       placeholder="id">
+                <div class="form-row">
+                    <input th:value="${agendaItem != null}? ${agendaItem.getDescricao()} : ''"
+                           name="nome"
+                           required
+                           type="text"
+                           class="form-control"
+                           aria-describedby="emailHelp"
+                           placeholder="Nome">
+                </div>
+                <div class="form-row">
+                    <input th:value="${agendaItem != null}? ${{agendaItem.getData()}} : ''"
+                           name="email"
+                           required
+                           type="text"
+                           class="form-control"
+                           placeholder="Email">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/modalConfirmDelete :: modalConfirmDelete(${agendaItem != null
+    ? agendaItem.getId()
+    : null})}"></div>
+
+<script>
+    function handleDelete(id) {
+        $.ajax({
+            url: '/agenda/delete/' + id,
+            type: 'POST',
+            data: {_method: 'POST'},
+            success: function () {
+                window.location.href = '/agenda';
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>
