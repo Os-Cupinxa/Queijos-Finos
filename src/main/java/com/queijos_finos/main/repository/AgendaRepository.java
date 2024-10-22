@@ -12,4 +12,6 @@ import java.util.List;
 public interface AgendaRepository extends JpaRepository<Agenda, Long> {
     @Query("SELECT a FROM Agenda a WHERE a.usuario.idUsuario = :userId AND a.data > :currentDate")
     List<Agenda> findFuturesAgendasByUserId(Long userId, Date currentDate);
+
+    List<Agenda> findAllByDataAfter(Date currentDate);
 }
