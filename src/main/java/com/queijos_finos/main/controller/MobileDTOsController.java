@@ -64,7 +64,7 @@ public class MobileDTOsController {
                 .toList();
 
         List<AgendaItemsDTO> contractItems = expiringContracts.stream()
-                .map(contract -> new AgendaItemsDTO(contract.getPropriedade().getNomePropriedade(), "teste", contract.getDataVercimento(), "Contrato"))
+                .map(contract -> new AgendaItemsDTO(contract.getPropriedade().getNomePropriedade(), contract.getNome(), contract.getDataVercimento(), "Contrato"))
                 .toList();
 
         List<AgendaItemsDTO> combinedItems = new ArrayList<>();
