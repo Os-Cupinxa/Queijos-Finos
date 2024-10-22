@@ -47,32 +47,31 @@ public class MobileDTOsController {
         return new DataInsightDTO(type1Count, type2Count, type3Count);
     }
 
-    @GetMapping("/itemsAgenda")
+    @GetMapping("/agendaAndExpiringContracts")
     @ResponseBody
-    public List<AgendaItemsDTO> getFuturesAgendasByUserId(@RequestParam(defaultValue = "0") Long userId) {
-        LocalDate dataAtual = LocalDate.now();
-        Date dataAtualSQL = Date.valueOf(dataAtual);
-
-        List<Agenda> agendas = agendaRepository.findFuturesAgendasByUserId(userId, dataAtualSQL);
-
-        return agendas.stream()
-                .map(agenda -> new AgendaItemsDTO(agenda.getUsuario().getNome(), agenda.getDescricao(), agenda.getData(), "Visita"))
-                .toList();
-    }
-
-    @GetMapping("/expiringContracts")
-    @ResponseBody
-    public List<AgendaItemsDTO> getExpiringContracts() {
+    public List<AgendaItemsDTO> getFuturesAgendasAndExpiringContracts(@RequestParam(defaultValue = "0") Long userId) {
         LocalDate dataAtual = LocalDate.now();
         Date dataAtualSQL = Date.valueOf(dataAtual);
         LocalDate dataFutura = dataAtual.plusDays(10);
         Date dataFuturaSQL = Date.valueOf(dataFutura);
 
+        List<Agenda> agendas = agendaRepository.findFuturesAgendasByUserId(userId, dataAtualSQL);
+
         List<Contrato> expiringContracts = contratoRepository.findExpiringContracts(dataAtualSQL, dataFuturaSQL);
 
-        return expiringContracts.stream()
+        List<AgendaItemsDTO> agendaItems = agendas.stream()
+                .map(agenda -> new AgendaItemsDTO(agenda.getUsuario().getNome(), agenda.getDescricao(), agenda.getData(), "Visita"))
+                .toList();
+
+        List<AgendaItemsDTO> contractItems = expiringContracts.stream()
                 .map(contract -> new AgendaItemsDTO(contract.getPropriedade().getNomePropriedade(), "teste", contract.getDataVercimento(), "Contrato"))
                 .toList();
+
+        List<AgendaItemsDTO> combinedItems = new ArrayList<>();
+        combinedItems.addAll(agendaItems);
+        combinedItems.addAll(contractItems);
+
+        return combinedItems;
     }
 
     @GetMapping("/propriedadesDTO")
