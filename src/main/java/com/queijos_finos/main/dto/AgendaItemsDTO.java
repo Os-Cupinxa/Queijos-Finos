@@ -1,11 +1,14 @@
 package com.queijos_finos.main.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class AgendaItemsDTO {
 
     private String nome;
     private String descricao;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date data;
     private String tipo;
 

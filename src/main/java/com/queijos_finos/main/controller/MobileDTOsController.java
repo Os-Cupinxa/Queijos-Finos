@@ -49,13 +49,13 @@ public class MobileDTOsController {
 
     @GetMapping("/agendaAndExpiringContracts")
     @ResponseBody
-    public List<AgendaItemsDTO> getFuturesAgendasAndExpiringContracts(@RequestParam(defaultValue = "0") Long userId) {
+    public List<AgendaItemsDTO> getFuturesAgendasAndExpiringContracts() {
         LocalDate dataAtual = LocalDate.now();
         Date dataAtualSQL = Date.valueOf(dataAtual);
         LocalDate dataFutura = dataAtual.plusDays(10);
         Date dataFuturaSQL = Date.valueOf(dataFutura);
 
-        List<Agenda> agendas = agendaRepository.findFuturesAgendasByUserId(userId, dataAtualSQL);
+        List<Agenda> agendas = agendaRepository.findAllByDataAfter(dataAtualSQL);
 
         List<Contrato> expiringContracts = contratoRepository.findExpiringContracts(dataAtualSQL, dataFuturaSQL);
 
