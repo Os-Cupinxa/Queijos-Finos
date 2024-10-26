@@ -1,55 +1,65 @@
 package com.queijos_finos.main.controller;
 
-import com.queijos_finos.main.model.Contrato;
 import com.queijos_finos.main.model.Fornecedor;
-import com.queijos_finos.main.model.Propriedade;
-import com.queijos_finos.main.model.Usuarios;
 import com.queijos_finos.main.repository.FornecedorRepository;
 
 import jakarta.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
 public class FornecedorController {
-    @Autowired
-    private FornecedorRepository fornecedorRepository;
+
+    private final FornecedorRepository fornecedorRepository;
+
+    public FornecedorController(FornecedorRepository fornecedorRepository) {
+        this.fornecedorRepository = fornecedorRepository;
+    }
 
     @GetMapping("/fornecedores")
-    public String showFornecedores(@RequestParam(name = "query", required = false) String query, Model model) {
-        List<Fornecedor> fornecedores;
+    public String showFornecedores(
+            @RequestParam(name = "query", required = false) String query,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            Model model) {
+
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Fornecedor> fornecedores;
+
         if (query != null && !query.isEmpty()) {
-            fornecedores = fornecedorRepository.findByNomeContainingIgnoreCase(query);
+            Fornecedor fornecedorExample = new Fornecedor();
+            fornecedorExample.setNome(query);
+
+            ExampleMatcher matcher = ExampleMatcher.matching()
+                    .withMatcher("nome", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase());
+
+            Example<Fornecedor> example = Example.of(fornecedorExample, matcher);
+            fornecedores = fornecedorRepository.findAll(example, pageable);
         } else {
-            Pageable pageable = PageRequest.of(0, Integer.MAX_VALUE);
-            fornecedores = fornecedorRepository.findAll(pageable).getContent();
+            fornecedores = fornecedorRepository.findAll(pageable);
         }
+
         model.addAttribute("fornecedores", fornecedores);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", fornecedores.getTotalPages());
+        model.addAttribute("totalItems", fornecedores.getTotalElements());
+        model.addAttribute("query", query);
+
         return "fornecedores";
     }
 
     @PostMapping("/fornecedores")
-    public String createFornecedor(@RequestParam("id") Long id,
-                                   @RequestParam("nome") String nome,
-                                   @RequestParam("nicho") String nicho,
-                                   @RequestParam("email") String email,
-                                   @RequestParam("qualidade") Double qualidade,
-                                   Model model) throws ParseException {
+    public String createFornecedor(
+            @RequestParam("id") Long id,
+            @RequestParam("nome") String nome,
+            @RequestParam("nicho") String nicho,
+            @RequestParam("email") String email,
+            @RequestParam("qualidade") Double qualidade,
+            Model model) {
 
         if (id != -1) {
             fornecedorRepository.findById(id)
@@ -73,27 +83,36 @@ public class FornecedorController {
         model.addAttribute("mensagem", "Fornecedor salvo com sucesso");
         return "redirect:/fornecedores";
     }
-    
+
     @Transactional
     @PostMapping("/fornecedor/delete/{id}")
-    public String deleteFornecedor(@PathVariable("id") Long id,
-                                   Model model) {
-    	fornecedorRepository.deleteFornecedorPropriedadeRelacionamento(id);
+    public String deleteFornecedor(
+            @PathVariable("id") Long id,
+            Model model) {
+
+        fornecedorRepository.deleteFornecedorPropriedadeRelacionamento(id);
         fornecedorRepository.deleteById(id);
+
         return "redirect:/fornecedores";
     }
 
 
     @GetMapping("/fornecedores/cadastrar")
-    public String createFornecedorView(@RequestParam(required = false) Long idFornecedor,
-                                       Model model) {
+    public String createFornecedorView(
+            @RequestParam(required = false) Long idFornecedor,
+            Model model) {
 
         if (idFornecedor != null) {
             Optional<Fornecedor> fornecedor = fornecedorRepository.findById(idFornecedor);
-            model.addAttribute("fornecedor", fornecedor.get());
+
+            if (fornecedor.isPresent()) {
+                model.addAttribute("fornecedor", fornecedor.get());
+            } else {
+                model.addAttribute("mensagem", "Fornecedor não encontrado");
+                return "redirect:/fornecedores";
+            }
         }
 
-        Pageable pageable = PageRequest.of(0, 20);
-        return "fornecedoresCadastrar";
+        return "subPages/fornecedoresCadastrar";
     }
 }

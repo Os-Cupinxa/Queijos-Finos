@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet"
+          th:href="@{/styles/global.css}"/>
+    <link rel="icon"
+          type="image/png"
+          sizes="128x128"
+          th:href="@{/images/favicon.png}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+          rel="stylesheet"/>
+    <title th:text="${propriedade != null}? 'Propriedades - editar' : 'Propriedades - cadastrar' ">Propriedades</title>
+</head>
+<body>
+<div th:insert="~{fragments/sidebar :: sidebar('propriedade')}"></div>
+
+<div class="w-100">
+    <div th:insert="~{fragments/header :: header}"></div>
+
+    <div class="page-content-container p-3">
+        <div class="page-header border-bottom">
+            <h1 th:text="${propriedade != null}? 'Editar Propriedade' : 'Cadastrar Propriedade' "></h1>
+
+            <div class="buttons-wrapper">
+                <button type="button"
+                        class="btn btn-danger"
+                        data-toggle="modal"
+                        data-target="#modalConfirmDelete">
+                    EXCLUIR
+                </button>
+
+                <button type="button"
+                        th:onclick="'cadastrarPropriedade();'"
+                        class="btn btn-success">
+                    SALVAR
+                </button>
+            </div>
+        </div>
+
+        <div class="page-container">
+            <form class="form-wrapper"
+                  method="post"
+                  id="formularioPropriedade">
+                <input type="hidden"
+                       th:value="${propriedade != null}? ${propriedade.getIdPropriedade()} : -1"
+                       id="id">
+
+                <div class="form-row">
+                    <input th:value="${propriedade != null} ? ${propriedade.getNomePropriedade()} : ''"
+                           id="nome"
+                           required
+                           type="text"
+                           class="form-control"
+                           aria-describedby="nomeHelp"
+                           placeholder="Nome da Propriedade">
+
+                    <input th:value="${propriedade != null} ? ${propriedade.getCNPJ()} : ''"
+                           id="cnpj"
+                           required
+                           type="text"
+                           class="form-control"
+                           aria-describedby="cnpjHelp"
+                           placeholder="CNPJ">
+
+                    <select id="status"
+                            required
+                            class="form-select"
+                            aria-describedby="statusHelp">
+                        <option value="2"
+                                th:selected="${propriedade != null && propriedade.getStatus() == 2}">
+                            Produzindo
+                        </option>
+                        <option value="1"
+                                th:selected="${propriedade != null && propriedade.getStatus() == 1}">Em
+                            contemplação
+                        </option>
+                        <option value="0"
+                                th:selected="${propriedade != null && propriedade.getStatus() == 0}">
+                            Desistente
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <input th:value="${propriedade != null} ? ${propriedade.getLatitude()} : ''"
+                           id="latitude"
+                           required
+                           type="text"
+                           class="form-control"
+                           aria-describedby="latitudeHelp"
+                           placeholder="Latitude">
+
+                    <input th:value="${propriedade != null} ? ${propriedade.getLongitude()} : ''"
+                           id="longitude"
+                           required
+                           type="text"
+                           class="form-control"
+                           aria-describedby="longitudeHelp"
+                           placeholder="Longitude">
+                </div>
+
+                <div class="form-row">
+                    <input th:value="${propriedade != null} ? ${propriedade.getRua()} : ''"
+                           id="rua"
+                           required
+                           type="text"
+                           class="form-control"
+                           aria-describedby="ruaHelp"
+                           placeholder="Rua">
+
+                    <input th:value="${propriedade != null} ? ${propriedade.getBairro()} : ''"
+                           id="bairro"
+                           required
+                           type="text"
+                           class="form-control"
+                           aria-describedby="bairroHelp"
+                           placeholder="Bairro">
+                </div>
+
+                <div class="form-row">
+                    <input th:value="${propriedade != null} ? ${propriedade.getCidade()} : ''"
+                           id="cidade"
+                           required
+                           type="text"
+                           class="form-control"
+                           aria-describedby="cidadeHelp"
+                           placeholder="Cidade">
+
+                    <input th:value="${propriedade != null} ? ${propriedade.getUF()} : ''"
+                           id="uf"
+                           required
+                           type="text"
+                           class="form-control"
+                           aria-describedby="ufHelp"
+                           placeholder="UF">
+                </div>
+
+                <div class="form-row">
+                    <input th:value="${propriedade != null} ? ${propriedade.getNomeProdutor()} : ''"
+                           id="nomeProdutor"
+                           required
+                           type="text"
+                           class="form-control"
+                           aria-describedby="nomeProdutorHelp"
+                           placeholder="Nome do Produtor">
+
+                    <input th:value="${propriedade != null} ? ${propriedade.getCPF()} : ''"
+                           id="cpf"
+                           required
+                           type="text"
+                           class="form-control"
+                           aria-describedby="cpfHelp"
+                           placeholder="CPF">
+                </div>
+
+                <div class="form-row">
+                    <input th:value="${propriedade != null} ? ${propriedade.getCelular()} : ''"
+                           id="celular"
+                           required
+                           type="text"
+                           class="form-control"
+                           aria-describedby="celularHelp"
+                           placeholder="Celular">
+
+                    <input th:value="${propriedade != null} ? ${propriedade.getTelefone()} : ''"
+                           id="telefone"
+                           required
+                           type="text"
+                           class="form-control"
+                           aria-describedby="telefoneHelp"
+                           placeholder="Telefone">
+
+                    <input th:value="${propriedade != null} ? ${propriedade.getEmail()} : ''"
+                           id="email"
+                           required
+                           type="email"
+                           class="form-control"
+                           aria-describedby="emailHelp"
+                           placeholder="Email">
+                </div>
+
+                <hr class="horizontal-line w-100">
+
+                <div class="details-row row-direction">
+                    <div class="row-item w-60">
+                        <div class="table-header pb-2">
+                            <h4 class="pb-2">Cursos</h4>
+
+                            <button type="button"
+                                    class="btn btn-primary"
+                                    data-toggle="modal"
+                                    data-target="#exampleModalCenter">
+                                ADICIONAR CURSO
+                            </button>
+                        </div>
+
+                        <div class="property-table-wrapper">
+                            <table id="cursosTable">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Nome</th>
+                                    <th scope="col">Professor</th>
+                                    <th scope="col">Duração</th>
+                                    <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody th:if="${propriedade != null}">
+                                <tr class="border tr"
+                                    th:id="${curso.getId()}"
+                                    th:each="curso : ${propriedade.getCursos()}">
+                                    <th class="cursoID"
+                                        th:id="${curso.getId()}"
+                                        th:text="${curso.getNome()}"></th>
+                                    <td th:text="${curso.getProfessor()}"></td>
+                                    <td th:text="${curso.getDuracao()}"></td>
+                                    <td class="button-table-column">
+                                        <button class="squared-button delete"
+                                                th:onclick="'removerCurso(\'' + ${curso.getId()} + '\');'">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row-item w-40">
+                        <div class="table-header pb-2">
+                            <h4 class="pb-2">Tecnologias</h4>
+
+                            <select class="form-control tecnologia-select"
+                                    id="tecnologiaSelect">
+                                <option selected="selected"></option>
+                                <option th:value="${tecnologia.getId()}"
+                                        th:each="tecnologia : ${tecnologias}"
+                                        th:text="${tecnologia.getNome()}"></option>
+                            </select>
+                            <button type="button"
+                                    class="btn btn-primary"
+                                    onclick="adicionarTecnologia()">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+
+                        <div class="property-table-wrapper">
+                            <table id="tecnologiasTable">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Nome</th>
+                                    <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody th:if="${propriedade != null}">
+                                <tr class="border tr tecnologiaAdd"
+                                    th:id="${tecnologia.getId()}"
+                                    th:each="tecnologia : ${propriedade.getTecnologias()}">
+                                    <th class="tecnologiaID"
+                                        th:id="${tecnologia.getId()}"
+                                        th:text="${tecnologia.getNome()}"></th>
+                                    <td class="button-table-column">
+                                        <button class="squared-button delete"
+                                                th:onclick="'removerTecnologia(\'' + ${tecnologia.getId()} + '\');'">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </td>
+
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="horizontal-line w-100">
+
+                <div class="details-row">
+                    <div class="table-header pb-2">
+                        <h4>
+                            Fornecedores
+                        </h4>
+
+                        <button type="button"
+                                class="btn btn-primary"
+                                data-toggle="modal"
+                                data-target="#fornecedorModal">
+                            ADICIONAR FORNECEDOR
+                        </button>
+                    </div>
+
+                    <div class="property-table-wrapper">
+                        <table id="fornecedorTable">
+                            <thead>
+                            <tr>
+                                <th scope="col">Nome</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Nicho</th>
+                                <th scope="col">Qualidade</th>
+                                <th scope="col"></th>
+                            </tr>
+                            </thead>
+                            <tbody th:if="${propriedade != null}">
+                            <tr class="border user-row"
+                                th:id="${fornecedor.getId()}"
+                                th:each="fornecedor : ${propriedade.getFornecedores()}">
+                                <td class="fornecedorID"
+                                    th:id="${fornecedor.getId()}"
+                                    th:text="${fornecedor.getNome()}"></td>
+                                <td th:text="${fornecedor.getEmail()}"></td>
+                                <td th:text="${fornecedor.getNicho()}"></td>
+                                <td th:text="${fornecedor.getQualidade()}"></td>
+                                <td class="button-table-column">
+                                    <button class="squared-button delete"
+                                            th:onclick="'removerFornecedor(\'' + ${fornecedor.getId()} + '\');'">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade"
+     id="exampleModalCenter"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable"
+         role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Adicionar Cursos</h5>
+
+            </div>
+            <div class="modal-body table-wrapper modal-table">
+                <table id="cursosTable2">
+                    <thead>
+                    <tr>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Conteúdo</th>
+                        <th scope="col">Professor</th>
+                        <th scope="col">Duração</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbodyCurso">
+                    <tr th:each="curso : ${cursos}">
+                        <th th:class="'cursoADD '+${curso.getId()}"
+                            th:id="${curso.getId()}"
+                            th:text="${curso.getNome()}"></th>
+                        <td th:class="'large-column cursoADD '+${curso.getId()}"
+                            th:text="${curso.getConteudo()}"
+                            class=""></td>
+                        <td th:class="'cursoADD '+${curso.getId()}"
+                            th:text="${curso.getProfessor()}"></td>
+                        <td th:class="'cursoADD '+${curso.getId()}"
+                            th:text="${curso.getDuracao()}"></td>
+                        <td class="select-table-column">
+                            <input type="checkbox"
+                                   th:id="${curso.getId()}"
+                                   class="form-check-input cursoADDcheck"
+                                   id="scales1"
+                                   name="scales"/>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-danger"
+                        data-dismiss="modal">
+                    CANCELAR
+                </button>
+                <button type="button"
+                        class="btn btn-success"
+                        onclick="adicionarCursos()"
+                        data-dismiss="modal">
+                    ADICIONAR
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade"
+     id="fornecedorModal"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable"
+         role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Adicionar Fornecedores</h5>
+
+            </div>
+            <div class="modal-body table-wrapper modal-table">
+                <table id="fornecedorTable2">
+                    <thead>
+                    <tr>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Nicho</th>
+                        <th scope="col">Qualidade</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbodyFornecedor">
+                    <tr th:each="fornecedor : ${fornecedores}">
+                        <th th:class="'fornecedorADD '+${fornecedor.getId()}"
+                            th:id="${fornecedor.getId()}"
+                            th:text="${fornecedor.getNome()}"></th>
+                        <td th:class="'fornecedorADD '+${fornecedor.getId()}"
+                            th:text="${fornecedor.getEmail()}"></td>
+                        <td th:class="'large-column fornecedorADD '+${fornecedor.getId()}"
+                            th:text="${fornecedor.getNicho()}"></td>
+                        <td th:class="'fornecedorADD '+${fornecedor.getId()}"
+                            th:text="${fornecedor.getQualidade()}"></td>
+                        <td class="select-table-column">
+                            <input type="checkbox"
+                                   th:id="${fornecedor.getId()}"
+                                   class="form-check-input fornecedorADDcheck"
+                                   id="scales2"
+                                   name="scales"/>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-danger"
+                        data-dismiss="modal">
+                    CANCELAR
+                </button>
+                <button type="button"
+                        class="btn btn-success"
+                        data-dismiss="modal"
+                        onclick="adicionarFornecedores()">
+                    ADICIONAR
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/modalConfirmDelete :: modalConfirmDelete(${propriedade != null
+    ? propriedade.getIdPropriedade()
+    : null})}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.datatables.net/2.0.7/js/dataTables.js"></script>
+<script type="text/javascript"
+        charset="utf8"
+        src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+
+<script>
+    $('#tecnologiaSelect').select2({
+        placeholder: 'Selecione uma tecnologia',
+        tags: true,
+        createTag: function (params) {
+            return {
+                id: params.term,
+                text: params.term,
+                value: params.term,
+                newOption: true
+            };
+        },
+        templateResult: function (data) {
+            var $result = $("<span></span>");
+
+            $result.text(data.text);
+
+            if (data.newOption) {
+                $result.append(" <em>(Novo)</em>");
+                $result.html($('<strong>', {html: $result.html()}));
+            }
+
+            return $result;
+        },
+        insertTag: function (data, tag) {
+            data.push(tag);
+        }
+    });
+
+    document.getElementById('formularioPropriedade').addEventListener('submit', function (event) {
+        event.preventDefault();
+        cadastrarPropriedade();
+    });
+
+
+    function removerCurso(id) {
+        var dataTable = $('#cursosTable').DataTable();
+        dataTable.row($("#" + id)).remove().draw();
+
+    }
+
+    function removerFornecedor(id) {
+        const dataTable = $('#fornecedorTable').DataTable();
+        dataTable.row($("#" + id)).remove().draw();
+    }
+
+    function removerTecnologia(id) {
+        const dataTable = $('#tecnologiasTable').DataTable();
+        dataTable.row($("#" + id)).remove().draw();
+    }
+
+    function adicionarTecnologia() {
+        const select = document.getElementById("tecnologiaSelect");
+
+        const text = select.options[select.selectedIndex].text;
+        const id = select.options[select.selectedIndex].value;
+
+        if (text !== "") {
+            var tecnologias = document.getElementsByClassName("tecnologiaAdd")
+            var flag = 0
+            for (tecnologia of tecnologias) {
+                if (tecnologia.id === id) {
+                    flag = 1
+                }
+            }
+            if (flag === 0) {
+                var table = new DataTable("#tecnologiasTable")
+                table.row
+                    .add([
+                        text,
+                        `<button class="squared-button delete"
+                                 onclick="removerTecnologia('${id}');">
+                             <i class="fa-solid fa-trash"></i>
+                         </button>`
+                    ])
+                    .draw(false);
+
+                const linhas = document.getElementById("tecnologiasTable").children[1].children;
+                for (let linha of linhas) {
+
+                    if (linha.children[0].innerText === text) {
+                        linha.setAttribute("id", id)
+                        linha.className = 'tecnologiaAdd'
+                        linha.children[0].setAttribute("id", id)
+                        linha.children[0].className = `sorting_1 tecnologiaID`
+                        break;
+                    }
+
+                }
+
+            }
+        }
+
+    }
+
+    function adicionarFornecedores() {
+        const selects = document.getElementsByClassName("fornecedorADDcheck");
+
+        for (let check of selects) {
+            if (check.checked) {
+                let flag = 0
+                var cursosSelect = document.getElementsByClassName("fornecedorID")
+                for (let curso of cursosSelect) {
+                    if (curso.id === check.id) {
+                        flag = 1
+                    }
+                }
+
+                if (flag === 0) {
+                    var infos = document.getElementsByClassName(`fornecedorADD ${check.id}`)
+                    var table = new DataTable("#fornecedorTable")
+                    table.row
+                        .add([
+                            infos[0].innerText,
+                            infos[1].innerText,
+                            infos[2].innerText,
+                            infos[3].innerText,
+                            `<button class="squared-button delete"
+                                     onclick="removerFornecedor(${check.id});">
+                                <i class="fa-solid fa-trash"></i>
+                             </button>`
+                        ])
+                        .draw(false);
+
+                    const linhas = document.getElementById("fornecedorTable").children[1].children;
+
+                    for (let linha of linhas) {
+
+                        if (linha.children[0].innerText == infos[0].innerText) {
+                            linha.setAttribute("id", check.id)
+                            linha.children[0].setAttribute("id", check.id)
+                            linha.children[0].className = `sorting_1 fornecedorID`
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    function adicionarCursos() {
+        const selects = document.getElementsByClassName("cursoADDcheck");
+
+        for (let check of selects) {
+            if (check.checked) {
+                let flag = 0
+                const cursosSelect = document.getElementsByClassName("cursoID");
+                for (let curso of cursosSelect) {
+                    if (curso.id === check.id) {
+                        flag = 1
+                    }
+                }
+                if (flag === 0) {
+                    var infos = document.getElementsByClassName(`cursoADD ${check.id}`)
+                    var table = new DataTable("#cursosTable")
+                    table.row
+                        .add([
+                            infos[0].innerText,
+                            infos[1].innerText,
+                            infos[2].innerText,
+                            infos[3].innerText,
+                            `<button class="squared-button delete"
+                                     onclick="removerCurso(${check.id});">
+                                 <i class="fa-solid fa-trash"></i>
+                             </button>`
+                        ])
+                        .draw(false);
+
+                    const linhas = document.getElementById("cursosTable").children[1].children;
+
+                    for (let linha of linhas) {
+
+                        if (linha.children[0].innerText === infos[0].innerText) {
+                            linha.setAttribute("id", check.id)
+                            linha.children[0].setAttribute("id", check.id)
+                            linha.children[0].className = `sorting_1 cursoID`
+                            break;
+                        }
+
+                    }
+                }
+
+            }
+        }
+    }
+
+    function cadastrarPropriedade() {
+        cursosIds = []
+        allCursos = []
+        cursos = document.getElementsByClassName("cursoID")
+
+        for (let item of cursos) {
+            cursosIds.push(item.id)
+        }
+
+        for (let cursoId of cursosIds) {
+            allCursos.push({
+                id: parseInt(cursoId),
+                nome: null,
+                conteudo: null,
+                professor: null,
+                duracao: null,
+            })
+        }
+
+        fornecedoresIds = []
+        allFornecedores = []
+        fornecedores = document.getElementsByClassName("fornecedorID")
+
+        for (let item of fornecedores) {
+            fornecedoresIds.push(item.id)
+        }
+
+        for (let fornecedorId of fornecedoresIds) {
+            allFornecedores.push({
+                id: parseInt(fornecedorId),
+                nome: null,
+                email: null,
+                nicho: null,
+                qualidade: null,
+            })
+        }
+
+        tecnologiasIds = []
+        allTecnologias = []
+        tecnologias = document.getElementsByClassName("tecnologiaID")
+
+        for (let item of tecnologias) {
+            tecnologiasIds.push({id: item.id, nome: item.innerText})
+        }
+
+        for (let tecnologiaId of tecnologiasIds) {
+            allTecnologias.push({
+                id: parseInt(tecnologiaId.id),
+                nome: tecnologiaId.nome,
+                observacao: null,
+            })
+        }
+
+
+        $.ajax({
+            url: '/propriedade',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                idPropriedade: document.getElementById('id').value,
+                nomePropriedade: document.getElementById('nome').value,
+                email: document.getElementById('email').value,
+                status: parseInt(document.getElementById('status').value),
+                cpf: document.getElementById('cpf').value,
+                cnpj: document.getElementById('cnpj').value,
+                telefone: document.getElementById('telefone').value,
+                celular: document.getElementById('celular').value,
+                rua: document.getElementById('rua').value,
+                bairro: document.getElementById('bairro').value,
+                cidade: document.getElementById('cidade').value,
+                uf: document.getElementById('uf').value,
+                latitude: document.getElementById('latitude').value,
+                longitude: document.getElementById('longitude').value,
+                nomeProdutor: document.getElementById('nomeProdutor').value,
+                cursos: allCursos,
+                fornecedores: allFornecedores,
+                tecnologias: allTecnologias
+            }),
+            success: function (response) {
+                window.location.href = '/propriedade';
+            },
+            error: function (xhr, status, error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Ocorreu um erro ao cadastrar a propriedade.'
+                });
+            }
+        });
+    }
+
+    function handleDelete(id) {
+        $.ajax({
+            url: '/propriedade/delete/' + id,
+            type: 'POST',
+            data: {_method: 'POST'},
+            success: function () {
+                window.location.href = '/propriedade';
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>
+
+

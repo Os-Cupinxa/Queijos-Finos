@@ -1,0 +1,83 @@
+<div th:fragment="modalRegisterSample(idPropriedade)"
+     class="modal fade"
+     id="modalRegisterSample"
+     tabindex="-1"
+     role="dialog">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered"
+         role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Cadastrar amostra
+                </h5>
+            </div>
+
+            <div class="modal-body">
+                <div>
+                    <form action="/amostras"
+                          id="sampleForm"
+                          method="post">
+                        <input type="hidden"
+                               required
+                               name="propriedadeId"
+                               th:value="${idPropriedade}">
+
+                        <label for="data">Data de emissão</label>
+                        <input name="data"
+                               id="data"
+                               type="date"
+                               required
+                               class="form-control"
+                               placeholder="Nome">
+
+                        <!--
+                        <label for="file">Amostra</label>
+                        <input disabled
+                               type="file"
+                               id="file"
+                               class="form-control"
+                               placeholder="Nome">
+                        -->
+
+                        <label for="quantidadeQueijo">Quantidade/Queijo</label>
+                        <input name="quantidadeQueijo"
+                               id="quantidadeQueijo"
+                               type="number"
+                               required
+                               class="form-control"
+                               aria-describedby="emailHelp"
+                               placeholder="Kg">
+
+                        <label for="quantidadeleite">Quantidade/Leite</label>
+                        <input name="quantidadeleite"
+                               id="quantidadeleite"
+                               type="number"
+                               required
+                               class="form-control"
+                               placeholder="Litros">
+
+                        <label for="observacao">Observações</label>
+                        <textarea name="observacao"
+                                  id="observacao"
+                                  type="Text"
+                                  required
+                                  class="form-control"
+                                  aria-describedby="emailHelp"
+                                  placeholder=""></textarea>
+                    </form>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-danger"
+                        data-dismiss="modal">CANCELAR
+                </button>
+
+                <button onclick="document.getElementById('sampleForm').requestSubmit();"
+                        class="btn btn-success">CADASTRAR
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

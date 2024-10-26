@@ -1,5 +1,6 @@
 package com.queijos_finos.main;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import com.queijos_finos.main.model.Usuarios;
 import com.queijos_finos.main.repository.UsuarioRepository;
 
 @Service
+@Transactional
 public class UsuarioService {
 
     @Autowired

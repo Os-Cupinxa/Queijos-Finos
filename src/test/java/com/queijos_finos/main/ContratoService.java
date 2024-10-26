@@ -4,6 +4,7 @@ import com.queijos_finos.main.model.Contrato;
 import com.queijos_finos.main.model.Propriedade;
 import com.queijos_finos.main.repository.ContratoRepository;
 import com.queijos_finos.main.repository.PropriedadeRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class ContratoService {
 
     @Autowired

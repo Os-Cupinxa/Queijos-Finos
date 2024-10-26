@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet"
+          th:href="@{/styles/global.css}"/>
+    <link rel="icon"
+          type="image/png"
+          sizes="128x128"
+          th:href="@{/images/favicon.png}">
+    <title th:text="${fornecedor != null}? 'Fornecedores - editar' : 'Fornecedores - cadastrar' ">Fornecedores</title>
+</head>
+<body>
+<div th:insert="~{fragments/sidebar :: sidebar('fornecedores')}"></div>
+
+<div class="w-100">
+    <div th:insert="~{fragments/header :: header}"></div>
+
+    <div class="page-content-container p-3">
+        <div class="page-header border-bottom">
+            <h1 th:text="${fornecedor != null}? 'Editar Fornecedor' : 'Cadastrar Fornecedor' ">Fornecedor</h1>
+
+            <div class="buttons-wrapper">
+                <button type="button"
+                        th:if="${fornecedor != null}"
+                        class="btn btn-danger"
+                        data-toggle="modal"
+                        data-target="#modalConfirmDelete">
+                    EXCLUIR
+                </button>
+
+                <button th:text="${fornecedor != null}? 'ATUALIZAR' : 'CADASTRAR'"
+                        onclick="document.getElementById('supplierForm').requestSubmit();"
+                        class="btn btn-success">
+                    CADASTRAR
+                </button>
+            </div>
+        </div>
+
+        <div class="page-content-wrapper">
+            <form id="supplierForm"
+                  class="form-wrapper"
+                  th:action="@{/fornecedores}"
+                  method="post">
+                <input type="hidden"
+                       th:value="${fornecedor != null}? ${fornecedor.getId()} : -1"
+                       name="id">
+                <div class="form-row">
+                    <input th:value="${fornecedor != null}? ${fornecedor.getNome()} : ''"
+                           name="nome"
+                           required
+                           type="text"
+                           class="form-control"
+                           placeholder="Nome do Fornecedor">
+                </div>
+                <div class="form-row">
+                    <input th:value="${fornecedor != null}? ${{fornecedor.getNicho()}} : ''"
+                           name="nicho"
+                           required
+                           type="text"
+                           class="form-control"
+                           placeholder="Nicho do fornecedor">
+                </div>
+                <div class="form-row">
+                    <input th:value="${fornecedor != null}? ${{fornecedor.getEmail()}} : ''"
+                           name="email"
+                           required
+                           type="text"
+                           class="form-control"
+                           placeholder="Email">
+                </div>
+                <div class="form-row">
+                    <input th:value="${fornecedor != null}? ${{fornecedor.getQualidade()}} : ''"
+                           name="qualidade"
+                           required
+                           type="number"
+                           class="form-control"
+                           placeholder="Qualidade">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/modalConfirmDelete :: modalConfirmDelete(${fornecedor != null
+    ? fornecedor.getId()
+    : null})}"></div>
+
+<script>
+    function handleDelete(id) {
+        $.ajax({
+            url: '/fornecedor/delete/' + id,
+            type: 'POST',
+            data: {_method: 'POST'},
+            success: function () {
+                window.location.href = '/fornecedores';
+            },
+            error: function (xhr, status, error) {
+                console.error(error);
+            }
+        });
+    }
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>

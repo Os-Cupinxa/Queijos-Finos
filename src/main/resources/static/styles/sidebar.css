@@ -1,0 +1,13 @@
+.sidebar-title {
+    font-family: "Bell MT", serif;
+}
+
+.nav-link i {
+    width: 20px;
+    margin-right: 10px;
+}
+
+.horizontal-line {
+    border: 1px solid #FFFFFF;
+    margin: 10px 0;
+}

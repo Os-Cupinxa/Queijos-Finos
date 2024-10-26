@@ -1,0 +1,81 @@
+<div th:fragment="sidebar(activePage)"
+     class="d-flex flex-column p-3 h-100 background-primary"
+     style="width: 280px;">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet"
+          th:href="@{/styles/sidebar.css}"/>
+    <link rel="stylesheet"
+          th:href="@{/styles/colors.css}"/>
+
+    <a href="/dashboard"
+       class="d-flex align-items-center mb-3 mb-md-0 justify-content-center text-white text-decoration-none">
+        <span class="fs-2 text-white sidebar-title">Queijos Finos</span>
+    </a>
+    <hr class="horizontal-line">
+    <ul class="nav nav-pills flex-column mb-auto gap-2">
+        <li class="nav-item">
+            <a href="/dashboard"
+               th:classappend="${activePage == 'home'} ? 'active' : ''"
+               class="nav-link text-white"
+               aria-current="page">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li>
+            <a href="/propriedade"
+               th:classappend="${activePage == 'propriedade'} ? 'active' : ''"
+               class="nav-link text-white">
+                <i class="fa-solid fa-house"></i>
+                <span>Propriedades</span>
+            </a>
+        </li>
+        <li>
+            <a href="/cursos"
+               th:classappend="${activePage == 'cursos'} ? 'active' : ''"
+               class="nav-link text-white">
+                <i class="fa-solid fa-book"></i>
+                <span>Cursos</span>
+            </a>
+        </li>
+        <li>
+            <a href="/contratos"
+               th:classappend="${activePage == 'contratos'} ? 'active' : ''"
+               class="nav-link text-white">
+                <i class="fa-solid fa-file-signature"></i>
+                <span>Contratos</span>
+            </a>
+        </li>
+        <li>
+            <a href="/fornecedores"
+               th:classappend="${activePage == 'fornecedores'} ? 'active' : ''"
+               class="nav-link text-white">
+                <i class="fa-solid fa-box"></i>
+                <span>Fornecedores</span>
+            </a>
+        </li>
+        <li>
+            <a href="/agenda"
+               th:classappend="${activePage == 'agenda'} ? 'active' : ''"
+               class="nav-link text-white">
+                <i class="fa-solid fa-calendar-day"></i>
+                <span>Agenda</span>
+            </a>
+        </li>
+        <li>
+            <a href="/usuarios"
+               th:classappend="${activePage == 'usuarios'} ? 'active' : ''"
+               class="nav-link text-white">
+                <i class="fa-solid fa-users"></i>
+                <span>Usuários</span>
+            </a>
+        </li>
+    </ul>
+
+
+    <a href="/"
+       class="logout-button">
+        <i class="fa-solid fa-right-from-bracket fa-2x"></i>
+    </a>
+</div>

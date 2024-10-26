@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet"
+          th:href="@{/styles/global.css}"/>
+    <link rel="icon"
+          type="image/png"
+          sizes="128x128"
+          th:href="@{/images/favicon.png}">
+    <title>Agenda</title>
+</head>
+<body>
+<div th:insert="~{fragments/sidebar :: sidebar(agenda)}"></div>
+
+<div class="w-100">
+    <div th:insert="~{fragments/header :: header}"></div>
+
+    <div class="page-content-container p-3">
+        <div class="page-header border-bottom">
+            <h1>
+                Agenda
+            </h1>
+
+            <a href="/agenda/cadastrar">
+                <button class="btn btn-primary">
+                    CADASTRAR NOVO
+                </button>
+            </a>
+        </div>
+
+        <!-- Campo de pesquisa -->
+        <div th:replace="~{fragments/tableSearch :: tableSearch(${query}, 'Pesquisar agenda')}"></div>
+
+        <!-- Tabela de agenda -->
+        <div class="table-wrapper">
+            <table id="agendaTable">
+                <thead>
+                <tr>
+                    <th scope="col">Usuário</th>
+                    <th scope="col">Data</th>
+                    <th scope="col">Descrição</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="table-item"
+                    th:each="agendaItem : ${agenda}">
+                    <td th:text="${agendaItem.getUsuario().getNome()}"></td>
+                    <td th:text="${agendaItem.getData()}"></td>
+                    <td th:text="${agendaItem.getDescricao()}"
+                        class="large-column"></td>
+                    <td class="button-table-column">
+                        <a th:href="@{/agenda/editar/{id}(id=${agendaItem.getId()})}">
+                            <button class="squared-button">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Paginação -->
+        <div th:replace="~{fragments/tablePaginator :: tablePaginator(${currentPage}, ${totalPages}, '/agenda')}"></div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script th:src="@{/scripts/agenda.js}"></script>
+</div>
+</body>
+</html>
