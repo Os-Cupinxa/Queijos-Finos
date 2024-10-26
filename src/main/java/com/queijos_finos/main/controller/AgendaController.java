@@ -1,7 +1,9 @@
 package com.queijos_finos.main.controller;
 
 import com.queijos_finos.main.model.Agenda;
+import com.queijos_finos.main.model.Usuarios;
 import com.queijos_finos.main.repository.AgendaRepository;
+import com.queijos_finos.main.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Controller;
@@ -9,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -16,9 +19,11 @@ import java.util.Optional;
 public class AgendaController {
 
     private final AgendaRepository agendaRepository;
+    private final UsuarioRepository usuarioRepo;
 
-    public AgendaController(AgendaRepository agendaRepository) {
+    public AgendaController(AgendaRepository agendaRepository, UsuarioRepository usuarioRepo) {
         this.agendaRepository = agendaRepository;
+        this.usuarioRepo = usuarioRepo;
     }
 
     @GetMapping
@@ -54,8 +59,9 @@ public class AgendaController {
 
     @GetMapping("/cadastrar")
     public String createAgendaView(Model model) {
+        List<Usuarios> usuarios = usuarioRepo.findAll();
 
-        model.addAttribute("agendaItem", new Agenda());
+        model.addAttribute("usuarios", usuarios);
 
         return "subPages/agendaCadastrar";
     }
@@ -75,9 +81,11 @@ public class AgendaController {
     public String editAgendaView(@PathVariable Long id, Model model) {
 
         Optional<Agenda> agendaItem = agendaRepository.findById(id);
+        List<Usuarios> usuarios = usuarioRepo.findAll();
 
         if (agendaItem.isPresent()) {
             model.addAttribute("agendaItem", agendaItem.get());
+            model.addAttribute("usuarios", usuarios);
             return "subPages/agendaCadastrar";
         } else {
             model.addAttribute("mensagem", "AgendaItem não encontrado");

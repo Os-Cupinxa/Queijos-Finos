@@ -48,22 +48,35 @@
                        type="hidden"
                        placeholder="id">
                 <div class="form-row">
+                    <input th:value="${agendaItem != null}? ${{agendaItem.getData()}} : ''"
+                           name="data"
+                           required
+                           type="text"
+                           onfocus="(this.type='date')"
+                           onblur="(this.type='text')"
+                           class="form-control"
+                           placeholder="Data">
+                </div>
+                <div class="form-row">
                     <input th:value="${agendaItem != null}? ${agendaItem.getDescricao()} : ''"
-                           name="nome"
+                           name="descricao"
                            required
                            type="text"
                            class="form-control"
                            aria-describedby="emailHelp"
-                           placeholder="Nome">
+                           placeholder="Descrição">
                 </div>
-                <div class="form-row">
-                    <input th:value="${agendaItem != null}? ${{agendaItem.getData()}} : ''"
-                           name="email"
-                           required
-                           type="text"
-                           class="form-control"
-                           placeholder="Email">
-                </div>
+                <select name="usuario"
+                        required
+                        class="form-select">
+                    <option th:value="${agendaItem != null}? ${agendaItem.getUsuario().getIdUsuario()} : ''"
+                            th:text="${agendaItem != null}? ${agendaItem.getUsuario().getNome()} : 'Selecione a propriedade'"
+                            selected>Selecione o responsável
+                    </option>
+                    <option th:each="usuario : ${usuarios}"
+                            th:text="${usuario.getNome()}"
+                            th:value="${usuario.getIdUsuario()}"></option>
+                </select>
             </form>
         </div>
     </div>
