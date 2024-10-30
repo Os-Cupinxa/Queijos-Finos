@@ -95,7 +95,8 @@ public class MobileDTOsController {
                         propriedade.getStatus(),
                         propriedade.getLatitude(),
                         propriedade.getLongitude(),
-                        propriedade.getContratos()
+                        propriedade.getContratos(),
+                        propriedade.getTecnologias()
                 )
         );
     }

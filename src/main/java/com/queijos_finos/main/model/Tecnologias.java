@@ -3,6 +3,7 @@ package com.queijos_finos.main.model;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,10 +18,9 @@ public class Tecnologias {
     private String nome;
     private String observacao;
 
-
     @ManyToMany(mappedBy = "tecnologias")
+    @JsonIgnore
     private List<Propriedade> propriedades;
-
 
     public List<Propriedade> getPropriedades() {
         return propriedades;
