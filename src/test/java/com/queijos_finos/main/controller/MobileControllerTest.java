@@ -1,6 +1,5 @@
 package com.queijos_finos.main.controller;
 
-
 import com.queijos_finos.main.dto.DataInsightDTO;
 import com.queijos_finos.main.dto.DataPointDTO;
 import com.queijos_finos.main.dto.DataPointDTOYear;
@@ -19,10 +18,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -33,10 +28,6 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
 class MobileControllerTest {
@@ -202,21 +193,21 @@ class MobileControllerTest {
             Page<PropriedadeDTO> propriedadesDTOPage = mobileDTOsController.showPropriedadesDTO(0, 20);
 
             assertEquals(2, propriedadesDTOPage.getTotalElements());
-            assertEquals("Fazenda do Antony", propriedadesDTOPage.getContent().get(0).getName());
-            assertEquals("Antony Bresolin", propriedadesDTOPage.getContent().get(0).getOwner());
-            assertEquals("Curitiba", propriedadesDTOPage.getContent().get(0).getCity());
-            assertEquals("PR", propriedadesDTOPage.getContent().get(0).getState());
-            assertEquals(1, propriedadesDTOPage.getContent().get(0).getStatus());
-            assertEquals("-25.4284", propriedadesDTOPage.getContent().get(0).getLatitude());
-            assertEquals("-49.2733", propriedadesDTOPage.getContent().get(0).getLongitude());
+            assertEquals("Fazenda do Antony", propriedadesDTOPage.getContent().get(0).name());
+            assertEquals("Antony Bresolin", propriedadesDTOPage.getContent().get(0).owner());
+            assertEquals("Curitiba", propriedadesDTOPage.getContent().get(0).city());
+            assertEquals("PR", propriedadesDTOPage.getContent().get(0).state());
+            assertEquals(1, propriedadesDTOPage.getContent().get(0).status());
+            assertEquals("-25.4284", propriedadesDTOPage.getContent().get(0).latitude());
+            assertEquals("-49.2733", propriedadesDTOPage.getContent().get(0).longitude());
 
-            assertEquals("Fazenda do Gabriel", propriedadesDTOPage.getContent().get(1).getName());
-            assertEquals("Gabriel Silva", propriedadesDTOPage.getContent().get(1).getOwner());
-            assertEquals("Toledo", propriedadesDTOPage.getContent().get(1).getCity());
-            assertEquals("PR", propriedadesDTOPage.getContent().get(1).getState());
-            assertEquals(2, propriedadesDTOPage.getContent().get(1).getStatus());
-            assertEquals("-24.7316", propriedadesDTOPage.getContent().get(1).getLatitude());
-            assertEquals("-53.7434", propriedadesDTOPage.getContent().get(1).getLongitude());
+            assertEquals("Fazenda do Gabriel", propriedadesDTOPage.getContent().get(1).name());
+            assertEquals("Gabriel Silva", propriedadesDTOPage.getContent().get(1).owner());
+            assertEquals("Toledo", propriedadesDTOPage.getContent().get(1).city());
+            assertEquals("PR", propriedadesDTOPage.getContent().get(1).state());
+            assertEquals(2, propriedadesDTOPage.getContent().get(1).status());
+            assertEquals("-24.7316", propriedadesDTOPage.getContent().get(1).latitude());
+            assertEquals("-53.7434", propriedadesDTOPage.getContent().get(1).longitude());
         }
 
 

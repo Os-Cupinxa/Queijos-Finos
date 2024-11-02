@@ -49,15 +49,17 @@ public class MobileDTOsController {
 
     @GetMapping("/agendaAndExpiringContracts")
     @ResponseBody
-    public List<AgendaItemsDTO> getFuturesAgendasAndExpiringContracts() {
-        LocalDate dataAtual = LocalDate.now();
-        Date dataAtualSQL = Date.valueOf(dataAtual);
-        LocalDate dataFutura = dataAtual.plusDays(10);
-        Date dataFuturaSQL = Date.valueOf(dataFutura);
+    public List<AgendaItemsDTO> getFuturesAgendasAndExpiringContracts(@RequestParam Long userId) {
+        LocalDate currentDate = LocalDate.now();
+        Date currentDateSQL = Date.valueOf(currentDate);
+        LocalDate futureDateAgenda = currentDate.plusDays(7);
+        Date futureDateAgendaSQL = Date.valueOf(futureDateAgenda);
+        LocalDate futureDateContracts = currentDate.plusDays(30);
+        Date futureDateContractsSQL = Date.valueOf(futureDateContracts);
 
-        List<Agenda> agendas = agendaRepository.findAllByDataAfter(dataAtualSQL);
+        List<Agenda> agendas = agendaRepository.findFuturesAgendasByUserId(userId, currentDateSQL, futureDateAgendaSQL);
 
-        List<Contrato> expiringContracts = contratoRepository.findExpiringContracts(dataAtualSQL, dataFuturaSQL);
+        List<Contrato> expiringContracts = contratoRepository.findExpiringContracts(currentDateSQL, futureDateContractsSQL);
 
         List<AgendaItemsDTO> agendaItems = agendas.stream()
                 .map(agenda -> new AgendaItemsDTO(agenda.getUsuario().getNome(), agenda.getDescricao(), agenda.getData(), "Visita"))
@@ -93,7 +95,8 @@ public class MobileDTOsController {
                         propriedade.getStatus(),
                         propriedade.getLatitude(),
                         propriedade.getLongitude(),
-                        propriedade.getContratos()
+                        propriedade.getContratos(),
+                        propriedade.getTecnologias()
                 )
         );
     }
