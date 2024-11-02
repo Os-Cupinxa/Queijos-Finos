@@ -92,46 +92,61 @@ function adicionarTecnologia() {
 }
 
 function adicionarFornecedores() {
-    const selects = document.getElementsByClassName("fornecedorADDcheck");
+    const supplierChecks = document.getElementsByClassName("fornecedorADDcheck");
 
-    for (let check of selects) {
-        if (check.checked) {
-            let flag = 0
-            var cursosSelect = document.getElementsByClassName("fornecedorID")
-            for (let curso of cursosSelect) {
-                if (curso.id === check.id) {
-                    flag = 1
-                }
+    for (const supplierCheck of supplierChecks) {
+        if (supplierCheck.checked) {
+            if (!isSupplierAlreadyAdded(supplierCheck)) {
+                const supplierInfo = getSupplierInfo(supplierCheck.id);
+                addSupplierToTable(supplierCheck.id, supplierInfo);
             }
+        }
+    }
+}
 
-            if (flag === 0) {
-                var infos = document.getElementsByClassName(`fornecedorADD ${check.id}`)
-                var table = new DataTable("#fornecedorTable")
-                table.row
-                    .add([
-                        infos[0].innerText,
-                        infos[1].innerText,
-                        infos[2].innerText,
-                        infos[3].innerText,
-                        `<button class="squared-button delete"
-                                     onclick="removerFornecedor(${check.id});">
-                                <i class="fa-solid fa-trash"></i>
-                             </button>`
-                    ])
-                    .draw(false);
+function isSupplierAlreadyAdded(supplierCheck) {
+    const existingSupplierRows = document.getElementsByClassName("fornecedorID");
+    for (const row of existingSupplierRows) {
+        if (row.id === supplierCheck.id) {
+            return true;
+        }
+    }
+    return false;
+}
 
-                const linhas = document.getElementById("fornecedorTable").children[1].children;
+function getSupplierInfo(supplierId) {
+    return Array.from(document.getElementsByClassName(`fornecedorADD ${supplierId}`)).map(info => info.innerText);
+}
 
-                for (let linha of linhas) {
+function addSupplierToTable(supplierId, supplierInfo) {
+    const table = new DataTable("#fornecedorTable");
+    table.row
+        .add([
+            supplierInfo[0],
+            supplierInfo[1],
+            supplierInfo[2],
+            supplierInfo[3],
+            getDeleteButtonHtml(supplierId)
+        ])
+        .draw(false);
 
-                    if (linha.children[0].innerText == infos[0].innerText) {
-                        linha.setAttribute("id", check.id)
-                        linha.children[0].setAttribute("id", check.id)
-                        linha.children[0].className = `sorting_1 fornecedorID`
-                        break;
-                    }
-                }
-            }
+    updateRowAttributes(supplierId, supplierInfo[0]);
+}
+
+function getDeleteButtonHtml(supplierId) {
+    return `<button class="squared-button delete" onclick="removeSupplier(${supplierId});">
+              <i class="fa-solid fa-trash"></i>
+            </button>`;
+}
+
+function updateRowAttributes(supplierId, supplierName) {
+    const rows = document.getElementById("fornecedorTable").children[1].children;
+    for (const row of rows) {
+        if (row.children[0].innerText === supplierName) {
+            row.id = supplierId;
+            row.children[0].id = supplierId;
+            row.children[0].className = 'sorting_1 fornecedorID';
+            break;
         }
     }
 }
@@ -140,38 +155,52 @@ function adicionarCursos() {
     const selects = document.getElementsByClassName("cursoADDcheck");
     for (let check of selects) {
         if (check.checked) {
-            let flag = 0
-            const cursosSelect = document.getElementsByClassName("cursoID");
-            for (let curso of cursosSelect) {
-                if (curso.id === check.id) {
-                    flag = 1
-                }
+            if (!isCursoAlreadyAdded(check.id)) {
+                const infos = getCursoInfos(check.id);
+                addCursoToTable(infos, check.id);
+                updateCursoRow(infos, check.id);
             }
-            if (flag === 0) {
-                var infos = document.getElementsByClassName(`cursoADD ${check.id}`)
-                var table = new DataTable("#cursosTable")
-                table.row
-                    .add([
-                        infos[0].innerText,
-                        infos[1].innerText,
-                        infos[2].innerText,
-                        infos[3].innerText,
-                        `<button class="squared-button delete"
-                                     onclick="removerCurso(${check.id});">
-                                 <i class="fa-solid fa-trash"></i>
-                             </button>`
-                    ])
-                    .draw(false);
-                const linhas = document.getElementById("cursosTable").children[1].children;
-                for (let linha of linhas) {
-                    if (linha.children[0].innerText === infos[0].innerText) {
-                        linha.setAttribute("id", check.id)
-                        linha.children[0].setAttribute("id", check.id)
-                        linha.children[0].className = `sorting_1 cursoID`
-                        break;
-                    }
-                }
-            }
+        }
+    }
+}
+
+function isCursoAlreadyAdded(checkId) {
+    const cursosSelect = document.getElementsByClassName("cursoID");
+    for (let curso of cursosSelect) {
+        if (curso.id === checkId) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function getCursoInfos(checkId) {
+    return document.getElementsByClassName(`cursoADD ${checkId}`);
+}
+
+function addCursoToTable(infos, checkId) {
+    var table = new DataTable(`#cursosTable`);
+    table.row
+        .add([
+            infos[0].innerText,
+            infos[1].innerText,
+            infos[2].innerText,
+            infos[3].innerText,
+            `<button class="squared-button delete" onclick="removerCurso(${checkId});">
+                 <i class="fa-solid fa-trash"></i>
+             </button>`
+        ])
+        .draw(false);
+}
+
+function updateCursoRow(infos, checkId) {
+    const linhas = document.getElementById("cursosTable").children[1].children;
+    for (let linha of linhas) {
+        if (linha.children[0].innerText === infos[0].innerText) {
+            linha.setAttribute("id", checkId);
+            linha.children[0].setAttribute("id", checkId);
+            linha.children[0].className = "sorting_1 cursoID";
+            break;
         }
     }
 }
