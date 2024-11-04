@@ -2,7 +2,6 @@ package com.queijos_finos.main.controller;
 
 import com.queijos_finos.main.repository.PropriedadeRepository;
 import com.queijos_finos.main.repository.TecnologiaRepository;
-
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +24,13 @@ import java.util.stream.Collectors;
 
 @Controller
 public class UsuarioController {
+
+    private static final String MENSAGEM = "mensagem";
+    private static final String REDIRECT_USUARIOS = "redirect:/usuarios";
+    private static final String STATUS = "status";
+    private static final String ERROR = "error";
+    private static final String SUCCESS = "success";
+    private static final String MESSAGE = "message";
 
     private final UsuarioRepository usuarioRepo;
     private final PropriedadeRepository propRepo;
@@ -70,7 +76,6 @@ public class UsuarioController {
         return "usuarios";
     }
 
-
     @PostMapping("/usuarios")
     public String createUsuario(
             @RequestParam("id") Long id,
@@ -97,8 +102,8 @@ public class UsuarioController {
             usuarioRepo.save(usuario);
         }
 
-        model.addAttribute("mensagem", "Usuário salvo com sucesso");
-        return "redirect:/usuarios";
+        model.addAttribute(MENSAGEM, "Usuário salvo com sucesso");
+        return REDIRECT_USUARIOS;
     }
 
     @PostMapping("/usuarios/alterarSenha")
@@ -113,8 +118,8 @@ public class UsuarioController {
                     return usuarioRepo.save(usuarios);
                 })
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado com o ID: " + id));
-        model.addAttribute("mensagem", "Usuário salvo com sucesso");
-        return "redirect:/usuarios";
+        model.addAttribute(MENSAGEM, "Usuário salvo com sucesso");
+        return REDIRECT_USUARIOS;
     }
 
     @PostMapping("/usuarios/delete/{id}")
@@ -123,9 +128,8 @@ public class UsuarioController {
             Model model) {
 
         usuarioRepo.deleteById(id);
-        return "redirect:/usuarios";
+        return REDIRECT_USUARIOS;
     }
-
 
     @GetMapping("/usuarios/cadastrar")
     public String createUsuarioView(
@@ -140,14 +144,12 @@ public class UsuarioController {
         return "subPages/usuariosCadastrar";
     }
 
-
     @GetMapping("/")
     public ModelAndView login() {
         ModelAndView modelview = new ModelAndView();
         modelview.setViewName("login");
         return modelview;
     }
-
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(
@@ -158,22 +160,20 @@ public class UsuarioController {
         Usuarios usu = usuarioRepo.findByEmail(email);
 
         if (usu == null) {
-            response.put("status", "error");
-            response.put("message", "Usuário não encontrado");
+            response.put(STATUS, ERROR);
+            response.put(MESSAGE, "Usuário não encontrado");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
 
         BCryptPasswordEncoder hashGenerator = new BCryptPasswordEncoder();
 
         if (hashGenerator.matches(senha, usu.getSenha())) {
-            response.put("status", "success");
-            response.put("message", "Login bem-sucedido");
-            response.put("userId", usu.getIdUsuario());
-
+            response.put(STATUS, SUCCESS);
+            response.put(MESSAGE, "Login bem-sucedido");response.put("userId", usu.getIdUsuario());
             return ResponseEntity.ok(response);
         } else {
-            response.put("status", "error");
-            response.put("message", "Credenciais inválidas");
+            response.put(STATUS, ERROR);
+            response.put(MESSAGE, "Credenciais inválidas");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
     }
@@ -190,11 +190,9 @@ public class UsuarioController {
 
         if (hashGenerator.matches(senha, usu.getSenha())) {
             model.addAttribute("usu", usu);
-
             return getDashboardData(model);
         } else {
-
-            model.addAttribute("mensagem", "Credenciais invalidas");
+            model.addAttribute(MENSAGEM, "Credenciais invalidas");
             return "login";
         }
     }

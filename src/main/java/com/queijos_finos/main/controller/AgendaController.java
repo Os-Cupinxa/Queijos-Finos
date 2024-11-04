@@ -21,6 +21,11 @@ public class AgendaController {
     private final AgendaRepository agendaRepository;
     private final UsuarioRepository usuarioRepo;
 
+    // Constantes para strings literais duplicadas
+    private static final String AGENDA_CADASTRAR_VIEW = "subPages/agendaCadastrar";
+    private static final String REDIRECT_AGENDA = "redirect:/agenda";
+    private static final String MENSAGEM_ATTR = "mensagem";
+
     public AgendaController(AgendaRepository agendaRepository, UsuarioRepository usuarioRepo) {
         this.agendaRepository = agendaRepository;
         this.usuarioRepo = usuarioRepo;
@@ -63,18 +68,18 @@ public class AgendaController {
 
         model.addAttribute("usuarios", usuarios);
 
-        return "subPages/agendaCadastrar";
+        return AGENDA_CADASTRAR_VIEW;
     }
 
     @PostMapping
     public String cadastrarAgendaItem(@ModelAttribute Agenda agendaItem, BindingResult result, Model model) {
 
         if (result.hasErrors()) {
-            return "subPages/agendaCadastrar";
+            return AGENDA_CADASTRAR_VIEW;
         }
 
         agendaRepository.save(agendaItem);
-        return "redirect:/agenda";
+        return REDIRECT_AGENDA;
     }
 
     @GetMapping("/editar/{id}")
@@ -86,10 +91,10 @@ public class AgendaController {
         if (agendaItem.isPresent()) {
             model.addAttribute("agendaItem", agendaItem.get());
             model.addAttribute("usuarios", usuarios);
-            return "subPages/agendaCadastrar";
+            return AGENDA_CADASTRAR_VIEW;
         } else {
-            model.addAttribute("mensagem", "AgendaItem não encontrado");
-            return "redirect:/agenda";
+            model.addAttribute(MENSAGEM_ATTR, "AgendaItem não encontrado");
+            return REDIRECT_AGENDA;
         }
     }
 
@@ -98,23 +103,22 @@ public class AgendaController {
 
         if (result.hasErrors()) {
             model.addAttribute("agendaItem", agendaItem);
-            return "subPages/agendaCadastrar";
+            return AGENDA_CADASTRAR_VIEW;
         }
 
         agendaItem.setId(id);
         agendaRepository.save(agendaItem);
-        model.addAttribute("mensagem", "AgendaItem atualizado com sucesso");
+        model.addAttribute(MENSAGEM_ATTR, "AgendaItem atualizado com sucesso");
 
-        return "redirect:/agenda";
+        return REDIRECT_AGENDA;
     }
 
     @Transactional
     @PostMapping("/delete/{id}")
     public String deleteAgenda(@PathVariable Long id, Model model) {
         agendaRepository.deleteById(id);
-        model.addAttribute("mensagem", "Item da agenda excluído com sucesso");
+        model.addAttribute(MENSAGEM_ATTR, "Item da agenda excluído com sucesso");
 
-        return "redirect:/agenda";
+        return REDIRECT_AGENDA;
     }
-
 }

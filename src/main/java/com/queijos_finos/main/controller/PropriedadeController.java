@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class PropriedadeController {
 
+    private static final String REDIRECT_PROPRIEDADE = "redirect:/propriedade";
+    private static final String MENSAGEM = "mensagem";
+
     private final PropriedadeRepository propriedadeRepo;
     private final CursosRepository cursoRepo;
     private final TecnologiaRepository tecnologiaRepo;
@@ -33,7 +36,6 @@ public class PropriedadeController {
         this.fornecedorRepo = fornecedorRepo;
         this.amostraRepo = amostraRepo;
     }
-
 
     @GetMapping("/propriedade")
     public String showPropriedade(
@@ -100,7 +102,7 @@ public class PropriedadeController {
 
         amostraRepo.save(amostra);
 
-        return "redirect:/propriedade/visualizar?idPropriedade=" + propriedadeId;
+        return REDIRECT_PROPRIEDADE + "/visualizar?idPropriedade=" + propriedadeId;
     }
 
     @DeleteMapping("/amostra/delete/{id}")
@@ -120,8 +122,8 @@ public class PropriedadeController {
             if (propriedade.isPresent()) {
                 model.addAttribute("propriedade", propriedade.get());
             } else {
-                model.addAttribute("mensagem", "Propriedade não encontrado");
-                return "redirect:/propriedade";
+                model.addAttribute(MENSAGEM, "Propriedade não encontrado");
+                return REDIRECT_PROPRIEDADE;
             }
         }
 
@@ -135,7 +137,6 @@ public class PropriedadeController {
 
         return "subPages/propriedadeCadastrar";
     }
-
 
     @PostMapping("/propriedade")
     public String createPropriedade(
@@ -181,8 +182,8 @@ public class PropriedadeController {
             propriedadeRepo.save(propriedadeReq);
         }
 
-        model.addAttribute("mensagem", "Propriedade salva com sucesso");
-        return "redirect:/propriedade";
+        model.addAttribute(MENSAGEM, "Propriedade salva com sucesso");
+        return REDIRECT_PROPRIEDADE;
     }
 
     @PostMapping("/propriedade/delete/{id}")
@@ -191,11 +192,7 @@ public class PropriedadeController {
             Model model) {
 
         propriedadeRepo.deleteById(idPropriedade);
-
-        model.addAttribute("mensagem", "Propriedade deletada com sucesso");
-        return "redirect:/propriedade";
+        model.addAttribute(MENSAGEM, "Propriedade deletada com sucesso");
+        return REDIRECT_PROPRIEDADE;
     }
-
-
 }
-

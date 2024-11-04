@@ -4,7 +4,6 @@ import com.queijos_finos.main.model.Fornecedor;
 import com.queijos_finos.main.repository.FornecedorRepository;
 
 import jakarta.transaction.Transactional;
-
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +15,12 @@ import java.util.Optional;
 public class FornecedorController {
 
     private final FornecedorRepository fornecedorRepository;
+
+    // Constantes para valores literais duplicados
+    private static final String REDIRECT_FORNECEDORES = "redirect:/fornecedores";
+    private static final String FORNECEDOR_ATTR = "fornecedor";
+    private static final String MENSAGEM_ATTR = "mensagem";
+    private static final String FORNECEDORES_CADASTRAR_VIEW = "subPages/fornecedoresCadastrar";
 
     public FornecedorController(FornecedorRepository fornecedorRepository) {
         this.fornecedorRepository = fornecedorRepository;
@@ -80,8 +85,8 @@ public class FornecedorController {
             fornecedorRepository.save(fornecedor);
         }
 
-        model.addAttribute("mensagem", "Fornecedor salvo com sucesso");
-        return "redirect:/fornecedores";
+        model.addAttribute(MENSAGEM_ATTR, "Fornecedor salvo com sucesso");
+        return REDIRECT_FORNECEDORES;
     }
 
     @Transactional
@@ -93,9 +98,8 @@ public class FornecedorController {
         fornecedorRepository.deleteFornecedorPropriedadeRelacionamento(id);
         fornecedorRepository.deleteById(id);
 
-        return "redirect:/fornecedores";
+        return REDIRECT_FORNECEDORES;
     }
-
 
     @GetMapping("/fornecedores/cadastrar")
     public String createFornecedorView(
@@ -106,13 +110,13 @@ public class FornecedorController {
             Optional<Fornecedor> fornecedor = fornecedorRepository.findById(idFornecedor);
 
             if (fornecedor.isPresent()) {
-                model.addAttribute("fornecedor", fornecedor.get());
+                model.addAttribute(FORNECEDOR_ATTR, fornecedor.get());
             } else {
-                model.addAttribute("mensagem", "Fornecedor não encontrado");
-                return "redirect:/fornecedores";
+                model.addAttribute(MENSAGEM_ATTR, "Fornecedor não encontrado");
+                return REDIRECT_FORNECEDORES;
             }
         }
 
-        return "subPages/fornecedoresCadastrar";
+        return FORNECEDORES_CADASTRAR_VIEW;
     }
 }

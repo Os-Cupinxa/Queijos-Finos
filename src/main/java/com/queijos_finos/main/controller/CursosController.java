@@ -18,6 +18,13 @@ public class CursosController {
 
     private final CursosRepository cursosRepository;
 
+    // Constantes para strings literais duplicadas
+    private static final String CURSO_ATTR = "curso";
+    private static final String MENSAGEM_ATTR = "mensagem";
+    private static final String REDIRECT_CURSOS = "redirect:/cursos";
+    private static final String CURSOS_CADASTRAR_VIEW = "subPages/cursosCadastrar";
+    private static final String CURSOS_EDITAR_VIEW = "subPages/cursosEditar";
+
     public CursosController(CursosRepository cursosRepository) {
         this.cursosRepository = cursosRepository;
     }
@@ -55,34 +62,31 @@ public class CursosController {
 
     @GetMapping("/cadastrar")
     public String createCursosView(Model model) {
-
-        model.addAttribute("curso", new Curso());
-
-        return "subPages/cursosCadastrar";
+        model.addAttribute(CURSO_ATTR, new Curso());
+        return CURSOS_CADASTRAR_VIEW;
     }
 
     @PostMapping
     public String cadastrarCurso(@ModelAttribute Curso curso, BindingResult result, Model model) {
 
         if (result.hasErrors()) {
-            return "subPages/cursosCadastrar";
+            return CURSOS_CADASTRAR_VIEW;
         }
 
         cursosRepository.save(curso);
-        return "redirect:/cursos";
+        return REDIRECT_CURSOS;
     }
 
     @GetMapping("/editar/{id}")
     public String editCursosView(@PathVariable Long id, Model model) {
-
         Optional<Curso> curso = cursosRepository.findById(id);
 
         if (curso.isPresent()) {
-            model.addAttribute("curso", curso.get());
-            return "subPages/cursosEditar";
+            model.addAttribute(CURSO_ATTR, curso.get());
+            return CURSOS_EDITAR_VIEW;
         } else {
-            model.addAttribute("mensagem", "Curso não encontrado");
-            return "redirect:/cursos";
+            model.addAttribute(MENSAGEM_ATTR, "Curso não encontrado");
+            return REDIRECT_CURSOS;
         }
     }
 
@@ -90,25 +94,25 @@ public class CursosController {
     public String editCursos(@PathVariable Long id, @ModelAttribute Curso curso, BindingResult result, Model model) {
 
         if (result.hasErrors()) {
-            model.addAttribute("curso", curso);
-            return "subPages/cursosEditar";
+            model.addAttribute(CURSO_ATTR, curso);
+            return CURSOS_EDITAR_VIEW;
         }
 
         curso.setId(id);
         cursosRepository.save(curso);
-        model.addAttribute("mensagem", "Curso atualizado com sucesso");
+        model.addAttribute(MENSAGEM_ATTR, "Curso atualizado com sucesso");
 
-        return "redirect:/cursos";
+        return REDIRECT_CURSOS;
     }
 
     @Transactional
     @PostMapping("/delete/{id}")
     public String deleteCursos(@PathVariable Long id, Model model) {
-
         cursosRepository.deleteCursoPropriedadeRelacionamento(id);
         cursosRepository.deleteById(id);
-        model.addAttribute("mensagem", "Curso excluído com sucesso");
+        model.addAttribute(MENSAGEM_ATTR, "Curso excluído com sucesso");
 
-        return "redirect:/cursos";
+        return REDIRECT_CURSOS;
     }
 }
+
