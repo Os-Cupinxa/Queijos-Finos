@@ -169,7 +169,7 @@ public class UsuarioController {
 
         if (hashGenerator.matches(senha, usu.getSenha())) {
             response.put(STATUS, SUCCESS);
-            response.put(MESSAGE, "Login bem-sucedido");
+            response.put(MESSAGE, "Login bem-sucedido");response.put("userId", usu.getIdUsuario());
             return ResponseEntity.ok(response);
         } else {
             response.put(STATUS, ERROR);
