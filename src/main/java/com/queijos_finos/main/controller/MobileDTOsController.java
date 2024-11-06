@@ -101,6 +101,33 @@ public class MobileDTOsController {
         );
     }
 
+    @GetMapping("/propriedadesDTO/producerName")
+    @ResponseBody
+    public Page<PropriedadeDTO> showPropriedadesDTOByProducerName(
+            @RequestParam String nameProducer,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Propriedade> propriedadesPage = propriedadeRepo.findByNomeProdutorContainingIgnoreCase(pageable, nameProducer);
+
+        return propriedadesPage.map(propriedade ->
+                new PropriedadeDTO(
+                        propriedade.getNomePropriedade(),
+                        propriedade.getNomeProdutor(),
+                        propriedade.getCidade(),
+                        propriedade.getUF(),
+                        propriedade.getStatus(),
+                        propriedade.getLatitude(),
+                        propriedade.getLongitude(),
+                        propriedade.getContratos(),
+                        propriedade.getTecnologias()
+                )
+        );
+    }
+
+
+
     @GetMapping("/dataPointYear")
     @ResponseBody
     public DataPointDTOYear getLeitePorMes() {

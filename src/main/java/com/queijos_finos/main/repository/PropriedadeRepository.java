@@ -15,6 +15,8 @@ import com.queijos_finos.main.model.Usuarios;
 public interface PropriedadeRepository extends JpaRepository<Propriedade, Long> {
     Page<Propriedade> findAll(Pageable pageable);
 
+    Page<Propriedade> findByNomeProdutorContainingIgnoreCase(Pageable pageable, String nameProducer);
+
     long countBystatus(int status);
 
 
