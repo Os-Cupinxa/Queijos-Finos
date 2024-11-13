@@ -1,7 +1,10 @@
 package com.queijos_finos.main.controller;
 
+import com.queijos_finos.main.dto.LogInDTO;
+import com.queijos_finos.main.model.JwtToken;
 import com.queijos_finos.main.repository.PropriedadeRepository;
 import com.queijos_finos.main.repository.TecnologiaRepository;
+import com.queijos_finos.main.utils.JwtUtils;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +25,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.queijos_finos.main.utils.PasswordUtils.verifyPassword;
+
 @Controller
 public class UsuarioController {
 
@@ -34,14 +39,17 @@ public class UsuarioController {
 
     private final UsuarioRepository usuarioRepo;
     private final PropriedadeRepository propRepo;
+    private final JwtUtils jwtUtils;
     private final TecnologiaRepository tecnologiaRepository;
 
     public UsuarioController(
             UsuarioRepository usuarioRepo,
             PropriedadeRepository propRepo,
+            JwtUtils jwtUtils,
             TecnologiaRepository tecnologiaRepository) {
         this.usuarioRepo = usuarioRepo;
         this.propRepo = propRepo;
+        this.jwtUtils = jwtUtils;
         this.tecnologiaRepository = tecnologiaRepository;
     }
 
@@ -169,7 +177,8 @@ public class UsuarioController {
 
         if (hashGenerator.matches(senha, usu.getSenha())) {
             response.put(STATUS, SUCCESS);
-            response.put(MESSAGE, "Login bem-sucedido");response.put("userId", usu.getIdUsuario());
+            response.put(MESSAGE, "Login bem-sucedido");
+            response.put("userId", usu.getIdUsuario());
             return ResponseEntity.ok(response);
         } else {
             response.put(STATUS, ERROR);
@@ -178,23 +187,45 @@ public class UsuarioController {
         }
     }
 
-    @PostMapping("/dashboard")
+    @PostMapping("/loginMobile")
     public String webLogin(
             @RequestParam("email") String email,
             @RequestParam("senha") String senha,
             Model model) {
 
-        Usuarios usu = usuarioRepo.findByEmail(email);
+        System.out.println(email);
+        System.out.println(senha);
 
-        BCryptPasswordEncoder hashGenerator = new BCryptPasswordEncoder();
-
-        if (hashGenerator.matches(senha, usu.getSenha())) {
-            model.addAttribute("usu", usu);
-            return getDashboardData(model);
-        } else {
-            model.addAttribute(MENSAGEM, "Credenciais invalidas");
+        if (email.isBlank() || senha.isBlank()) {
+            model.addAttribute("mensagem", "Por favor informe o e-mail e a senha");
             return "login";
         }
+
+        Optional<Usuarios> existentUser = findByEmail(email);
+
+        if (existentUser.isEmpty()) {
+            model.addAttribute("mensagem", "E-mail não encontrado");
+            return "login";
+        }
+
+        BCryptPasswordEncoder hashGenerator = new BCryptPasswordEncoder();
+        if (hashGenerator.matches(senha, existentUser.get().getSenha())) {
+            JwtToken token = jwtUtils.generateToken(existentUser.get(), 3600000);
+            model.addAttribute("usu", existentUser.get());
+            model.addAttribute("token", token.getToken());
+            return "dashboard";
+        } else {
+            model.addAttribute("mensagem", "E-mail ou senha incorretos");
+            return "login";
+        }
+    }
+
+    public Optional<Usuarios> findByEmail(String email) {
+        Usuarios exampleUser = new Usuarios();
+        exampleUser.setEmail(email);
+
+        Example<Usuarios> example = Example.of(exampleUser);
+        return usuarioRepo.findOne(example);
     }
 
     private String getDashboardData(Model model) {
