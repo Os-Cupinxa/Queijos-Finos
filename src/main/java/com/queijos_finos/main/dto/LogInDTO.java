@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class LogInDTO {
     private String email;
-    private String password;
+    private String senha;
 
     public String getEmail() {
         return email;
@@ -14,12 +14,12 @@ public class LogInDTO {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getSenha() {
+        return senha;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     @Override
@@ -27,11 +27,11 @@ public class LogInDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LogInDTO logInDTO = (LogInDTO) o;
-        return Objects.equals(email, logInDTO.email) && Objects.equals(password, logInDTO.password);
+        return Objects.equals(email, logInDTO.email) && Objects.equals(senha, logInDTO.senha);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(email, password);
+        return Objects.hash(email, senha);
     }
 }

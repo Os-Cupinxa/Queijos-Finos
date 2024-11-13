@@ -1,6 +1,7 @@
 package com.queijos_finos.main.controller;
 
 import com.queijos_finos.main.dto.LogInDTO;
+import com.queijos_finos.main.dto.SingUpDTO;
 import com.queijos_finos.main.model.JwtToken;
 import com.queijos_finos.main.repository.PropriedadeRepository;
 import com.queijos_finos.main.repository.TecnologiaRepository;
@@ -25,6 +26,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.queijos_finos.main.utils.PasswordUtils.encryptPassword;
 import static com.queijos_finos.main.utils.PasswordUtils.verifyPassword;
 
 @Controller
@@ -159,13 +161,37 @@ public class UsuarioController {
         return modelview;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(
-            @RequestParam("email") String email,
-            @RequestParam("senha") String senha) {
+    @PostMapping("/signup")
+    public ResponseEntity<?> userSignUp(@RequestBody SingUpDTO user) {
 
         Map<String, Object> response = new HashMap<>();
-        Usuarios usu = usuarioRepo.findByEmail(email);
+
+        try {
+            if (findByEmail(user.getEmail()).isPresent()) {
+                response.put(STATUS, ERROR);
+                response.put(MESSAGE, "Email já cadastrado");
+                return ResponseEntity.badRequest().body(response);
+            }
+
+            Usuarios newUser = new Usuarios();
+            newUser.setNome(user.getNome());
+            newUser.setEmail(user.getEmail());
+            newUser.setSenha(encryptPassword(user.getSenha()));
+            Usuarios createdUser = usuarioRepo.save(newUser);
+
+            return ResponseEntity.ok().body(createdUser);
+        } catch (Exception e) {
+            response.put(STATUS, ERROR);
+            response.put(MESSAGE, "Erro interno");
+            return ResponseEntity.badRequest().body(response);
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LogInDTO user) {
+
+        Map<String, Object> response = new HashMap<>();
+        Usuarios usu = usuarioRepo.findByEmail(user.getEmail());
 
         if (usu == null) {
             response.put(STATUS, ERROR);
@@ -173,13 +199,11 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
 
-        BCryptPasswordEncoder hashGenerator = new BCryptPasswordEncoder();
-
-        if (hashGenerator.matches(senha, usu.getSenha())) {
+        if (verifyPassword(user.getSenha(), usu.getSenha())) {
             response.put(STATUS, SUCCESS);
             response.put(MESSAGE, "Login bem-sucedido");
             response.put("userId", usu.getIdUsuario());
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok().body(jwtUtils.generateToken(usu, 3600000));
         } else {
             response.put(STATUS, ERROR);
             response.put(MESSAGE, "Credenciais inválidas");
@@ -187,7 +211,7 @@ public class UsuarioController {
         }
     }
 
-    @PostMapping("/loginMobile")
+    @PostMapping("/dashboard")
     public String webLogin(
             @RequestParam("email") String email,
             @RequestParam("senha") String senha,
@@ -204,12 +228,11 @@ public class UsuarioController {
         Optional<Usuarios> existentUser = findByEmail(email);
 
         if (existentUser.isEmpty()) {
-            model.addAttribute("mensagem", "E-mail não encontrado");
+            model.addAttribute("mensagem", "E-mail ou senha incorretos");
             return "login";
         }
 
-        BCryptPasswordEncoder hashGenerator = new BCryptPasswordEncoder();
-        if (hashGenerator.matches(senha, existentUser.get().getSenha())) {
+        if (verifyPassword(senha, existentUser.get().getSenha())) {
             JwtToken token = jwtUtils.generateToken(existentUser.get(), 3600000);
             model.addAttribute("usu", existentUser.get());
             model.addAttribute("token", token.getToken());
