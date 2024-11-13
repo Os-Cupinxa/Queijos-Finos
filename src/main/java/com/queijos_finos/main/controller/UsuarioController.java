@@ -3,9 +3,9 @@ package com.queijos_finos.main.controller;
 import com.queijos_finos.main.dto.LogInDTO;
 import com.queijos_finos.main.dto.SingUpDTO;
 import com.queijos_finos.main.model.JwtToken;
-import com.queijos_finos.main.repository.PropriedadeRepository;
-import com.queijos_finos.main.repository.TecnologiaRepository;
 import com.queijos_finos.main.utils.JwtUtils;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,16 +15,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.queijos_finos.main.dto.TecnologiaCountProp;
-import com.queijos_finos.main.model.Propriedade;
 import com.queijos_finos.main.model.Usuarios;
 import com.queijos_finos.main.repository.UsuarioRepository;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.queijos_finos.main.utils.PasswordUtils.encryptPassword;
 import static com.queijos_finos.main.utils.PasswordUtils.verifyPassword;
@@ -40,19 +36,13 @@ public class UsuarioController {
     private static final String MESSAGE = "message";
 
     private final UsuarioRepository usuarioRepo;
-    private final PropriedadeRepository propRepo;
     private final JwtUtils jwtUtils;
-    private final TecnologiaRepository tecnologiaRepository;
 
     public UsuarioController(
             UsuarioRepository usuarioRepo,
-            PropriedadeRepository propRepo,
-            JwtUtils jwtUtils,
-            TecnologiaRepository tecnologiaRepository) {
+            JwtUtils jwtUtils) {
         this.usuarioRepo = usuarioRepo;
-        this.propRepo = propRepo;
         this.jwtUtils = jwtUtils;
-        this.tecnologiaRepository = tecnologiaRepository;
     }
 
     @GetMapping("/usuarios")
@@ -211,15 +201,12 @@ public class UsuarioController {
         }
     }
 
-    @PostMapping("/dashboard")
+    @PostMapping("/webLogin")
     public String webLogin(
             @RequestParam("email") String email,
             @RequestParam("senha") String senha,
-            Model model) {
-
-        System.out.println(email);
-        System.out.println(senha);
-
+            Model model,
+            HttpServletResponse response) {
         if (email.isBlank() || senha.isBlank()) {
             model.addAttribute("mensagem", "Por favor informe o e-mail e a senha");
             return "login";
@@ -234,9 +221,14 @@ public class UsuarioController {
 
         if (verifyPassword(senha, existentUser.get().getSenha())) {
             JwtToken token = jwtUtils.generateToken(existentUser.get(), 3600000);
-            model.addAttribute("usu", existentUser.get());
-            model.addAttribute("token", token.getToken());
-            return "dashboard";
+
+            Cookie authCookie = new Cookie("token", token.getToken());
+            authCookie.setHttpOnly(true);
+            authCookie.setPath("/");
+            authCookie.setMaxAge(3600);
+            response.addCookie(authCookie);
+
+            return "redirect:/dashboard";
         } else {
             model.addAttribute("mensagem", "E-mail ou senha incorretos");
             return "login";
@@ -249,30 +241,5 @@ public class UsuarioController {
 
         Example<Usuarios> example = Example.of(exampleUser);
         return usuarioRepo.findOne(example);
-    }
-
-    private String getDashboardData(Model model) {
-        Pageable pageable = PageRequest.of(0, 5);
-        List<Propriedade> top5Properties = propRepo.findTop5ByOrderByIdDesc(pageable).getContent();
-        Page<Object[]> results = tecnologiaRepository.countTecnologiaPropriedadesNative(pageable);
-        List<TecnologiaCountProp> tecnologiaCountProps = results.stream()
-                .map(obj -> new TecnologiaCountProp((String) obj[0], ((Number) obj[1]).longValue()))
-                .collect(Collectors.toList());
-
-        long type1Count = propRepo.countBystatus(2);
-        long type2Count = propRepo.countBystatus(1);
-        long type3Count = propRepo.countBystatus(0);
-
-        model.addAttribute("type1Count", type1Count);
-        model.addAttribute("type2Count", type2Count);
-        model.addAttribute("type3Count", type3Count);
-        model.addAttribute("propriedades", top5Properties);
-        model.addAttribute("topTec", tecnologiaCountProps);
-        return "dashboard";
-    }
-
-    @GetMapping("/dashboard")
-    public String dashboard(Model model) {
-        return getDashboardData(model);
     }
 }
