@@ -74,8 +74,22 @@
     </ul>
 
 
-    <a href="/"
+    <a href="javascript:void(0);"
+       id="logoutButton"
        class="logout-button">
         <i class="fa-solid fa-right-from-bracket fa-2x"></i>
     </a>
+
+
+    <script>
+      document.getElementById('logoutButton').addEventListener('click', function () {
+        fetch('/logout', {
+          method: 'POST',
+          credentials: 'same-origin'
+        })
+          .then(() => {
+            window.location.href = '/'
+          })
+      })
+    </script>
 </div>
