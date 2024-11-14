@@ -13,10 +13,8 @@ import java.util.Date;
 
 @Component
 public class JwtUtils {
-
     private final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    // Gera um token JWT com base nos dados do usuário
     public JwtToken generateToken(Usuarios user, long expirationMillis) {
         Key key = Keys.hmacShaKeyFor(SECRET_KEY.getEncoded());
         String token = Jwts.builder()
@@ -57,7 +55,6 @@ public class JwtUtils {
         return claims.get("profile", String.class);
     }
 
-    // Verifica se um token JWT expirou
     public boolean isTokenExpired(String token) {
         Date expirationDate = extractClaims(token).getExpiration();
         return expirationDate.before(new Date());

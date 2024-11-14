@@ -19,29 +19,24 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         String[] patterns = {
                 "/dashboard",
+                "/propriedade",
+                "/propriedade/**",
+                "/cursos",
+                "/cursos/**",
+                "/contratos",
+                "/contratos/**",
+                "/fornecedores",
+                "/fornecedores/**",
+                "/agenda",
+                "/agenda/**",
                 "/usuarios",
-                "/usuarios/**"
-/*              "/pageclientes",
-                "/pagedashboard",
-                "/pageinteracoes",
-                "/pagepropostas",
-                "/pageconfigs",
-                "/client/**",
-                "/client",
-                "/proposal/**",
-                "/proposal",
-                "/interaction/**",
-                "/interaction",
-                "/address/**",
-                "/address",
-                "/city",
-                "/city/**",
-                "/state",
-                "/team",
-                "/team/**",
-                "/dashboard",
-                "/user/changepassword",
-                "/user/disableuser/**" */
+                "/usuarios/**",
+                "/agendaAndExpiringContracts",
+                "/dataInsight",
+                "/propriedadesDTO",
+                "/propriedadesDTO/**",
+                "/dataPointYear",
+                "/dataPoint"
         };
 
         registry.addInterceptor(jwtInterceptor)

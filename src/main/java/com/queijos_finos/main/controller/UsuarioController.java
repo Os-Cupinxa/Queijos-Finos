@@ -225,7 +225,7 @@ public class UsuarioController {
             Cookie authCookie = new Cookie("token", token.getToken());
             authCookie.setHttpOnly(true);
             authCookie.setPath("/");
-            authCookie.setMaxAge(3600);
+            authCookie.setMaxAge(86400);
             response.addCookie(authCookie);
 
             return "redirect:/dashboard";
@@ -233,6 +233,16 @@ public class UsuarioController {
             model.addAttribute("mensagem", "E-mail ou senha incorretos");
             return "login";
         }
+    }
+
+    @PostMapping("/logout")
+    public void logout(HttpServletResponse response) {
+        Cookie cookie = new Cookie("token", null);
+        cookie.setPath("/");
+        cookie.setDomain("localhost");
+        cookie.setMaxAge(0);
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
     }
 
     public Optional<Usuarios> findByEmail(String email) {
