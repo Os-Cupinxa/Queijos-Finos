@@ -22,6 +22,7 @@ public class JwtUtils {
                 .setExpiration(new Date(System.currentTimeMillis() + expirationMillis))
                 .claim("name", user.getNome())
                 .claim("email", user.getEmail())
+                .claim("userId", user.getIdUsuario())
                 .signWith(key)
                 .compact();
         return new JwtToken(token, expirationMillis);

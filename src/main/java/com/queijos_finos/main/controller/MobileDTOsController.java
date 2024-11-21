@@ -3,6 +3,8 @@ package com.queijos_finos.main.controller;
 import com.queijos_finos.main.dto.*;
 import com.queijos_finos.main.model.*;
 import com.queijos_finos.main.repository.*;
+import com.queijos_finos.main.utils.JwtUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +27,9 @@ public class MobileDTOsController {
     private final AmostraRepository amostraRepo;
     private final ContratoRepository contratoRepository;
     private final AgendaRepository agendaRepository;
+
+    @Autowired
+    private JwtUtils jwtUtils;
 
     public MobileDTOsController(
             PropriedadeRepository propriedadeRepo,
@@ -49,7 +54,11 @@ public class MobileDTOsController {
 
     @GetMapping("/agendaAndExpiringContracts")
     @ResponseBody
-    public List<AgendaItemsDTO> getFuturesAgendasAndExpiringContracts(@RequestParam Long userId) {
+    public List<AgendaItemsDTO> getFuturesAgendasAndExpiringContracts(@RequestHeader("Authorization") String authorizationHeader) {
+        String token = authorizationHeader.replace("Bearer ", "");
+
+        // Usa o JwtUtils para extrair o userId
+        Long userId = jwtUtils.extractClaims(token).get("userId", Long.class);
         LocalDate currentDate = LocalDate.now();
         Date currentDateSQL = Date.valueOf(currentDate);
         LocalDate futureDateAgenda = currentDate.plusDays(7);
