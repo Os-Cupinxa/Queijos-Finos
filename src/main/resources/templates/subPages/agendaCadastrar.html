@@ -60,17 +60,17 @@
                 <div class="form-row">
                     <input th:value="${agendaItem != null}? ${agendaItem.getDescricao()} : ''"
                            name="descricao"
-                           required
                            type="text"
                            class="form-control"
                            aria-describedby="emailHelp"
                            placeholder="Descrição">
                 </div>
                 <select name="usuario"
+
                         required
                         class="form-select">
                     <option th:value="${agendaItem != null}? ${agendaItem.getUsuario().getIdUsuario()} : ''"
-                            th:text="${agendaItem != null}? ${agendaItem.getUsuario().getNome()} : 'Selecione a propriedade'"
+                            th:text="${agendaItem != null}? ${agendaItem.getUsuario().getNome()} : 'Selecione o responsável'"
                             selected>Selecione o responsável
                     </option>
                     <option th:each="usuario : ${usuarios}"
