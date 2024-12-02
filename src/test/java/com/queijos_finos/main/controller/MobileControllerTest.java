@@ -1,13 +1,12 @@
 package com.queijos_finos.main.controller;
 
-import com.queijos_finos.main.dto.DataInsightDTO;
-import com.queijos_finos.main.dto.DataPointDTO;
-import com.queijos_finos.main.dto.DataPointDTOYear;
-import com.queijos_finos.main.dto.PropriedadeDTO;
-import com.queijos_finos.main.model.Amostra;
-import com.queijos_finos.main.model.Propriedade;
+import com.queijos_finos.main.dto.*;
+import com.queijos_finos.main.model.*;
+import com.queijos_finos.main.repository.AgendaRepository;
 import com.queijos_finos.main.repository.AmostraRepository;
+import com.queijos_finos.main.repository.ContratoRepository;
 import com.queijos_finos.main.repository.PropriedadeRepository;
+import com.queijos_finos.main.utils.JwtUtils;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,6 +35,15 @@ class MobileControllerTest {
 
     @Mock
     private AmostraRepository amostraRepository;
+
+    @Mock
+    private JwtUtils jwtUtils;
+
+    @Mock
+    private AgendaRepository agendaRepository;
+
+    @Mock
+    private ContratoRepository contratoRepository;
 
     @InjectMocks
     private MobileDTOsController mobileDTOsController;
@@ -210,6 +218,114 @@ class MobileControllerTest {
             assertEquals("-53.7434", propriedadesDTOPage.getContent().get(1).longitude());
         }
 
+        /*@Test
+        void shouldReturnFutureAgendasAndExpiringContracts() {
+            // Mock dos dados de entrada
+            String authorizationHeader = "Bearer mockToken";
+            Long userId = 1L;
+
+            Usuarios usuario = new Usuarios();
+            usuario.setIdUsuario(userId);
+            usuario.setNome("Antony Bresolin");
+
+            Usuarios usuario2 = new Usuarios();
+            usuario2.setIdUsuario(2L);
+            usuario2.setNome("Gabriel Silva");
+
+
+            // Mock do JWT para extrair o userId
+            Map<String, Object> claims = new HashMap<>();
+            claims.put("userId", userId);
+
+            Object extractedClaims = jwtUtils.extractClaims("mockToken");
+            if (extractedClaims instanceof Map) {
+                claims = (Map<String, Object>) extractedClaims;
+            }
+
+            // Mock das agendas
+            Agenda agenda1 = new Agenda();
+            agenda1.setUsuario(usuario);
+            agenda1.setDescricao("Visita técnica");
+            agenda1.setData(java.sql.Date.valueOf(LocalDate.now().plusDays(2)));
+
+            Agenda agenda2 = new Agenda();
+            agenda2.setUsuario(usuario2);
+            agenda2.setDescricao("Reunião de planejamento");
+            agenda2.setData(java.sql.Date.valueOf(LocalDate.now().plusDays(5)));
+
+            List<Agenda> agendas = Arrays.asList(agenda1, agenda2);
+
+            // Mock dos contratos
+            Contrato contrato1 = new Contrato();
+            contrato1.setNome("Contrato de Arrendamento");
+            contrato1.setDataVercimento(java.sql.Date.valueOf(LocalDate.now().plusDays(15)));
+
+            Contrato contrato2 = new Contrato();
+            contrato2.setNome("Contrato de Locação");
+            contrato2.setDataVercimento(java.sql.Date.valueOf(LocalDate.now().plusDays(25)));
+
+            List<Contrato> expiringContracts = Arrays.asList(contrato1, contrato2);
+
+            // Configuração dos mocks
+            when(agendaRepository.findFuturesAgendasByUserId(userId, java.sql.Date.valueOf(LocalDate.now()), java.sql.Date.valueOf(LocalDate.now().plusDays(7))))
+                    .thenReturn(agendas);
+            when(contratoRepository.findExpiringContracts(java.sql.Date.valueOf(LocalDate.now()), java.sql.Date.valueOf(LocalDate.now().plusDays(30))))
+                    .thenReturn(expiringContracts);
+
+            // Executa o método
+            List<AgendaItemsDTO> response = mobileDTOsController.getFuturesAgendasAndExpiringContracts(authorizationHeader);
+
+            // Verifica a resposta
+            assertEquals(4, response.size());
+            assertEquals("Visita técnica", response.get(0).getDescricao());
+            assertEquals("Contrato de Arrendamento", response.get(2).getDescricao());
+        }*/
+
+        @Test
+        void shouldReturnPropriedadesDTOByProducerName() {
+            // Mock do nome do produtor
+            String nameProducer = "Antony";
+            Pageable pageable = PageRequest.of(0, 20);
+
+            // Mock das propriedades
+            Propriedade propriedade1 = new Propriedade();
+            propriedade1.setNomePropriedade("Fazenda do Antony");
+            propriedade1.setNomeProdutor("Antony Bresolin");
+            propriedade1.setCidade("Curitiba");
+            propriedade1.setUF("PR");
+            propriedade1.setStatus(1);
+            propriedade1.setLatitude("-25.4284");
+            propriedade1.setLongitude("-49.2733");
+            propriedade1.setContratos(Collections.emptyList());
+
+            Propriedade propriedade2 = new Propriedade();
+            propriedade2.setNomePropriedade("Fazenda do Gabriel");
+            propriedade2.setNomeProdutor("Antony Gabriel");
+            propriedade2.setCidade("Toledo");
+            propriedade2.setUF("PR");
+            propriedade2.setStatus(2);
+            propriedade2.setLatitude("-24.7316");
+            propriedade2.setLongitude("-53.7434");
+            propriedade2.setContratos(Collections.emptyList());
+
+            List<Propriedade> propriedadesList = Arrays.asList(propriedade1, propriedade2);
+            Page<Propriedade> propriedadesPage = new PageImpl<>(propriedadesList);
+
+            // Configuração do mock
+            when(propriedadeRepository.findByNomeProdutorContainingIgnoreCase(pageable, nameProducer)).thenReturn(propriedadesPage);
+
+            // Executa o método
+            Page<PropriedadeDTO> response = mobileDTOsController.showPropriedadesDTOByProducerName(nameProducer, 0, 20);
+
+            // Verifica a resposta
+            assertEquals(2, response.getTotalElements());
+            assertEquals("Fazenda do Antony", response.getContent().get(0).name());
+            assertEquals("Antony Bresolin", response.getContent().get(0).owner());
+            assertEquals("Curitiba", response.getContent().get(0).city());
+            assertEquals(1, response.getContent().get(0).status());
+        }
+
+
 
     }
     private List<String> getTimeLabels(LocalDate startDate) {
@@ -232,4 +348,6 @@ class MobileControllerTest {
 
         return labels;
     }
+
+
 }
