@@ -27,19 +27,19 @@ public class MobileDTOsController {
     private final AmostraRepository amostraRepo;
     private final ContratoRepository contratoRepository;
     private final AgendaRepository agendaRepository;
-
-    @Autowired
-    private JwtUtils jwtUtils;
+    private final JwtUtils jwtUtils;
 
     public MobileDTOsController(
             PropriedadeRepository propriedadeRepo,
             AmostraRepository amostraRepo,
             ContratoRepository contratoRepository,
-            AgendaRepository agendaRepository) {
+            AgendaRepository agendaRepository,
+            JwtUtils jwtUtils) {
         this.propriedadeRepo = propriedadeRepo;
         this.amostraRepo = amostraRepo;
         this.contratoRepository = contratoRepository;
         this.agendaRepository = agendaRepository;
+        this.jwtUtils = jwtUtils;
     }
 
     @GetMapping("/dataInsight")

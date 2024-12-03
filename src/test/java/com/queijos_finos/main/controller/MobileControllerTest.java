@@ -7,11 +7,13 @@ import com.queijos_finos.main.repository.AmostraRepository;
 import com.queijos_finos.main.repository.ContratoRepository;
 import com.queijos_finos.main.repository.PropriedadeRepository;
 import com.queijos_finos.main.utils.JwtUtils;
+import io.jsonwebtoken.Claims;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -218,12 +220,20 @@ class MobileControllerTest {
             assertEquals("-53.7434", propriedadesDTOPage.getContent().get(1).longitude());
         }
 
-        /*@Test
+        @Test
         void shouldReturnFutureAgendasAndExpiringContracts() {
             // Mock dos dados de entrada
             String authorizationHeader = "Bearer mockToken";
             Long userId = 1L;
 
+            // Mock do Claims
+            Claims claims = Mockito.mock(Claims.class);
+            when(claims.get("userId", Long.class)).thenReturn(userId);
+
+            // Configurar o mock do JwtUtils para retornar o Claims mockado
+            when(jwtUtils.extractClaims("mockToken")).thenReturn(claims);
+
+            // Mock dos usuários
             Usuarios usuario = new Usuarios();
             usuario.setIdUsuario(userId);
             usuario.setNome("Antony Bresolin");
@@ -231,16 +241,6 @@ class MobileControllerTest {
             Usuarios usuario2 = new Usuarios();
             usuario2.setIdUsuario(2L);
             usuario2.setNome("Gabriel Silva");
-
-
-            // Mock do JWT para extrair o userId
-            Map<String, Object> claims = new HashMap<>();
-            claims.put("userId", userId);
-
-            Object extractedClaims = jwtUtils.extractClaims("mockToken");
-            if (extractedClaims instanceof Map) {
-                claims = (Map<String, Object>) extractedClaims;
-            }
 
             // Mock das agendas
             Agenda agenda1 = new Agenda();
@@ -255,21 +255,33 @@ class MobileControllerTest {
 
             List<Agenda> agendas = Arrays.asList(agenda1, agenda2);
 
+            // Mock da propriedade
+            Propriedade propriedade = new Propriedade();
+            propriedade.setNomePropriedade("Fazenda Teste");
+
             // Mock dos contratos
             Contrato contrato1 = new Contrato();
             contrato1.setNome("Contrato de Arrendamento");
             contrato1.setDataVercimento(java.sql.Date.valueOf(LocalDate.now().plusDays(15)));
+            contrato1.setPropriedade(propriedade); // Adicione esta linha
 
             Contrato contrato2 = new Contrato();
             contrato2.setNome("Contrato de Locação");
             contrato2.setDataVercimento(java.sql.Date.valueOf(LocalDate.now().plusDays(25)));
+            contrato2.setPropriedade(propriedade); // Adicione esta linha
 
             List<Contrato> expiringContracts = Arrays.asList(contrato1, contrato2);
 
-            // Configuração dos mocks
-            when(agendaRepository.findFuturesAgendasByUserId(userId, java.sql.Date.valueOf(LocalDate.now()), java.sql.Date.valueOf(LocalDate.now().plusDays(7))))
+            // Configuração dos mocks para repositórios
+            when(agendaRepository.findFuturesAgendasByUserId(
+                    userId,
+                    java.sql.Date.valueOf(LocalDate.now()),
+                    java.sql.Date.valueOf(LocalDate.now().plusDays(7))))
                     .thenReturn(agendas);
-            when(contratoRepository.findExpiringContracts(java.sql.Date.valueOf(LocalDate.now()), java.sql.Date.valueOf(LocalDate.now().plusDays(30))))
+
+            when(contratoRepository.findExpiringContracts(
+                    java.sql.Date.valueOf(LocalDate.now()),
+                    java.sql.Date.valueOf(LocalDate.now().plusDays(30))))
                     .thenReturn(expiringContracts);
 
             // Executa o método
@@ -279,7 +291,7 @@ class MobileControllerTest {
             assertEquals(4, response.size());
             assertEquals("Visita técnica", response.get(0).getDescricao());
             assertEquals("Contrato de Arrendamento", response.get(2).getDescricao());
-        }*/
+        }
 
         @Test
         void shouldReturnPropriedadesDTOByProducerName() {
