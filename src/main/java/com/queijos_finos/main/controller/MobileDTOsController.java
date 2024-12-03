@@ -4,7 +4,6 @@ import com.queijos_finos.main.dto.*;
 import com.queijos_finos.main.model.*;
 import com.queijos_finos.main.repository.*;
 import com.queijos_finos.main.utils.JwtUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
