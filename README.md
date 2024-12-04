@@ -48,3 +48,9 @@ O software "Sistema de Cadastro do PDI de Queijos Finos" tem como objetivo princ
 ## Documentação
 #### _Documentação disponível em:_ "**./documentation"**
 Swagger api documentation: http://localhost:8080/swagger-ui.html
+
+
+#### _Esquema do banco de dados:_
+<p align="center">
+  <img src="https://github.com/Os-Cupinxa/Queijos-Finos/blob/main/schema.png" alt="Schema" width="800">
+</p>
